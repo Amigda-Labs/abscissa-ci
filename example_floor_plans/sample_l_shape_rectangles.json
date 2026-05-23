@@ -1,0 +1,24 @@
+{
+  "project_name": "Sample L Shape Floor Plan",
+  "input_source": "json",
+  "rectangles": [
+    {
+      "name": "Main Rectangle",
+      "length_m": 12,
+      "width_m": 5,
+      "operation": "add",
+      "source_text": "12.00 m x 5.00 m"
+    },
+    {
+      "name": "Lower Left Rectangle",
+      "length_m": 7,
+      "width_m": 4,
+      "operation": "add",
+      "source_text": "7.00 m x 4.00 m"
+    }
+  ],
+  "waste_percent": 10,
+  "assumptions": [
+    "The L-shaped footprint is decomposed into two non-overlapping rectangles."
+  ]
+}

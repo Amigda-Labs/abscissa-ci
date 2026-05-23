@@ -1,0 +1,11 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# Generated review outputs from local floor-plan runs.
+*.tile_estimate.json
+*.tile_estimate.md
