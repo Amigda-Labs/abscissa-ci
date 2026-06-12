@@ -24,19 +24,78 @@ def load_json(path: Path) -> dict[str, Any]:
         raise SystemExit(2)
 
 
+def compute_polygon_zones(payload: dict[str, Any]) -> tuple[list[dict[str, Any]], float, list[str], bool]:
+    """Returns (zones, signed_total_sqm, warnings, had_errors).
+
+    Polygon geometry and validation live in the abscissa_ci package so the
+    rules cannot drift between the product code and this skill script. The
+    restricted shell executor always runs this script with the project
+    interpreter, where the package is importable.
+    """
+
+    polygons = payload.get("polygons")
+    if not polygons:
+        return [], 0.0, [], False
+    if not isinstance(polygons, list):
+        return [], 0.0, ["polygons must be an array."], True
+
+    try:
+        from abscissa_ci.calculators.polygon_geometry import (
+            compute_polygon_areas,
+            compute_total_polygon_area,
+            validate_polygon_set,
+        )
+        from abscissa_ci.models import PolygonDraft
+    except ImportError:
+        return (
+            [],
+            0.0,
+            ["Polygon input requires the abscissa_ci package, which is not importable here."],
+            True,
+        )
+
+    drafts = []
+    warnings: list[str] = []
+    had_errors = False
+    for index, item in enumerate(polygons, start=1):
+        try:
+            drafts.append(PolygonDraft.model_validate(item))
+        except Exception as exc:
+            warnings.append(f"Polygon {index} is invalid: {exc}")
+            had_errors = True
+
+    zones = compute_polygon_areas(drafts)
+    for zone in zones:
+        warnings.extend(zone.errors)
+        warnings.extend(zone.warnings)
+    valid_drafts = [draft for draft, zone in zip(drafts, zones) if zone.is_valid]
+    cross_errors = validate_polygon_set(valid_drafts)
+    warnings.extend(cross_errors)
+    if any(not zone.is_valid for zone in zones) or cross_errors:
+        had_errors = True
+
+    total = 0.0 if had_errors else compute_total_polygon_area(zones)
+    return [zone.model_dump(mode="json") for zone in zones], total, warnings, had_errors
+
+
 def compute_area(payload: dict[str, Any]) -> dict[str, Any]:
     rectangles = payload.get("rectangles")
-    if not isinstance(rectangles, list) or not rectangles:
+    has_polygons = bool(payload.get("polygons"))
+    if (not isinstance(rectangles, list) or not rectangles) and not has_polygons:
         return {
             "can_compute": False,
             "rooms": [],
+            "polygon_zones": [],
             "total_floor_area_sqm": None,
-            "warnings": ["Input must include a non-empty rectangles array."],
+            "warnings": ["Input must include a non-empty rectangles or polygons array."],
         }
 
     rooms: list[dict[str, Any]] = []
     warnings: list[str] = []
-    for index, rectangle in enumerate(rectangles, start=1):
+    if rectangles is not None and not isinstance(rectangles, list):
+        warnings.append("rectangles must be an array; it was ignored.")
+        rectangles = []
+    for index, rectangle in enumerate(rectangles or [], start=1):
         if not isinstance(rectangle, dict):
             warnings.append(f"Rectangle {index} must be an object.")
             continue
@@ -76,25 +135,30 @@ def compute_area(payload: dict[str, Any]) -> dict[str, Any]:
             }
         )
 
-    total_area = clean_float(sum(room["signed_area_sqm"] for room in rooms))
-    can_compute = bool(rooms) and total_area > 0
-    if rooms and total_area <= 0:
-        warnings.append("Net floor area must be greater than zero after subtractive rectangles.")
+    zones, polygon_total, polygon_warnings, polygon_errors = compute_polygon_zones(payload)
+    warnings.extend(polygon_warnings)
+
+    has_shapes = bool(rooms) or bool(zones)
+    total_area = clean_float(sum(room["signed_area_sqm"] for room in rooms) + polygon_total)
+    can_compute = has_shapes and not polygon_errors and total_area > 0
+    if has_shapes and not polygon_errors and total_area <= 0:
+        warnings.append("Net floor area must be greater than zero after subtractive areas.")
 
     return {
         "can_compute": can_compute,
         "rooms": rooms,
-        "total_floor_area_sqm": total_area if rooms else None,
+        "polygon_zones": zones,
+        "total_floor_area_sqm": total_area if has_shapes and not polygon_errors else None,
         "warnings": warnings,
     }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Compute floor area from add/subtract rectangular floor-plan parts.",
+        description="Compute floor area from add/subtract rectangle or polygon floor-plan parts.",
     )
-    parser.add_argument("input", nargs="?", type=Path, help="JSON file containing a rectangles array.")
-    parser.add_argument("--json", help="Inline JSON payload containing a rectangles array.")
+    parser.add_argument("input", nargs="?", type=Path, help="JSON file containing rectangles and/or polygons arrays.")
+    parser.add_argument("--json", help="Inline JSON payload containing rectangles and/or polygons arrays.")
     parser.add_argument("--output", type=Path, help="Optional path for JSON output.")
     args = parser.parse_args()
 

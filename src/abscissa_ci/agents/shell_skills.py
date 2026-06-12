@@ -19,8 +19,9 @@ def tile_area_skill() -> dict[str, str]:
     return {
         "name": AREA_SKILL_NAME,
         "description": (
-            "Compute floor area from add/subtract rectangular floor-plan parts, "
-            "including decomposed L/T/plus shapes and voids."
+            "Compute floor area from add/subtract floor-plan parts: rectilinear "
+            "polygons with metric vertex coordinates and edge labels (preferred), "
+            "or rectangles including decomposed L/T/plus shapes and voids."
         ),
         "path": str(SKILLS_ROOT / AREA_SKILL_NAME),
     }

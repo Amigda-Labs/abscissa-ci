@@ -12,7 +12,7 @@ from abscissa_ci.agents.tile_agent import OPENAI_API_KEY_ENV, TILE_ENGINEER_API_
     reason=f"{TILE_ENGINEER_API_KEY_ENV} or {OPENAI_API_KEY_ENV} is not set",
 )
 def test_agent_image_smoke():
-    image_path = Path("example_floor_plans/rectangular_floor_plan.png")
+    image_path = Path("example_floor_plans/training/images/rectangular_floor_plan.png")
     if not image_path.exists():
         pytest.skip("example floor plan image is not available")
 

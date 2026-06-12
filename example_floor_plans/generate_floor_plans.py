@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 from math import floor, ceil
 
@@ -18,6 +19,15 @@ WALL = "#2b2d30"
 PARTITION = "#70757c"
 WINDOW = "#4c8fb7"
 WHITE = "#ffffff"
+
+TEST_PLAN_SLUGS = {
+    "right_side_notch",
+    "offset_cross_footprint",
+    "asymmetric_wing_footprint",
+    "rect_double_courtyard_end_cutouts",
+    "rect_courtyard_cross_recesses",
+    "rect_multi_void_terrace_cuts",
+}
 
 
 def load_font(size, bold=False):
@@ -45,6 +55,28 @@ FONT_SUBTITLE = load_font(20)
 FONT_LABEL = load_font(23, bold=True)
 FONT_SMALL = load_font(16)
 FONT_TINY = load_font(13)
+
+
+def draw_fitted_text(draw, position, text, max_width, font_size=16, bold=False, fill=INK, min_size=10):
+    size = font_size
+    while size >= min_size:
+        font = load_font(size, bold=bold)
+        bbox = draw.textbbox((0, 0), text, font=font)
+        if bbox[2] - bbox[0] <= max_width:
+            draw.text(position, text, font=font, fill=fill)
+            return
+        size -= 1
+
+    shortened = text
+    font = load_font(min_size, bold=bold)
+    while len(shortened) > 4:
+        candidate = shortened[:-4].rstrip() + "..."
+        bbox = draw.textbbox((0, 0), candidate, font=font)
+        if bbox[2] - bbox[0] <= max_width:
+            draw.text(position, candidate, font=font, fill=fill)
+            return
+        shortened = shortened[:-1]
+    draw.text(position, text[:3] + "...", font=font, fill=fill)
 
 
 PLANS = [
@@ -158,6 +190,239 @@ PLANS = [
             ((0, 3.6), (0, 6.4)),
             ((10, 3.6), (10, 6.4)),
         ],
+    },
+    {
+        "slug": "u_courtyard_simple",
+        "title": "U COURTYARD FLOOR PLAN",
+        "polygon": [(0, 0), (0, 10), (4, 10), (4, 4), (10, 4), (10, 10), (14, 10), (14, 0)],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 14, "y": -1.25, "ref_y1": 0, "ref_y2": 0, "label": "14.00 m"},
+            {"kind": "v", "x": -1.25, "y1": 0, "y2": 10, "ref_x1": 0, "ref_x2": 0, "label": "10.00 m"},
+            {"kind": "h", "x1": 0, "x2": 4, "y": 11.20, "ref_y1": 10, "ref_y2": 10, "label": "4.00 m"},
+            {"kind": "h", "x1": 4, "x2": 10, "y": 11.20, "ref_y1": 10, "ref_y2": 10, "label": "6.00 m"},
+            {"kind": "h", "x1": 10, "x2": 14, "y": 11.20, "ref_y1": 10, "ref_y2": 10, "label": "4.00 m"},
+            {"kind": "v", "x": 15.20, "y1": 0, "y2": 4, "ref_x1": 14, "ref_x2": 10, "label": "4.00 m"},
+            {"kind": "v", "x": 15.92, "y1": 4, "y2": 10, "ref_x1": 10, "ref_x2": 14, "label": "6.00 m"},
+        ],
+        "windows": [((2, 0), (5, 0)), ((9, 0), (12, 0)), ((0, 2), (0, 4.2)), ((14, 2), (14, 4.2)), ((4, 5.2), (4, 8.4)), ((10, 5.2), (10, 8.4))],
+    },
+    {
+        "slug": "c_shape_right_open",
+        "title": "C SHAPE RIGHT OPEN FLOOR PLAN",
+        "polygon": [(0, 0), (0, 11), (15, 11), (15, 7), (4, 7), (4, 4), (15, 4), (15, 0)],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 15, "y": -1.25, "ref_y1": 0, "ref_y2": 0, "label": "15.00 m"},
+            {"kind": "v", "x": -1.25, "y1": 0, "y2": 11, "ref_x1": 0, "ref_x2": 0, "label": "11.00 m"},
+            {"kind": "h", "x1": 0, "x2": 15, "y": 12.20, "ref_y1": 11, "ref_y2": 11, "label": "15.00 m"},
+            {"kind": "h", "x1": 4, "x2": 15, "y": 5.50, "ref_y1": 4, "ref_y2": 4, "label": "11.00 m"},
+            {"kind": "v", "x": 16.25, "y1": 0, "y2": 4, "ref_x1": 15, "ref_x2": 15, "label": "4.00 m"},
+            {"kind": "v", "x": 16.25, "y1": 4, "y2": 7, "ref_x1": 15, "ref_x2": 15, "label": "3.00 m"},
+            {"kind": "v", "x": 16.25, "y1": 7, "y2": 11, "ref_x1": 15, "ref_x2": 15, "label": "4.00 m"},
+        ],
+        "windows": [((2, 0), (5.5, 0)), ((9, 0), (13, 0)), ((2, 11), (5.5, 11)), ((8.5, 11), (13, 11)), ((0, 2.2), (0, 4.6)), ((0, 7.1), (0, 9.5)), ((4, 4.5), (4, 6.5))],
+    },
+    {
+        "slug": "three_step_footprint",
+        "title": "THREE STEP FLOOR PLAN",
+        "polygon": [(0, 0), (0, 6), (4, 6), (4, 9), (9, 9), (9, 12), (15, 12), (15, 0)],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 15, "y": -1.20, "ref_y1": 0, "ref_y2": 0, "label": "15.00 m"},
+            {"kind": "v", "x": 16.20, "y1": 0, "y2": 12, "ref_x1": 15, "ref_x2": 15, "label": "12.00 m"},
+            {"kind": "h", "x1": 0, "x2": 4, "y": 13.20, "ref_y1": 6, "ref_y2": 6, "label": "4.00 m"},
+            {"kind": "h", "x1": 4, "x2": 9, "y": 13.20, "ref_y1": 9, "ref_y2": 9, "label": "5.00 m"},
+            {"kind": "h", "x1": 9, "x2": 15, "y": 13.20, "ref_y1": 12, "ref_y2": 12, "label": "6.00 m"},
+            {"kind": "v", "x": -1.20, "y1": 0, "y2": 6, "ref_x1": 0, "ref_x2": 0, "label": "6.00 m"},
+            {"kind": "v", "x": -1.95, "y1": 6, "y2": 9, "ref_x1": 0, "ref_x2": 4, "label": "3.00 m"},
+            {"kind": "v", "x": -2.70, "y1": 9, "y2": 12, "ref_x1": 4, "ref_x2": 9, "label": "3.00 m"},
+        ],
+        "windows": [((2, 0), (5.4, 0)), ((8.5, 0), (12.5, 0)), ((0, 1.5), (0, 4.5)), ((1, 6), (3.2, 6)), ((5, 9), (8, 9)), ((10.5, 12), (14, 12)), ((15, 3), (15, 7.5))],
+    },
+    {
+        "slug": "rear_center_notch",
+        "title": "REAR CENTER NOTCH FLOOR PLAN",
+        "polygon": [(0, 0), (0, 10), (5, 10), (5, 6.5), (9, 6.5), (9, 10), (14, 10), (14, 0)],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 14, "y": -1.20, "ref_y1": 0, "ref_y2": 0, "label": "14.00 m"},
+            {"kind": "v", "x": -1.20, "y1": 0, "y2": 10, "ref_x1": 0, "ref_x2": 0, "label": "10.00 m"},
+            {"kind": "h", "x1": 0, "x2": 5, "y": 11.20, "ref_y1": 10, "ref_y2": 10, "label": "5.00 m"},
+            {"kind": "h", "x1": 5, "x2": 9, "y": 11.20, "ref_y1": 10, "ref_y2": 10, "label": "4.00 m"},
+            {"kind": "h", "x1": 9, "x2": 14, "y": 11.20, "ref_y1": 10, "ref_y2": 10, "label": "5.00 m"},
+            {"kind": "v", "x": 15.20, "y1": 0, "y2": 6.5, "ref_x1": 14, "ref_x2": 9, "label": "6.50 m"},
+            {"kind": "v", "x": 15.92, "y1": 6.5, "y2": 10, "ref_x1": 9, "ref_x2": 14, "label": "3.50 m"},
+        ],
+        "windows": [((2, 0), (5, 0)), ((9, 0), (12, 0)), ((0, 2), (0, 5.2)), ((14, 2), (14, 5.2)), ((1.2, 10), (4, 10)), ((10, 10), (12.8, 10)), ((5, 7.2), (5, 9.2)), ((9, 7.2), (9, 9.2))],
+    },
+    {
+        "slug": "right_side_notch",
+        "title": "RIGHT SIDE NOTCH FLOOR PLAN",
+        "polygon": [(0, 0), (0, 9), (16, 9), (16, 6.5), (12, 6.5), (12, 3), (16, 3), (16, 0)],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 16, "y": -1.20, "ref_y1": 0, "ref_y2": 0, "label": "16.00 m"},
+            {"kind": "v", "x": -1.20, "y1": 0, "y2": 9, "ref_x1": 0, "ref_x2": 0, "label": "9.00 m"},
+            {"kind": "h", "x1": 0, "x2": 12, "y": 10.45, "ref_y1": 9, "ref_y2": 6.5, "label": "12.00 m"},
+            {"kind": "h", "x1": 12, "x2": 16, "y": 10.45, "ref_y1": 6.5, "ref_y2": 9, "label": "4.00 m"},
+            {"kind": "h", "x1": 12, "x2": 16, "y": 4.75, "ref_y1": 3, "ref_y2": 3, "label": "4.00 m"},
+            {"kind": "v", "x": 17.20, "y1": 0, "y2": 3, "ref_x1": 16, "ref_x2": 16, "label": "3.00 m"},
+            {"kind": "v", "x": 17.20, "y1": 3, "y2": 6.5, "ref_x1": 16, "ref_x2": 16, "label": "3.50 m"},
+            {"kind": "v", "x": 17.20, "y1": 6.5, "y2": 9, "ref_x1": 16, "ref_x2": 16, "label": "2.50 m"},
+        ],
+        "windows": [((2, 0), (5.5, 0)), ((9, 0), (13, 0)), ((0, 2), (0, 4.5)), ((0, 5.8), (0, 8)), ((3, 9), (7, 9)), ((9.5, 9), (13.5, 9)), ((12, 3.6), (12, 5.9)), ((16, 0.8), (16, 2.4)), ((16, 7.1), (16, 8.4))],
+    },
+    {
+        "slug": "h_shape_dual_wing",
+        "title": "H SHAPE DUAL WING FLOOR PLAN",
+        "polygon": [(0, 12), (5, 12), (5, 7.5), (11, 7.5), (11, 12), (16, 12), (16, 0), (11, 0), (11, 4.5), (5, 4.5), (5, 0), (0, 0)],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 16, "y": 13.30, "ref_y1": 12, "ref_y2": 12, "label": "16.00 m"},
+            {"kind": "h", "x1": 0, "x2": 5, "y": -1.20, "ref_y1": 0, "ref_y2": 0, "label": "5.00 m"},
+            {"kind": "h", "x1": 5, "x2": 11, "y": -1.20, "ref_y1": 4.5, "ref_y2": 4.5, "label": "6.00 m"},
+            {"kind": "h", "x1": 11, "x2": 16, "y": -1.20, "ref_y1": 0, "ref_y2": 0, "label": "5.00 m"},
+            {"kind": "v", "x": 17.30, "y1": 0, "y2": 12, "ref_x1": 16, "ref_x2": 16, "label": "12.00 m"},
+            {"kind": "v", "x": -1.35, "y1": 0, "y2": 4.5, "ref_x1": 0, "ref_x2": 5, "label": "4.50 m"},
+            {"kind": "v", "x": -1.35, "y1": 4.5, "y2": 7.5, "ref_x1": 5, "ref_x2": 5, "label": "3.00 m"},
+            {"kind": "v", "x": -1.35, "y1": 7.5, "y2": 12, "ref_x1": 5, "ref_x2": 0, "label": "4.50 m"},
+        ],
+        "windows": [((1.0, 12), (4.0, 12)), ((12.0, 12), (15.0, 12)), ((0, 1.6), (0, 4.2)), ((0, 8.0), (0, 10.8)), ((16, 1.6), (16, 4.2)), ((16, 8.0), (16, 10.8))],
+    },
+    {
+        "slug": "e_shape_three_bay",
+        "title": "E SHAPE THREE BAY FLOOR PLAN",
+        "polygon": [(0, 13), (15, 13), (15, 10), (4, 10), (4, 8), (12, 8), (12, 5), (4, 5), (4, 3), (15, 3), (15, 0), (0, 0)],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 15, "y": 14.30, "ref_y1": 13, "ref_y2": 13, "label": "15.00 m"},
+            {"kind": "h", "x1": 0, "x2": 4, "y": -1.15, "ref_y1": 0, "ref_y2": 0, "label": "4.00 m"},
+            {"kind": "h", "x1": 4, "x2": 15, "y": -1.15, "ref_y1": 0, "ref_y2": 0, "label": "11.00 m"},
+            {"kind": "h", "x1": 4, "x2": 12, "y": 8.90, "ref_y1": 8, "ref_y2": 8, "label": "8.00 m"},
+            {"kind": "v", "x": -1.30, "y1": 0, "y2": 13, "ref_x1": 0, "ref_x2": 0, "label": "13.00 m"},
+            {"kind": "v", "x": 16.25, "y1": 0, "y2": 3, "ref_x1": 15, "ref_x2": 15, "label": "3.00 m"},
+            {"kind": "v", "x": 16.25, "y1": 3, "y2": 5, "ref_x1": 15, "ref_x2": 4, "label": "2.00 m"},
+            {"kind": "v", "x": 16.25, "y1": 5, "y2": 8, "ref_x1": 12, "ref_x2": 12, "label": "3.00 m"},
+            {"kind": "v", "x": 16.25, "y1": 8, "y2": 10, "ref_x1": 12, "ref_x2": 15, "label": "2.00 m"},
+            {"kind": "v", "x": 16.25, "y1": 10, "y2": 13, "ref_x1": 15, "ref_x2": 15, "label": "3.00 m"},
+        ],
+        "windows": [((2, 13), (5, 13)), ((9, 13), (13, 13)), ((6, 0), (10, 0)), ((0, 2), (0, 5)), ((0, 8), (0, 11)), ((15, 10.6), (15, 12.2)), ((12, 5.6), (12, 7.2))],
+    },
+    {
+        "slug": "f_shape_offset_wing",
+        "title": "F SHAPE OFFSET WING FLOOR PLAN",
+        "polygon": [(0, 13), (14, 13), (14, 10), (4, 10), (4, 8), (11, 8), (11, 5), (4, 5), (4, 0), (0, 0)],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 14, "y": 14.25, "ref_y1": 13, "ref_y2": 13, "label": "14.00 m"},
+            {"kind": "h", "x1": 0, "x2": 4, "y": -1.15, "ref_y1": 0, "ref_y2": 0, "label": "4.00 m"},
+            {"kind": "h", "x1": 4, "x2": 11, "y": 4.15, "ref_y1": 5, "ref_y2": 5, "label": "7.00 m"},
+            {"kind": "h", "x1": 4, "x2": 14, "y": 9.15, "ref_y1": 10, "ref_y2": 10, "label": "10.00 m"},
+            {"kind": "v", "x": -1.30, "y1": 0, "y2": 13, "ref_x1": 0, "ref_x2": 0, "label": "13.00 m"},
+            {"kind": "v", "x": 15.20, "y1": 10, "y2": 13, "ref_x1": 14, "ref_x2": 14, "label": "3.00 m"},
+            {"kind": "v", "x": 15.20, "y1": 8, "y2": 10, "ref_x1": 11, "ref_x2": 14, "label": "2.00 m"},
+            {"kind": "v", "x": 12.20, "y1": 5, "y2": 8, "ref_x1": 11, "ref_x2": 11, "label": "3.00 m"},
+            {"kind": "v", "x": 5.30, "y1": 0, "y2": 5, "ref_x1": 4, "ref_x2": 4, "label": "5.00 m"},
+        ],
+        "windows": [((2, 13), (5, 13)), ((8.5, 13), (12.5, 13)), ((14, 10.6), (14, 12.2)), ((11, 5.6), (11, 7.4)), ((0, 1.5), (0, 4.0)), ((0, 8.5), (0, 11.0))],
+    },
+    {
+        "slug": "offset_cross_footprint",
+        "title": "OFFSET CROSS FLOOR PLAN",
+        "polygon": [(5, 13), (9, 13), (9, 8.5), (16, 8.5), (16, 4), (9, 4), (9, 0), (5, 0), (5, 4), (0, 4), (0, 8.5), (5, 8.5)],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 16, "y": 14.25, "ref_y1": 8.5, "ref_y2": 8.5, "label": "16.00 m"},
+            {"kind": "h", "x1": 0, "x2": 5, "y": 9.60, "ref_y1": 8.5, "ref_y2": 8.5, "label": "5.00 m"},
+            {"kind": "h", "x1": 5, "x2": 9, "y": -1.20, "ref_y1": 0, "ref_y2": 0, "label": "4.00 m"},
+            {"kind": "h", "x1": 9, "x2": 16, "y": 9.60, "ref_y1": 8.5, "ref_y2": 8.5, "label": "7.00 m"},
+            {"kind": "v", "x": 17.20, "y1": 0, "y2": 13, "ref_x1": 9, "ref_x2": 9, "label": "13.00 m"},
+            {"kind": "v", "x": -1.20, "y1": 0, "y2": 4, "ref_x1": 5, "ref_x2": 0, "label": "4.00 m"},
+            {"kind": "v", "x": -1.20, "y1": 4, "y2": 8.5, "ref_x1": 0, "ref_x2": 0, "label": "4.50 m"},
+            {"kind": "v", "x": -1.20, "y1": 8.5, "y2": 13, "ref_x1": 5, "ref_x2": 5, "label": "4.50 m"},
+        ],
+        "windows": [((5.7, 13), (8.3, 13)), ((5.7, 0), (8.3, 0)), ((1.0, 8.5), (3.6, 8.5)), ((11.0, 8.5), (15.0, 8.5)), ((0, 4.8), (0, 7.8)), ((16, 4.8), (16, 7.8))],
+    },
+    {
+        "slug": "asymmetric_wing_footprint",
+        "title": "ASYMMETRIC WING FLOOR PLAN",
+        "polygon": [(0, 12), (7, 12), (7, 9), (14, 9), (14, 5), (18, 5), (18, 0), (10, 0), (10, 2), (2, 2), (2, 9), (0, 9)],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 18, "y": 14.55, "ref_y1": 12, "ref_y2": 5, "label": "18.00 m"},
+            {"kind": "h", "x1": 0, "x2": 7, "y": 13.35, "ref_y1": 12, "ref_y2": 12, "label": "7.00 m"},
+            {"kind": "h", "x1": 7, "x2": 14, "y": 10.30, "ref_y1": 9, "ref_y2": 9, "label": "7.00 m"},
+            {"kind": "h", "x1": 14, "x2": 18, "y": 6.30, "ref_y1": 5, "ref_y2": 5, "label": "4.00 m"},
+            {"kind": "h", "x1": 10, "x2": 18, "y": -1.25, "ref_y1": 0, "ref_y2": 0, "label": "8.00 m"},
+            {"kind": "v", "x": 20.40, "y1": 0, "y2": 12, "ref_x1": 18, "ref_x2": 7, "label": "12.00 m"},
+            {"kind": "v", "x": -1.35, "y1": 9, "y2": 12, "ref_x1": 0, "ref_x2": 0, "label": "3.00 m"},
+            {"kind": "v", "x": 0.85, "y1": 2, "y2": 9, "ref_x1": 2, "ref_x2": 2, "label": "7.00 m"},
+            {"kind": "v", "x": 19.00, "y1": 0, "y2": 5, "ref_x1": 18, "ref_x2": 18, "label": "5.00 m"},
+        ],
+        "windows": [((1.0, 12), (4.5, 12)), ((9.0, 9), (12.5, 9)), ((14, 6.0), (14, 8.2)), ((18, 1.0), (18, 4.0)), ((11.2, 0), (15.6, 0)), ((2, 3.0), (2, 6.8)), ((0, 9.4), (0, 11.2))],
+    },
+    {
+        "slug": "rect_courtyard_side_recesses",
+        "title": "RECTANGULAR COURTYARD WITH SIDE RECESSES",
+        "polygon": [(0, 0), (0, 4), (2.5, 4), (2.5, 8), (0, 8), (0, 12), (20, 12), (20, 9), (17.5, 9), (17.5, 6), (20, 6), (20, 0)],
+        "holes": [[(7.5, 4), (12.5, 4), (12.5, 8), (7.5, 8)]],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 20, "y": -1.25, "ref_y1": 0, "ref_y2": 0, "label": "20.00 m"},
+            {"kind": "v", "x": -1.25, "y1": 0, "y2": 12, "ref_x1": 0, "ref_x2": 0, "label": "12.00 m"},
+            {"kind": "h", "x1": 7.5, "x2": 12.5, "y": 13.20, "ref_y1": 8, "ref_y2": 8, "label": "5.00 m"},
+            {"kind": "v", "x": 21.25, "y1": 4, "y2": 8, "ref_x1": 12.5, "ref_x2": 12.5, "label": "4.00 m"},
+            {"kind": "h", "x1": 0, "x2": 2.5, "y": 2.85, "ref_y1": 4, "ref_y2": 4, "label": "2.50 m"},
+        ],
+        "windows": [((3.2, 0), (7.0, 0)), ((13.0, 0), (17.0, 0)), ((20, 1.6), (20, 5.2)), ((0, 9.2), (0, 11.0)), ((7.5, 4.6), (7.5, 7.4)), ((12.5, 4.6), (12.5, 7.4))],
+    },
+    {
+        "slug": "rect_double_courtyard_end_cutouts",
+        "title": "RECTANGULAR DOUBLE COURTYARD WITH END CUTOUTS",
+        "polygon": [(0, 0), (0, 14), (4, 14), (4, 11.5), (9, 11.5), (9, 14), (16, 14), (16, 11.5), (20, 11.5), (20, 14), (24, 14), (24, 0), (15, 0), (15, 2.5), (9, 2.5), (9, 0)],
+        "holes": [[(5, 4), (9, 4), (9, 8), (5, 8)], [(15, 5), (19, 5), (19, 9), (15, 9)]],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 24, "y": -1.25, "ref_y1": 0, "ref_y2": 0, "label": "24.00 m"},
+            {"kind": "v", "x": -1.25, "y1": 0, "y2": 14, "ref_x1": 0, "ref_x2": 0, "label": "14.00 m"},
+            {"kind": "h", "x1": 9, "x2": 15, "y": 3.55, "ref_y1": 2.5, "ref_y2": 2.5, "label": "6.00 m"},
+            {"kind": "h", "x1": 5, "x2": 9, "y": 9.35, "ref_y1": 8, "ref_y2": 8, "label": "4.00 m"},
+            {"kind": "v", "x": 20.60, "y1": 5, "y2": 9, "ref_x1": 19, "ref_x2": 19, "label": "4.00 m"},
+        ],
+        "windows": [((2, 0), (6, 0)), ((18, 0), (22, 0)), ((10, 14), (14, 14)), ((24, 2), (24, 4.8)), ((0, 3), (0, 6)), ((5, 4.6), (5, 7.4)), ((19, 5.6), (19, 8.4))],
+    },
+    {
+        "slug": "rect_lightwell_chain_cutouts",
+        "title": "RECTANGULAR LIGHTWELL WITH CHAINED CUTOUTS",
+        "polygon": [(0, 0), (0, 16), (6, 16), (6, 13), (9, 13), (9, 16), (18, 16), (18, 10), (15, 10), (15, 7), (18, 7), (18, 0), (11, 0), (11, 3), (7, 3), (7, 0)],
+        "holes": [[(3, 5), (6, 5), (6, 9), (3, 9)], [(10, 6), (13.5, 6), (13.5, 10.5), (10, 10.5)]],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 18, "y": -1.25, "ref_y1": 0, "ref_y2": 0, "label": "18.00 m"},
+            {"kind": "v", "x": -1.25, "y1": 0, "y2": 16, "ref_x1": 0, "ref_x2": 0, "label": "16.00 m"},
+            {"kind": "h", "x1": 7, "x2": 11, "y": 4.15, "ref_y1": 3, "ref_y2": 3, "label": "4.00 m"},
+            {"kind": "h", "x1": 10, "x2": 13.5, "y": 11.75, "ref_y1": 10.5, "ref_y2": 10.5, "label": "3.50 m"},
+            {"kind": "v", "x": 14.85, "y1": 6, "y2": 10.5, "ref_x1": 13.5, "ref_x2": 13.5, "label": "4.50 m"},
+        ],
+        "windows": [((1.5, 0), (5.5, 0)), ((12.5, 0), (16, 0)), ((10.5, 16), (15.5, 16)), ((18, 1.5), (18, 5.5)), ((0, 10.5), (0, 14)), ((6, 5.7), (6, 8.3)), ((10.6, 10.5), (13, 10.5))],
+    },
+    {
+        "slug": "rect_courtyard_cross_recesses",
+        "title": "RECTANGULAR COURTYARD WITH CROSS RECESSES",
+        "polygon": [(0, 0), (0, 7), (3, 7), (3, 11), (0, 11), (0, 18), (8, 18), (8, 15), (14, 15), (14, 18), (22, 18), (22, 11), (19, 11), (19, 7), (22, 7), (22, 0), (14, 0), (14, 3), (8, 3), (8, 0)],
+        "holes": [[(8, 6), (14, 6), (14, 12), (8, 12)]],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 22, "y": -1.30, "ref_y1": 0, "ref_y2": 0, "label": "22.00 m"},
+            {"kind": "v", "x": -1.30, "y1": 0, "y2": 18, "ref_x1": 0, "ref_x2": 0, "label": "18.00 m"},
+            {"kind": "h", "x1": 8, "x2": 14, "y": 4.15, "ref_y1": 3, "ref_y2": 3, "label": "6.00 m"},
+            {"kind": "h", "x1": 8, "x2": 14, "y": 13.25, "ref_y1": 12, "ref_y2": 12, "label": "6.00 m"},
+            {"kind": "v", "x": 15.25, "y1": 6, "y2": 12, "ref_x1": 14, "ref_x2": 14, "label": "6.00 m"},
+            {"kind": "v", "x": 4.20, "y1": 7, "y2": 11, "ref_x1": 3, "ref_x2": 3, "label": "4.00 m"},
+        ],
+        "windows": [((2, 0), (6, 0)), ((16, 0), (20, 0)), ((2, 18), (6, 18)), ((16, 18), (20, 18)), ((22, 1.5), (22, 5.5)), ((0, 12.5), (0, 16)), ((8, 7), (8, 11)), ((14, 7), (14, 11))],
+    },
+    {
+        "slug": "rect_multi_void_terrace_cuts",
+        "title": "RECTANGULAR MULTI VOID WITH TERRACE CUTS",
+        "polygon": [(0, 0), (0, 16), (5, 16), (5, 13), (10, 13), (10, 16), (26, 16), (26, 9), (23, 9), (23, 5), (26, 5), (26, 0), (18, 0), (18, 2.5), (13, 2.5), (13, 0)],
+        "holes": [[(4, 5), (8, 5), (8, 9), (4, 9)], [(14, 6), (20, 6), (20, 11), (14, 11)]],
+        "dims": [
+            {"kind": "h", "x1": 0, "x2": 26, "y": -1.25, "ref_y1": 0, "ref_y2": 0, "label": "26.00 m"},
+            {"kind": "v", "x": -1.25, "y1": 0, "y2": 16, "ref_x1": 0, "ref_x2": 0, "label": "16.00 m"},
+            {"kind": "h", "x1": 13, "x2": 18, "y": 3.60, "ref_y1": 2.5, "ref_y2": 2.5, "label": "5.00 m"},
+            {"kind": "v", "x": 22.00, "y1": 5, "y2": 9, "ref_x1": 23, "ref_x2": 23, "label": "4.00 m"},
+            {"kind": "h", "x1": 14, "x2": 20, "y": 12.35, "ref_y1": 11, "ref_y2": 11, "label": "6.00 m"},
+            {"kind": "v", "x": 21.25, "y1": 6, "y2": 11, "ref_x1": 20, "ref_x2": 20, "label": "5.00 m"},
+        ],
+        "windows": [((2, 0), (6, 0)), ((19.5, 0), (24, 0)), ((11.5, 16), (16.5, 16)), ((20, 16), (24, 16)), ((26, 1.5), (26, 4.2)), ((0, 2.5), (0, 6)), ((8, 5.6), (8, 8.4)), ((14.8, 11), (19.2, 11))],
     },
 ]
 
@@ -282,7 +547,7 @@ def draw_title_block(draw, plan):
     draw.line([(x1 + 385, y1), (x1 + 385, y2)], fill=INK, width=1)
     draw.text((x1 + 16, y1 + 9), "ABSCISSA CI", font=FONT_SMALL, fill=INK)
     draw.text((x1 + 401, y1 + 9), "TRAINING FLOOR PLAN", font=FONT_SMALL, fill=INK)
-    draw.text((x1 + 16, y1 + 50), plan["title"], font=FONT_SMALL, fill=INK)
+    draw_fitted_text(draw, (x1 + 16, y1 + 50), plan["title"], 350, font_size=16)
     draw.text((x1 + 401, y1 + 50), "DIMENSIONS IN METERS", font=FONT_SMALL, fill=INK)
     draw.text((x1 + 16, y1 + 81), "DRAFT REFERENCE", font=FONT_TINY, fill=DIM)
     draw.text((x1 + 401, y1 + 81), "HUMAN REVIEW REQUIRED", font=FONT_TINY, fill=DIM)
@@ -304,6 +569,16 @@ def draw_scale_bar(draw):
     draw.text((x, y + 23), "0", font=FONT_TINY, fill=INK)
     draw.text((x + segment * 2 - 8, y + 23), "2 m", font=FONT_TINY, fill=INK)
     draw.text((x + segment * 4 - 12, y + 23), "4 m", font=FONT_TINY, fill=INK)
+
+
+def plan_split(plan):
+    if plan["slug"] in TEST_PLAN_SLUGS:
+        return "tests"
+    return "training"
+
+
+def plan_image_path(plan):
+    return ROOT / plan_split(plan) / "images" / f"{plan['slug']}_floor_plan.png"
 
 
 def draw_plan(plan):
@@ -350,15 +625,75 @@ def draw_plan(plan):
     draw_scale_bar(draw)
     draw_title_block(draw, plan)
 
-    output = ROOT / f"{plan['slug']}_floor_plan.png"
+    output = plan_image_path(plan)
+    output.parent.mkdir(parents=True, exist_ok=True)
     image.convert("RGB").save(output, quality=96)
     return output
+
+
+def manifest_entry(plan):
+    return {
+        "slug": plan["slug"],
+        "title": plan["title"],
+        "split": plan_split(plan),
+        "image_path": str(plan_image_path(plan).relative_to(ROOT)),
+        "has_voids": bool(plan.get("holes")),
+        "dimension_labels": [dim["label"] for dim in plan["dims"]],
+        "review_status": "draft_training_reference",
+    }
+
+
+def write_json(path, payload):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2) + "\n")
+
+
+def write_manifests():
+    manifests_dir = ROOT / "json" / "manifests"
+    entries = [manifest_entry(plan) for plan in PLANS]
+
+    for split in ("training", "tests"):
+        split_entries = [entry for entry in entries if entry["split"] == split]
+        write_json(
+            manifests_dir / f"{split}_manifest.json",
+            {
+                "split": split,
+                "count": len(split_entries),
+                "images_dir": f"{split}/images",
+                "notes": [
+                    "Dimensions are visible in the floor plan images.",
+                    "No computed answer fields are included in this manifest.",
+                    "All generated construction outputs are draft-only and require human review.",
+                ],
+                "plans": split_entries,
+            },
+        )
+
+    write_json(
+        manifests_dir / "dataset_manifest.json",
+        {
+            "dataset": "example_floor_plans",
+            "total_count": len(entries),
+            "splits": {
+                "training": len([entry for entry in entries if entry["split"] == "training"]),
+                "tests": len([entry for entry in entries if entry["split"] == "tests"]),
+            },
+            "generator": "generate_floor_plans.py",
+            "notes": [
+                "Floor plans are rectilinear and orthogonal.",
+                "Images show dimensions only; compute measurements separately.",
+                "Generated construction references are draft-only until reviewed.",
+            ],
+            "plans": entries,
+        },
+    )
 
 
 def main():
     for plan in PLANS:
         path = draw_plan(plan)
         print(path)
+    write_manifests()
 
 
 if __name__ == "__main__":

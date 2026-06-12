@@ -32,23 +32,45 @@ def render_tile_estimate_markdown(result: TileEstimateResult) -> str:
                 f"Base tiles needed: **{result.base_tile_count} pcs**",
                 f"Order quantity with waste: **{result.order_tile_count} pcs**",
                 "",
-                "## Room Areas",
-                "",
-                "| Area | Operation | Dimensions | Net area | Source |",
-                "| --- | --- | ---: | ---: | --- |",
             ]
         )
-        for room in result.rooms:
-            source = room.source_text or ""
-            lines.append(
-                f"| {room.name} | {room.operation} | {room.length_m:g}m x {room.width_m:g}m | "
-                f"{room.signed_area_sqm:g} sqm | {source} |"
+        if result.rooms:
+            lines.extend(
+                [
+                    "## Room Areas",
+                    "",
+                    "| Area | Operation | Dimensions | Net area | Source |",
+                    "| --- | --- | ---: | ---: | --- |",
+                ]
             )
-        lines.append("")
+            for room in result.rooms:
+                source = room.source_text or ""
+                lines.append(
+                    f"| {room.name} | {room.operation} | {room.length_m:g}m x {room.width_m:g}m | "
+                    f"{room.signed_area_sqm:g} sqm | {source} |"
+                )
+            lines.append("")
+        if result.polygons:
+            lines.extend(
+                [
+                    "## Polygon Zones",
+                    "",
+                    "| Zone | Operation | Vertices | Net area | Perimeter | Source |",
+                    "| --- | --- | ---: | ---: | ---: | --- |",
+                ]
+            )
+            for zone in result.polygons:
+                source = zone.source_text or ""
+                lines.append(
+                    f"| {zone.name} | {zone.operation} | {zone.point_count} | "
+                    f"{zone.signed_area_sqm:g} sqm | {zone.perimeter_m:g} m | {source} |"
+                )
+            lines.append("")
     else:
         lines.extend(
             [
-                "The tile estimate could not be computed because no valid rectangular dimensions were available.",
+                "The tile estimate could not be computed because the inputs did not produce a "
+                "valid floor area. See the warnings below.",
                 "",
             ]
         )

@@ -13,6 +13,7 @@ dependencies = [
 
 [project.scripts]
 abscissa-tile = "abscissa_ci.cli:app"
+abscissa-serve = "abscissa_ci.web.server:main"
 
 [build-system]
 requires = ["hatchling"]

@@ -5,6 +5,13 @@ from math import ceil
 from abscissa_ci.models import TileCountResult, TileSpec, clean_float
 
 
+def ceil_exact(value: float, places: int = 9) -> int:
+    # Inputs are cleaned to at most 4 decimal places, so any fractional part
+    # smaller than 1e-9 is float noise (e.g. 1.08 / 0.36 -> 3.0000000000000004),
+    # not a real remainder that needs an extra tile.
+    return ceil(round(value, places))
+
+
 def count_needed_tiles(
     total_floor_area_sqm: float,
     tile_spec: TileSpec | None = None,
@@ -17,8 +24,8 @@ def count_needed_tiles(
 
     spec = tile_spec or TileSpec()
     tile_area_sqm = spec.area_sqm
-    base_tile_count = ceil(total_floor_area_sqm / tile_area_sqm)
-    order_tile_count = ceil(base_tile_count * (1 + (waste_percent / 100)))
+    base_tile_count = ceil_exact(total_floor_area_sqm / tile_area_sqm)
+    order_tile_count = ceil_exact(base_tile_count * (1 + (waste_percent / 100)))
 
     return TileCountResult(
         tile_length_mm=spec.length_mm,

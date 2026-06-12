@@ -14,6 +14,13 @@ def clean_float(value: float, places: int = 4) -> float:
     return 0.0 if rounded == -0.0 else rounded
 
 
+def ceil_exact(value: float, places: int = 9) -> int:
+    # Inputs are cleaned to at most 4 decimal places, so any fractional part
+    # smaller than 1e-9 is float noise (e.g. 1.08 / 0.36 -> 3.0000000000000004),
+    # not a real remainder that needs an extra tile.
+    return math.ceil(round(value, places))
+
+
 def load_json(path: Path) -> dict[str, Any]:
     try:
         return json.loads(path.read_text())
@@ -57,8 +64,8 @@ def count_tiles(
         }
 
     tile_area_sqm = clean_float((tile_length_mm / 1000) * (tile_width_mm / 1000), places=6)
-    base_tile_count = math.ceil(total_floor_area_sqm / tile_area_sqm)
-    order_tile_count = math.ceil(base_tile_count * (1 + (waste_percent / 100)))
+    base_tile_count = ceil_exact(total_floor_area_sqm / tile_area_sqm)
+    order_tile_count = ceil_exact(base_tile_count * (1 + (waste_percent / 100)))
 
     return {
         "can_compute": True,

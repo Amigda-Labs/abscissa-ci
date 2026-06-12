@@ -30,6 +30,16 @@ def read_json_input(path: Path) -> TileEstimateInput:
 
 
 def output_paths(source_path: Path) -> tuple[Path, Path]:
+    example_root = next(
+        (parent for parent in (source_path, *source_path.parents) if parent.name == "example_floor_plans"),
+        None,
+    )
+    if example_root is not None:
+        return (
+            example_root / "json" / "tile_estimates" / f"{source_path.stem}.tile_estimate.json",
+            example_root / "reports" / "tile_estimates" / f"{source_path.stem}.tile_estimate.md",
+        )
+
     return (
         source_path.with_name(f"{source_path.stem}.tile_estimate.json"),
         source_path.with_name(f"{source_path.stem}.tile_estimate.md"),
@@ -38,6 +48,8 @@ def output_paths(source_path: Path) -> tuple[Path, Path]:
 
 def write_outputs(source_path: Path, result) -> tuple[Path, Path]:
     json_path, markdown_path = output_paths(source_path)
+    json_path.parent.mkdir(parents=True, exist_ok=True)
+    markdown_path.parent.mkdir(parents=True, exist_ok=True)
     json_path.write_text(result.model_dump_json(indent=2) + "\n")
     markdown_path.write_text(render_tile_estimate_markdown(result))
     return json_path, markdown_path

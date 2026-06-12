@@ -1,0 +1,114 @@
+{
+  "split": "tests",
+  "count": 6,
+  "images_dir": "tests/images",
+  "notes": [
+    "Dimensions are visible in the floor plan images.",
+    "No computed answer fields are included in this manifest.",
+    "All generated construction outputs are draft-only and require human review."
+  ],
+  "plans": [
+    {
+      "slug": "right_side_notch",
+      "title": "RIGHT SIDE NOTCH FLOOR PLAN",
+      "split": "tests",
+      "image_path": "tests/images/right_side_notch_floor_plan.png",
+      "has_voids": false,
+      "dimension_labels": [
+        "16.00 m",
+        "9.00 m",
+        "12.00 m",
+        "4.00 m",
+        "4.00 m",
+        "3.00 m",
+        "3.50 m",
+        "2.50 m"
+      ],
+      "review_status": "draft_training_reference"
+    },
+    {
+      "slug": "offset_cross_footprint",
+      "title": "OFFSET CROSS FLOOR PLAN",
+      "split": "tests",
+      "image_path": "tests/images/offset_cross_footprint_floor_plan.png",
+      "has_voids": false,
+      "dimension_labels": [
+        "16.00 m",
+        "5.00 m",
+        "4.00 m",
+        "7.00 m",
+        "13.00 m",
+        "4.00 m",
+        "4.50 m",
+        "4.50 m"
+      ],
+      "review_status": "draft_training_reference"
+    },
+    {
+      "slug": "asymmetric_wing_footprint",
+      "title": "ASYMMETRIC WING FLOOR PLAN",
+      "split": "tests",
+      "image_path": "tests/images/asymmetric_wing_footprint_floor_plan.png",
+      "has_voids": false,
+      "dimension_labels": [
+        "18.00 m",
+        "7.00 m",
+        "7.00 m",
+        "4.00 m",
+        "8.00 m",
+        "12.00 m",
+        "3.00 m",
+        "7.00 m",
+        "5.00 m"
+      ],
+      "review_status": "draft_training_reference"
+    },
+    {
+      "slug": "rect_double_courtyard_end_cutouts",
+      "title": "RECTANGULAR DOUBLE COURTYARD WITH END CUTOUTS",
+      "split": "tests",
+      "image_path": "tests/images/rect_double_courtyard_end_cutouts_floor_plan.png",
+      "has_voids": true,
+      "dimension_labels": [
+        "24.00 m",
+        "14.00 m",
+        "6.00 m",
+        "4.00 m",
+        "4.00 m"
+      ],
+      "review_status": "draft_training_reference"
+    },
+    {
+      "slug": "rect_courtyard_cross_recesses",
+      "title": "RECTANGULAR COURTYARD WITH CROSS RECESSES",
+      "split": "tests",
+      "image_path": "tests/images/rect_courtyard_cross_recesses_floor_plan.png",
+      "has_voids": true,
+      "dimension_labels": [
+        "22.00 m",
+        "18.00 m",
+        "6.00 m",
+        "6.00 m",
+        "6.00 m",
+        "4.00 m"
+      ],
+      "review_status": "draft_training_reference"
+    },
+    {
+      "slug": "rect_multi_void_terrace_cuts",
+      "title": "RECTANGULAR MULTI VOID WITH TERRACE CUTS",
+      "split": "tests",
+      "image_path": "tests/images/rect_multi_void_terrace_cuts_floor_plan.png",
+      "has_voids": true,
+      "dimension_labels": [
+        "26.00 m",
+        "16.00 m",
+        "5.00 m",
+        "4.00 m",
+        "6.00 m",
+        "5.00 m"
+      ],
+      "review_status": "draft_training_reference"
+    }
+  ]
+}
