@@ -1,1 +1,0 @@
-"""Deterministic construction calculators."""
