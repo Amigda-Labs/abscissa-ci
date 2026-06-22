@@ -1,0 +1,331 @@
+{
+  "project_name": "Townhouse Ground Floor",
+  "requested_measurement_basis": "net_internal_room_area",
+  "scale_basis": "dimension_labels",
+  "units_detected": [
+    "m"
+  ],
+  "rooms": [
+    {
+      "room_id": "garage",
+      "name": "Garage",
+      "room_type": "garage",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "garage",
+          "name": "Garage",
+          "operation": "add",
+          "length": {
+            "value": 3.4,
+            "unit": "m",
+            "source_text": "3.40 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 5.4,
+            "unit": "m",
+            "source_text": "5.40 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_04_townhouse_ground"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "foyer",
+      "name": "Foyer",
+      "room_type": "hall",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "foyer",
+          "name": "Foyer",
+          "operation": "add",
+          "length": {
+            "value": 2.2,
+            "unit": "m",
+            "source_text": "2.20 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 2.4,
+            "unit": "m",
+            "source_text": "2.40 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_04_townhouse_ground"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "powder_room",
+      "name": "Powder Room",
+      "room_type": "bathroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "powder_room",
+          "name": "Powder Room",
+          "operation": "add",
+          "length": {
+            "value": 1.8,
+            "unit": "m",
+            "source_text": "1.80 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.8,
+            "unit": "m",
+            "source_text": "1.80 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_04_townhouse_ground"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "stair_hall",
+      "name": "Stair Hall",
+      "room_type": "hall",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "stair_hall",
+          "name": "Stair Hall",
+          "operation": "add",
+          "length": {
+            "value": 1.8,
+            "unit": "m",
+            "source_text": "1.80 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.6,
+            "unit": "m",
+            "source_text": "3.60 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_04_townhouse_ground"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "kitchen",
+      "name": "Kitchen",
+      "room_type": "kitchen",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "kitchen",
+          "name": "Kitchen",
+          "operation": "add",
+          "length": {
+            "value": 3.4,
+            "unit": "m",
+            "source_text": "3.40 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.0,
+            "unit": "m",
+            "source_text": "3.00 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_04_townhouse_ground"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "dining",
+      "name": "Dining",
+      "room_type": "dining",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "dining",
+          "name": "Dining",
+          "operation": "add",
+          "length": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.6,
+            "unit": "m",
+            "source_text": "3.60 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_04_townhouse_ground"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "living_room",
+      "name": "Living Room",
+      "room_type": "living",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "living_room",
+          "name": "Living Room",
+          "operation": "add",
+          "length": {
+            "value": 6.6,
+            "unit": "m",
+            "source_text": "6.60 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 4.0,
+            "unit": "m",
+            "source_text": "4.00 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_04_townhouse_ground"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "storage",
+      "name": "Storage",
+      "room_type": "storage",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "storage",
+          "name": "Storage",
+          "operation": "add",
+          "length": {
+            "value": 1.6,
+            "unit": "m",
+            "source_text": "1.60 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.8,
+            "unit": "m",
+            "source_text": "1.80 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_04_townhouse_ground"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "mudroom",
+      "name": "Mudroom",
+      "room_type": "utility",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "mudroom",
+          "name": "Mudroom",
+          "operation": "add",
+          "length": {
+            "value": 1.8,
+            "unit": "m",
+            "source_text": "1.80 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.8,
+            "unit": "m",
+            "source_text": "1.80 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_04_townhouse_ground"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    }
+  ],
+  "consistency_checks": [],
+  "assumptions": [
+    "Synthetic fixture with net internal metric dimensions."
+  ],
+  "warnings": [],
+  "questions": []
+}

@@ -1,0 +1,29 @@
+[project]
+name = "abscissa-ci"
+version = "0.1.0"
+description = "Construction intelligence agents for floor-plan area determination."
+requires-python = ">=3.12"
+dependencies = [
+  "openai-agents>=0.17.3",
+  "openai>=2.38.0",
+  "pillow>=10.0",
+  "pydantic>=2.13",
+  "python-dotenv>=1.0",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=9.0",
+]
+
+[project.scripts]
+abscissa-area = "abscissa_ci.cli:main"
+abscissa-cad = "abscissa_ci.cad.server:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

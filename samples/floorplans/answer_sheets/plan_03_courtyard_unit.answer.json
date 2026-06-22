@@ -1,0 +1,120 @@
+{
+  "plan_id": "plan_03_courtyard_unit",
+  "title": "Courtyard Unit",
+  "image": "samples/floorplans/images/plan_03_courtyard_unit.png",
+  "measurement_basis": "net_internal_room_area",
+  "units": "metric",
+  "scale": {
+    "px_per_m": 92
+  },
+  "notes": [
+    "Living Room contains a 1.20 m x 1.00 m lightwell void excluded from floor area."
+  ],
+  "rooms": [
+    {
+      "name": "Living Room",
+      "room_type": "living",
+      "displayed_dimension": "5.60 m x 4.20 m",
+      "components": [
+        {
+          "name": "Living Room gross rectangle",
+          "operation": "add",
+          "length_m": 5.6,
+          "width_m": 4.2,
+          "calculation": "5.60 m x 4.20 m",
+          "signed_area_sqm": 23.52
+        },
+        {
+          "name": "Lightwell void",
+          "operation": "subtract",
+          "length_m": 1.2,
+          "width_m": 1.0,
+          "calculation": "1.20 m x 1.00 m",
+          "signed_area_sqm": -1.2
+        }
+      ],
+      "area_sqm": 22.32
+    },
+    {
+      "name": "Kitchen",
+      "room_type": "kitchen",
+      "displayed_dimension": "2.80 m x 2.80 m",
+      "components": [
+        {
+          "name": "Kitchen",
+          "operation": "add",
+          "length_m": 2.8,
+          "width_m": 2.8,
+          "calculation": "2.80 m x 2.80 m",
+          "signed_area_sqm": 7.84
+        }
+      ],
+      "area_sqm": 7.84
+    },
+    {
+      "name": "Bedroom",
+      "room_type": "bedroom",
+      "displayed_dimension": "3.60 m x 3.30 m",
+      "components": [
+        {
+          "name": "Bedroom",
+          "operation": "add",
+          "length_m": 3.6,
+          "width_m": 3.3,
+          "calculation": "3.60 m x 3.30 m",
+          "signed_area_sqm": 11.88
+        }
+      ],
+      "area_sqm": 11.88
+    },
+    {
+      "name": "Study",
+      "room_type": "study",
+      "displayed_dimension": "2.40 m x 2.60 m",
+      "components": [
+        {
+          "name": "Study",
+          "operation": "add",
+          "length_m": 2.4,
+          "width_m": 2.6,
+          "calculation": "2.40 m x 2.60 m",
+          "signed_area_sqm": 6.24
+        }
+      ],
+      "area_sqm": 6.24
+    },
+    {
+      "name": "Bathroom",
+      "room_type": "bathroom",
+      "displayed_dimension": "2.40 m x 2.00 m",
+      "components": [
+        {
+          "name": "Bathroom",
+          "operation": "add",
+          "length_m": 2.4,
+          "width_m": 2.0,
+          "calculation": "2.40 m x 2.00 m",
+          "signed_area_sqm": 4.8
+        }
+      ],
+      "area_sqm": 4.8
+    },
+    {
+      "name": "Entry Hall",
+      "room_type": "hall",
+      "displayed_dimension": "2.40 m x 1.40 m",
+      "components": [
+        {
+          "name": "Entry Hall",
+          "operation": "add",
+          "length_m": 2.4,
+          "width_m": 1.4,
+          "calculation": "2.40 m x 1.40 m",
+          "signed_area_sqm": 3.36
+        }
+      ],
+      "area_sqm": 3.36
+    }
+  ],
+  "total_area_sqm": 56.44
+}

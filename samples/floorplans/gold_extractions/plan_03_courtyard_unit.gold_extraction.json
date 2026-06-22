@@ -1,0 +1,248 @@
+{
+  "project_name": "Courtyard Unit",
+  "requested_measurement_basis": "net_internal_room_area",
+  "scale_basis": "dimension_labels",
+  "units_detected": [
+    "m"
+  ],
+  "rooms": [
+    {
+      "room_id": "living_room",
+      "name": "Living Room",
+      "room_type": "living",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "living_room_gross_rectangle",
+          "name": "Living Room gross rectangle",
+          "operation": "add",
+          "length": {
+            "value": 5.6,
+            "unit": "m",
+            "source_text": "5.60 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 4.2,
+            "unit": "m",
+            "source_text": "4.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_03_courtyard_unit"
+          ],
+          "confidence": 1.0
+        },
+        {
+          "component_id": "lightwell_void",
+          "name": "Lightwell void",
+          "operation": "subtract",
+          "length": {
+            "value": 1.2,
+            "unit": "m",
+            "source_text": "1.20 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.0,
+            "unit": "m",
+            "source_text": "1.00 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_03_courtyard_unit"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "kitchen",
+      "name": "Kitchen",
+      "room_type": "kitchen",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "kitchen",
+          "name": "Kitchen",
+          "operation": "add",
+          "length": {
+            "value": 2.8,
+            "unit": "m",
+            "source_text": "2.80 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 2.8,
+            "unit": "m",
+            "source_text": "2.80 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_03_courtyard_unit"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "bedroom",
+      "name": "Bedroom",
+      "room_type": "bedroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "bedroom",
+          "name": "Bedroom",
+          "operation": "add",
+          "length": {
+            "value": 3.6,
+            "unit": "m",
+            "source_text": "3.60 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.3,
+            "unit": "m",
+            "source_text": "3.30 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_03_courtyard_unit"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "study",
+      "name": "Study",
+      "room_type": "study",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "study",
+          "name": "Study",
+          "operation": "add",
+          "length": {
+            "value": 2.4,
+            "unit": "m",
+            "source_text": "2.40 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 2.6,
+            "unit": "m",
+            "source_text": "2.60 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_03_courtyard_unit"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "bathroom",
+      "name": "Bathroom",
+      "room_type": "bathroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "bathroom",
+          "name": "Bathroom",
+          "operation": "add",
+          "length": {
+            "value": 2.4,
+            "unit": "m",
+            "source_text": "2.40 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 2.0,
+            "unit": "m",
+            "source_text": "2.00 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_03_courtyard_unit"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "entry_hall",
+      "name": "Entry Hall",
+      "room_type": "hall",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "entry_hall",
+          "name": "Entry Hall",
+          "operation": "add",
+          "length": {
+            "value": 2.4,
+            "unit": "m",
+            "source_text": "2.40 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.4,
+            "unit": "m",
+            "source_text": "1.40 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_03_courtyard_unit"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    }
+  ],
+  "consistency_checks": [],
+  "assumptions": [
+    "Synthetic fixture with net internal metric dimensions."
+  ],
+  "warnings": [],
+  "questions": []
+}

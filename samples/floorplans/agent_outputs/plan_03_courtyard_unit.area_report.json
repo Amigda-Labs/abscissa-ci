@@ -1,0 +1,157 @@
+{
+  "can_compute": true,
+  "project_name": "Courtyard Unit",
+  "source_image_path": "/Users/josejaimegarcia/Documents/Amigda/_Company_Projects/abscissa-ci/samples/floorplans/images/plan_03_courtyard_unit.png",
+  "requested_measurement_basis": "net_internal_room_area",
+  "total_area_sqm": 56.44,
+  "rooms": [
+    {
+      "room_id": "R1",
+      "name": "Living Room",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 22.32,
+      "add_area_sqm": 23.52,
+      "subtract_area_sqm": 1.2,
+      "components": [
+        {
+          "component_id": "R1_C1",
+          "name": "Living Room main rectangle",
+          "operation": "add",
+          "length_m": 5.6,
+          "width_m": 4.2,
+          "area_sqm": 23.52,
+          "signed_area_sqm": 23.52
+        },
+        {
+          "component_id": "R1_C2",
+          "name": "Void",
+          "operation": "subtract",
+          "length_m": 1.2,
+          "width_m": 1.0,
+          "area_sqm": 1.2,
+          "signed_area_sqm": -1.2
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.97
+    },
+    {
+      "room_id": "R2",
+      "name": "Kitchen",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 7.84,
+      "add_area_sqm": 7.84,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "R2_C1",
+          "name": "Kitchen rectangle",
+          "operation": "add",
+          "length_m": 2.8,
+          "width_m": 2.8,
+          "area_sqm": 7.84,
+          "signed_area_sqm": 7.84
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "R3",
+      "name": "Entry Hall",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 3.36,
+      "add_area_sqm": 3.36,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "R3_C1",
+          "name": "Entry Hall rectangle",
+          "operation": "add",
+          "length_m": 2.4,
+          "width_m": 1.4,
+          "area_sqm": 3.36,
+          "signed_area_sqm": 3.36
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "R4",
+      "name": "Bathroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 4.8,
+      "add_area_sqm": 4.8,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "R4_C1",
+          "name": "Bathroom rectangle",
+          "operation": "add",
+          "length_m": 2.4,
+          "width_m": 2.0,
+          "area_sqm": 4.8,
+          "signed_area_sqm": 4.8
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "R5",
+      "name": "Bedroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 11.88,
+      "add_area_sqm": 11.88,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "R5_C1",
+          "name": "Bedroom rectangle",
+          "operation": "add",
+          "length_m": 3.6,
+          "width_m": 3.3,
+          "area_sqm": 11.88,
+          "signed_area_sqm": 11.88
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "R6",
+      "name": "Study",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 6.24,
+      "add_area_sqm": 6.24,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "R6_C1",
+          "name": "Study rectangle",
+          "operation": "add",
+          "length_m": 2.4,
+          "width_m": 2.6,
+          "area_sqm": 6.24,
+          "signed_area_sqm": 6.24
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    }
+  ],
+  "issues": [],
+  "questions": [],
+  "assumptions": [
+    "Title states synthetic metric plan with net room dimensions shown; room labels are treated as inside-face net internal dimensions.",
+    "Furniture blocks are ignored as movable objects and not subtracted from room area."
+  ],
+  "warnings": []
+}

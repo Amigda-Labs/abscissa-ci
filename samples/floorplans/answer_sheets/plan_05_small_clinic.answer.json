@@ -1,0 +1,142 @@
+{
+  "plan_id": "plan_05_small_clinic",
+  "title": "Small Clinic Suite",
+  "image": "samples/floorplans/images/plan_05_small_clinic.png",
+  "measurement_basis": "net_internal_room_area",
+  "units": "metric",
+  "scale": {
+    "px_per_m": 92
+  },
+  "notes": [],
+  "rooms": [
+    {
+      "name": "Reception",
+      "room_type": "reception",
+      "displayed_dimension": "4.20 m x 3.20 m",
+      "components": [
+        {
+          "name": "Reception",
+          "operation": "add",
+          "length_m": 4.2,
+          "width_m": 3.2,
+          "calculation": "4.20 m x 3.20 m",
+          "signed_area_sqm": 13.44
+        }
+      ],
+      "area_sqm": 13.44
+    },
+    {
+      "name": "Waiting",
+      "room_type": "waiting",
+      "displayed_dimension": "3.60 m x 3.20 m",
+      "components": [
+        {
+          "name": "Waiting",
+          "operation": "add",
+          "length_m": 3.6,
+          "width_m": 3.2,
+          "calculation": "3.60 m x 3.20 m",
+          "signed_area_sqm": 11.52
+        }
+      ],
+      "area_sqm": 11.52
+    },
+    {
+      "name": "Consult Room 1",
+      "room_type": "consult",
+      "displayed_dimension": "3.20 m x 3.20 m",
+      "components": [
+        {
+          "name": "Consult Room 1",
+          "operation": "add",
+          "length_m": 3.2,
+          "width_m": 3.2,
+          "calculation": "3.20 m x 3.20 m",
+          "signed_area_sqm": 10.24
+        }
+      ],
+      "area_sqm": 10.24
+    },
+    {
+      "name": "Consult Room 2",
+      "room_type": "consult",
+      "displayed_dimension": "3.20 m x 3.20 m",
+      "components": [
+        {
+          "name": "Consult Room 2",
+          "operation": "add",
+          "length_m": 3.2,
+          "width_m": 3.2,
+          "calculation": "3.20 m x 3.20 m",
+          "signed_area_sqm": 10.24
+        }
+      ],
+      "area_sqm": 10.24
+    },
+    {
+      "name": "Treatment",
+      "room_type": "treatment",
+      "displayed_dimension": "3.40 m x 3.20 m",
+      "components": [
+        {
+          "name": "Treatment",
+          "operation": "add",
+          "length_m": 3.4,
+          "width_m": 3.2,
+          "calculation": "3.40 m x 3.20 m",
+          "signed_area_sqm": 10.88
+        }
+      ],
+      "area_sqm": 10.88
+    },
+    {
+      "name": "WC",
+      "room_type": "bathroom",
+      "displayed_dimension": "2.00 m x 1.80 m",
+      "components": [
+        {
+          "name": "WC",
+          "operation": "add",
+          "length_m": 2.0,
+          "width_m": 1.8,
+          "calculation": "2.00 m x 1.80 m",
+          "signed_area_sqm": 3.6
+        }
+      ],
+      "area_sqm": 3.6
+    },
+    {
+      "name": "Records",
+      "room_type": "storage",
+      "displayed_dimension": "2.00 m x 1.40 m",
+      "components": [
+        {
+          "name": "Records",
+          "operation": "add",
+          "length_m": 2.0,
+          "width_m": 1.4,
+          "calculation": "2.00 m x 1.40 m",
+          "signed_area_sqm": 2.8
+        }
+      ],
+      "area_sqm": 2.8
+    },
+    {
+      "name": "Corridor",
+      "room_type": "corridor",
+      "displayed_dimension": "9.80 m x 1.20 m",
+      "components": [
+        {
+          "name": "Corridor",
+          "operation": "add",
+          "length_m": 9.8,
+          "width_m": 1.2,
+          "calculation": "9.80 m x 1.20 m",
+          "signed_area_sqm": 11.76
+        }
+      ],
+      "area_sqm": 11.76
+    }
+  ],
+  "total_area_sqm": 74.48
+}

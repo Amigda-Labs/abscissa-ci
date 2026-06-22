@@ -1,0 +1,158 @@
+{
+  "plan_id": "plan_04_townhouse_ground",
+  "title": "Townhouse Ground Floor",
+  "image": "samples/floorplans/images/plan_04_townhouse_ground.png",
+  "measurement_basis": "net_internal_room_area",
+  "units": "metric",
+  "scale": {
+    "px_per_m": 92
+  },
+  "notes": [],
+  "rooms": [
+    {
+      "name": "Garage",
+      "room_type": "garage",
+      "displayed_dimension": "3.40 m x 5.40 m",
+      "components": [
+        {
+          "name": "Garage",
+          "operation": "add",
+          "length_m": 3.4,
+          "width_m": 5.4,
+          "calculation": "3.40 m x 5.40 m",
+          "signed_area_sqm": 18.36
+        }
+      ],
+      "area_sqm": 18.36
+    },
+    {
+      "name": "Foyer",
+      "room_type": "hall",
+      "displayed_dimension": "2.20 m x 2.40 m",
+      "components": [
+        {
+          "name": "Foyer",
+          "operation": "add",
+          "length_m": 2.2,
+          "width_m": 2.4,
+          "calculation": "2.20 m x 2.40 m",
+          "signed_area_sqm": 5.28
+        }
+      ],
+      "area_sqm": 5.28
+    },
+    {
+      "name": "Powder Room",
+      "room_type": "bathroom",
+      "displayed_dimension": "1.80 m x 1.80 m",
+      "components": [
+        {
+          "name": "Powder Room",
+          "operation": "add",
+          "length_m": 1.8,
+          "width_m": 1.8,
+          "calculation": "1.80 m x 1.80 m",
+          "signed_area_sqm": 3.24
+        }
+      ],
+      "area_sqm": 3.24
+    },
+    {
+      "name": "Stair Hall",
+      "room_type": "hall",
+      "displayed_dimension": "1.80 m x 3.60 m",
+      "components": [
+        {
+          "name": "Stair Hall",
+          "operation": "add",
+          "length_m": 1.8,
+          "width_m": 3.6,
+          "calculation": "1.80 m x 3.60 m",
+          "signed_area_sqm": 6.48
+        }
+      ],
+      "area_sqm": 6.48
+    },
+    {
+      "name": "Kitchen",
+      "room_type": "kitchen",
+      "displayed_dimension": "3.40 m x 3.00 m",
+      "components": [
+        {
+          "name": "Kitchen",
+          "operation": "add",
+          "length_m": 3.4,
+          "width_m": 3.0,
+          "calculation": "3.40 m x 3.00 m",
+          "signed_area_sqm": 10.2
+        }
+      ],
+      "area_sqm": 10.2
+    },
+    {
+      "name": "Dining",
+      "room_type": "dining",
+      "displayed_dimension": "3.20 m x 3.60 m",
+      "components": [
+        {
+          "name": "Dining",
+          "operation": "add",
+          "length_m": 3.2,
+          "width_m": 3.6,
+          "calculation": "3.20 m x 3.60 m",
+          "signed_area_sqm": 11.52
+        }
+      ],
+      "area_sqm": 11.52
+    },
+    {
+      "name": "Living Room",
+      "room_type": "living",
+      "displayed_dimension": "6.60 m x 4.00 m",
+      "components": [
+        {
+          "name": "Living Room",
+          "operation": "add",
+          "length_m": 6.6,
+          "width_m": 4.0,
+          "calculation": "6.60 m x 4.00 m",
+          "signed_area_sqm": 26.4
+        }
+      ],
+      "area_sqm": 26.4
+    },
+    {
+      "name": "Storage",
+      "room_type": "storage",
+      "displayed_dimension": "1.60 m x 1.80 m",
+      "components": [
+        {
+          "name": "Storage",
+          "operation": "add",
+          "length_m": 1.6,
+          "width_m": 1.8,
+          "calculation": "1.60 m x 1.80 m",
+          "signed_area_sqm": 2.88
+        }
+      ],
+      "area_sqm": 2.88
+    },
+    {
+      "name": "Mudroom",
+      "room_type": "utility",
+      "displayed_dimension": "1.80 m x 1.80 m",
+      "components": [
+        {
+          "name": "Mudroom",
+          "operation": "add",
+          "length_m": 1.8,
+          "width_m": 1.8,
+          "calculation": "1.80 m x 1.80 m",
+          "signed_area_sqm": 3.24
+        }
+      ],
+      "area_sqm": 3.24
+    }
+  ],
+  "total_area_sqm": 87.6
+}

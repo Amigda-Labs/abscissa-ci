@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1127" height="1215" viewBox="0 0 1127 1215">
+<defs>
+<pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+<path d="M 46 0 L 0 0 0 46" fill="none" stroke="#edf0f2" stroke-width="1"/>
+</pattern>
+</defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect width="100%" height="100%" fill="url(#grid)"/>
+<text x="140" y="42" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#172026">L-Shaped Family Flat</text>
+<text x="140" y="68" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4b5563">Synthetic metric plan - net room dimensions shown</text>
+<polygon points="140.00,140.00 600.00,140.00 600.00,434.40 379.20,434.40 379.20,673.60 140.00,673.60" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="600.00" y="140.00" width="276.00" height="294.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="379.20" y="434.40" width="496.80" height="110.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="140.00" y="673.60" width="368.00" height="312.80" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="508.00" y="544.80" width="294.40" height="294.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="802.40" y="434.40" width="184.00" height="202.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="802.40" y="636.80" width="184.00" height="147.20" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="802.40" y="784.00" width="184.00" height="110.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="176.80" y="190.60" width="184.00" height="69.00" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="268.80" y="225.10" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">SOFA</text>
+<rect x="204.40" y="485.00" width="105.80" height="78.20" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="257.30" y="524.10" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">TBL</text>
+<rect x="623.00" y="172.20" width="216.20" height="50.60" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="731.10" y="197.50" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">CTR</text>
+<rect x="186.00" y="724.20" width="184.00" height="184.00" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="278.00" y="816.20" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">BED</text>
+<rect x="549.40" y="586.20" width="156.40" height="170.20" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="627.60" y="671.30" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">BED</text>
+<rect x="825.40" y="466.60" width="110.40" height="64.40" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="880.60" y="498.80" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">TUB</text>
+<rect x="839.20" y="673.60" width="64.40" height="64.40" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="871.40" y="705.80" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">WM</text>
+<rect x="830.00" y="816.20" width="115.00" height="41.40" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="887.50" y="836.90" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">WRD</text>
+<rect x="305.45" y="256.20" width="129.10" height="42.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="370.00" y="268.70" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Living / Dining</text>
+<text x="370.00" y="285.70" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">5.00 m x 3.20 m</text>
+<rect x="185.48" y="526.00" width="148.24" height="40.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="259.60" y="538.00" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">Living / Dining bay</text>
+<text x="259.60" y="554.00" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="500" fill="#1f2937" text-anchor="middle" dominant-baseline="middle">2.60 m x 2.60 m</text>
+<rect x="669.10" y="255.20" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="738.00" y="268.20" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Kitchen</text>
+<text x="738.00" y="286.20" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">3.00 m x 3.20 m</text>
+<rect x="558.70" y="457.60" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="627.60" y="470.60" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Hall</text>
+<text x="627.60" y="488.60" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">5.40 m x 1.20 m</text>
+<rect x="255.10" y="798.00" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="324.00" y="811.00" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Primary Bedroom</text>
+<text x="324.00" y="829.00" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">4.00 m x 3.40 m</text>
+<rect x="586.30" y="660.00" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="655.20" y="673.00" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Bedroom 2</text>
+<text x="655.20" y="691.00" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">3.20 m x 3.20 m</text>
+<rect x="834.20" y="505.60" width="120.40" height="40.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="894.40" y="517.60" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Bath</text>
+<text x="894.40" y="533.60" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">2.00 m x 2.20 m</text>
+<rect x="834.20" y="680.40" width="120.40" height="40.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="894.40" y="692.40" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Laundry</text>
+<text x="894.40" y="708.40" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">2.00 m x 1.60 m</text>
+<rect x="834.20" y="809.20" width="120.40" height="40.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="894.40" y="821.20" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Closet</text>
+<text x="894.40" y="837.20" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">2.00 m x 1.20 m</text>
+<line x1="140.00" y1="1167.00" x2="324.00" y2="1167.00" stroke="#111827" stroke-width="5"/>
+<line x1="140.00" y1="1159.00" x2="140.00" y2="1175.00" stroke="#111827" stroke-width="3"/>
+<line x1="324.00" y1="1159.00" x2="324.00" y2="1175.00" stroke="#111827" stroke-width="3"/>
+<text x="232.00" y="1191.00" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="middle">2.00 m scale bar</text>
+</svg>

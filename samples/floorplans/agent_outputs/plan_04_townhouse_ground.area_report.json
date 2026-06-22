@@ -1,0 +1,216 @@
+{
+  "can_compute": true,
+  "project_name": "Townhouse Ground Floor",
+  "source_image_path": "/Users/josejaimegarcia/Documents/Amigda/_Company_Projects/abscissa-ci/samples/floorplans/images/plan_04_townhouse_ground.png",
+  "requested_measurement_basis": "net_internal_room_area",
+  "total_area_sqm": 87.6,
+  "rooms": [
+    {
+      "room_id": "garage",
+      "name": "Garage",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 18.36,
+      "add_area_sqm": 18.36,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "garage_rect_1",
+          "name": "Garage rectangle",
+          "operation": "add",
+          "length_m": 3.4,
+          "width_m": 5.4,
+          "area_sqm": 18.36,
+          "signed_area_sqm": 18.36
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "foyer",
+      "name": "Foyer",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 5.28,
+      "add_area_sqm": 5.28,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "foyer_rect_1",
+          "name": "Foyer rectangle",
+          "operation": "add",
+          "length_m": 2.2,
+          "width_m": 2.4,
+          "area_sqm": 5.28,
+          "signed_area_sqm": 5.28
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "powder_room",
+      "name": "Powder Room",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 3.24,
+      "add_area_sqm": 3.24,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "powder_room_rect_1",
+          "name": "Powder Room rectangle",
+          "operation": "add",
+          "length_m": 1.8,
+          "width_m": 1.8,
+          "area_sqm": 3.24,
+          "signed_area_sqm": 3.24
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "kitchen",
+      "name": "Kitchen",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 10.2,
+      "add_area_sqm": 10.2,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "kitchen_rect_1",
+          "name": "Kitchen rectangle",
+          "operation": "add",
+          "length_m": 3.4,
+          "width_m": 3.0,
+          "area_sqm": 10.2,
+          "signed_area_sqm": 10.2
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "stair_hall",
+      "name": "Stair Hall",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 6.48,
+      "add_area_sqm": 6.48,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "stair_hall_rect_1",
+          "name": "Stair Hall rectangle",
+          "operation": "add",
+          "length_m": 1.8,
+          "width_m": 3.6,
+          "area_sqm": 6.48,
+          "signed_area_sqm": 6.48
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.9
+    },
+    {
+      "room_id": "dining",
+      "name": "Dining",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 11.52,
+      "add_area_sqm": 11.52,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "dining_rect_1",
+          "name": "Dining rectangle",
+          "operation": "add",
+          "length_m": 3.2,
+          "width_m": 3.6,
+          "area_sqm": 11.52,
+          "signed_area_sqm": 11.52
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "storage",
+      "name": "Storage",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 2.88,
+      "add_area_sqm": 2.88,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "storage_rect_1",
+          "name": "Storage rectangle",
+          "operation": "add",
+          "length_m": 1.6,
+          "width_m": 1.8,
+          "area_sqm": 2.88,
+          "signed_area_sqm": 2.88
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "mudroom",
+      "name": "Mudroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 3.24,
+      "add_area_sqm": 3.24,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "mudroom_rect_1",
+          "name": "Mudroom rectangle",
+          "operation": "add",
+          "length_m": 1.8,
+          "width_m": 1.8,
+          "area_sqm": 3.24,
+          "signed_area_sqm": 3.24
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "living_room",
+      "name": "Living Room",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 26.4,
+      "add_area_sqm": 26.4,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "living_room_rect_1",
+          "name": "Living Room rectangle",
+          "operation": "add",
+          "length_m": 6.6,
+          "width_m": 4.0,
+          "area_sqm": 26.4,
+          "signed_area_sqm": 26.4
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    }
+  ],
+  "issues": [],
+  "questions": [],
+  "assumptions": [
+    "Plan subtitle states synthetic metric plan with net room dimensions shown; dimension labels are treated as net internal room dimensions to inside face of walls.",
+    "Furniture/cabinet symbols are not treated as subtractive area components."
+  ],
+  "warnings": [
+    "Scale bar is visible but room labels provide direct metric dimensions; scale bar was not used for geometry extraction."
+  ]
+}

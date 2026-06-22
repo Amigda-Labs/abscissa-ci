@@ -1,0 +1,318 @@
+{
+  "project_name": "L-Shaped Family Flat",
+  "requested_measurement_basis": "net_internal_room_area",
+  "scale_basis": "dimension_labels",
+  "units_detected": [
+    "m"
+  ],
+  "rooms": [
+    {
+      "room_id": "living_dining",
+      "name": "Living / Dining",
+      "room_type": "living",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "lounge_rectangle",
+          "name": "Lounge rectangle",
+          "operation": "add",
+          "length": {
+            "value": 5.0,
+            "unit": "m",
+            "source_text": "5.00 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_02_l_shaped_family_flat"
+          ],
+          "confidence": 1.0
+        },
+        {
+          "component_id": "living_dining_bay",
+          "name": "Living / Dining bay",
+          "operation": "add",
+          "length": {
+            "value": 2.6,
+            "unit": "m",
+            "source_text": "2.60 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 2.6,
+            "unit": "m",
+            "source_text": "2.60 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_02_l_shaped_family_flat"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "kitchen",
+      "name": "Kitchen",
+      "room_type": "kitchen",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "kitchen",
+          "name": "Kitchen",
+          "operation": "add",
+          "length": {
+            "value": 3.0,
+            "unit": "m",
+            "source_text": "3.00 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_02_l_shaped_family_flat"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "hall",
+      "name": "Hall",
+      "room_type": "hall",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "hall",
+          "name": "Hall",
+          "operation": "add",
+          "length": {
+            "value": 5.4,
+            "unit": "m",
+            "source_text": "5.40 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.2,
+            "unit": "m",
+            "source_text": "1.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_02_l_shaped_family_flat"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "primary_bedroom",
+      "name": "Primary Bedroom",
+      "room_type": "bedroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "primary_bedroom",
+          "name": "Primary Bedroom",
+          "operation": "add",
+          "length": {
+            "value": 4.0,
+            "unit": "m",
+            "source_text": "4.00 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.4,
+            "unit": "m",
+            "source_text": "3.40 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_02_l_shaped_family_flat"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "bedroom_2",
+      "name": "Bedroom 2",
+      "room_type": "bedroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "bedroom_2",
+          "name": "Bedroom 2",
+          "operation": "add",
+          "length": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_02_l_shaped_family_flat"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "bath",
+      "name": "Bath",
+      "room_type": "bathroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "bath",
+          "name": "Bath",
+          "operation": "add",
+          "length": {
+            "value": 2.0,
+            "unit": "m",
+            "source_text": "2.00 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 2.2,
+            "unit": "m",
+            "source_text": "2.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_02_l_shaped_family_flat"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "laundry",
+      "name": "Laundry",
+      "room_type": "laundry",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "laundry",
+          "name": "Laundry",
+          "operation": "add",
+          "length": {
+            "value": 2.0,
+            "unit": "m",
+            "source_text": "2.00 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.6,
+            "unit": "m",
+            "source_text": "1.60 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_02_l_shaped_family_flat"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "closet",
+      "name": "Closet",
+      "room_type": "storage",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "closet",
+          "name": "Closet",
+          "operation": "add",
+          "length": {
+            "value": 2.0,
+            "unit": "m",
+            "source_text": "2.00 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.2,
+            "unit": "m",
+            "source_text": "1.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_02_l_shaped_family_flat"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    }
+  ],
+  "consistency_checks": [],
+  "assumptions": [
+    "Synthetic fixture with net internal metric dimensions."
+  ],
+  "warnings": [],
+  "questions": []
+}

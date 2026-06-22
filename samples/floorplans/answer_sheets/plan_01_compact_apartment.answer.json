@@ -1,0 +1,126 @@
+{
+  "plan_id": "plan_01_compact_apartment",
+  "title": "Compact Apartment",
+  "image": "samples/floorplans/images/plan_01_compact_apartment.png",
+  "measurement_basis": "net_internal_room_area",
+  "units": "metric",
+  "scale": {
+    "px_per_m": 92
+  },
+  "notes": [],
+  "rooms": [
+    {
+      "name": "Living / Dining",
+      "room_type": "living",
+      "displayed_dimension": "5.20 m x 3.80 m",
+      "components": [
+        {
+          "name": "Living / Dining",
+          "operation": "add",
+          "length_m": 5.2,
+          "width_m": 3.8,
+          "calculation": "5.20 m x 3.80 m",
+          "signed_area_sqm": 19.76
+        }
+      ],
+      "area_sqm": 19.76
+    },
+    {
+      "name": "Kitchen",
+      "room_type": "kitchen",
+      "displayed_dimension": "2.80 m x 2.60 m",
+      "components": [
+        {
+          "name": "Kitchen",
+          "operation": "add",
+          "length_m": 2.8,
+          "width_m": 2.6,
+          "calculation": "2.80 m x 2.60 m",
+          "signed_area_sqm": 7.28
+        }
+      ],
+      "area_sqm": 7.28
+    },
+    {
+      "name": "Entry",
+      "room_type": "hall",
+      "displayed_dimension": "2.80 m x 1.20 m",
+      "components": [
+        {
+          "name": "Entry",
+          "operation": "add",
+          "length_m": 2.8,
+          "width_m": 1.2,
+          "calculation": "2.80 m x 1.20 m",
+          "signed_area_sqm": 3.36
+        }
+      ],
+      "area_sqm": 3.36
+    },
+    {
+      "name": "Bedroom 1",
+      "room_type": "bedroom",
+      "displayed_dimension": "3.40 m x 3.20 m",
+      "components": [
+        {
+          "name": "Bedroom 1",
+          "operation": "add",
+          "length_m": 3.4,
+          "width_m": 3.2,
+          "calculation": "3.40 m x 3.20 m",
+          "signed_area_sqm": 10.88
+        }
+      ],
+      "area_sqm": 10.88
+    },
+    {
+      "name": "Bedroom 2",
+      "room_type": "bedroom",
+      "displayed_dimension": "3.20 m x 3.00 m",
+      "components": [
+        {
+          "name": "Bedroom 2",
+          "operation": "add",
+          "length_m": 3.2,
+          "width_m": 3.0,
+          "calculation": "3.20 m x 3.00 m",
+          "signed_area_sqm": 9.6
+        }
+      ],
+      "area_sqm": 9.6
+    },
+    {
+      "name": "Bathroom",
+      "room_type": "bathroom",
+      "displayed_dimension": "1.80 m x 2.20 m",
+      "components": [
+        {
+          "name": "Bathroom",
+          "operation": "add",
+          "length_m": 1.8,
+          "width_m": 2.2,
+          "calculation": "1.80 m x 2.20 m",
+          "signed_area_sqm": 3.96
+        }
+      ],
+      "area_sqm": 3.96
+    },
+    {
+      "name": "Storage",
+      "room_type": "storage",
+      "displayed_dimension": "1.80 m x 1.00 m",
+      "components": [
+        {
+          "name": "Storage",
+          "operation": "add",
+          "length_m": 1.8,
+          "width_m": 1.0,
+          "calculation": "1.80 m x 1.00 m",
+          "signed_area_sqm": 1.8
+        }
+      ],
+      "area_sqm": 1.8
+    }
+  ],
+  "total_area_sqm": 56.64
+}

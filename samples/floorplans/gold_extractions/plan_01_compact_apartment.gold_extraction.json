@@ -1,0 +1,261 @@
+{
+  "project_name": "Compact Apartment",
+  "requested_measurement_basis": "net_internal_room_area",
+  "scale_basis": "dimension_labels",
+  "units_detected": [
+    "m"
+  ],
+  "rooms": [
+    {
+      "room_id": "living_dining",
+      "name": "Living / Dining",
+      "room_type": "living",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "living_dining",
+          "name": "Living / Dining",
+          "operation": "add",
+          "length": {
+            "value": 5.2,
+            "unit": "m",
+            "source_text": "5.20 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.8,
+            "unit": "m",
+            "source_text": "3.80 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_01_compact_apartment"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "kitchen",
+      "name": "Kitchen",
+      "room_type": "kitchen",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "kitchen",
+          "name": "Kitchen",
+          "operation": "add",
+          "length": {
+            "value": 2.8,
+            "unit": "m",
+            "source_text": "2.80 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 2.6,
+            "unit": "m",
+            "source_text": "2.60 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_01_compact_apartment"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "entry",
+      "name": "Entry",
+      "room_type": "hall",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "entry",
+          "name": "Entry",
+          "operation": "add",
+          "length": {
+            "value": 2.8,
+            "unit": "m",
+            "source_text": "2.80 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.2,
+            "unit": "m",
+            "source_text": "1.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_01_compact_apartment"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "bedroom_1",
+      "name": "Bedroom 1",
+      "room_type": "bedroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "bedroom_1",
+          "name": "Bedroom 1",
+          "operation": "add",
+          "length": {
+            "value": 3.4,
+            "unit": "m",
+            "source_text": "3.40 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_01_compact_apartment"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "bedroom_2",
+      "name": "Bedroom 2",
+      "room_type": "bedroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "bedroom_2",
+          "name": "Bedroom 2",
+          "operation": "add",
+          "length": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.0,
+            "unit": "m",
+            "source_text": "3.00 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_01_compact_apartment"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "bathroom",
+      "name": "Bathroom",
+      "room_type": "bathroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "bathroom",
+          "name": "Bathroom",
+          "operation": "add",
+          "length": {
+            "value": 1.8,
+            "unit": "m",
+            "source_text": "1.80 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 2.2,
+            "unit": "m",
+            "source_text": "2.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_01_compact_apartment"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "storage",
+      "name": "Storage",
+      "room_type": "storage",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "storage",
+          "name": "Storage",
+          "operation": "add",
+          "length": {
+            "value": 1.8,
+            "unit": "m",
+            "source_text": "1.80 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.0,
+            "unit": "m",
+            "source_text": "1.00 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_01_compact_apartment"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    }
+  ],
+  "consistency_checks": [],
+  "assumptions": [
+    "Synthetic fixture with net internal metric dimensions."
+  ],
+  "warnings": [],
+  "questions": []
+}

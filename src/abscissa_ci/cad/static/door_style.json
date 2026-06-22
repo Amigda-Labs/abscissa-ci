@@ -1,0 +1,25 @@
+{
+  "schema_version": "abscissa-door-style-v1",
+  "frame_jamb_mm": 50,
+  "leaf_thickness_mm": 45,
+  "leaf_width_mm": {
+    "exterior": 900,
+    "interior": 800
+  },
+  "swing": {
+    "default_direction": "cw",
+    "default_hinge_side": "start"
+  },
+  "leaf_thickness_px_min": 5,
+  "leaf_thickness_px_max": 12,
+  "jamb_px_min": 3,
+  "colors": {
+    "frame_fill": "#ffffff",
+    "frame_stroke": "#111827",
+    "leaf_fill": "#ffffff",
+    "leaf_fill_selected": "#fff7ed",
+    "leaf_stroke": "#111827",
+    "swing_stroke": "#64748b",
+    "selected": "#f97316"
+  }
+}

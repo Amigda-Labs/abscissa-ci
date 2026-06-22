@@ -1,0 +1,192 @@
+{
+  "can_compute": true,
+  "project_name": "Small Clinic Suite",
+  "source_image_path": "/Users/josejaimegarcia/Documents/Amigda/_Company_Projects/abscissa-ci/samples/floorplans/images/plan_05_small_clinic.png",
+  "requested_measurement_basis": "net_internal_room_area",
+  "total_area_sqm": 74.48,
+  "rooms": [
+    {
+      "room_id": "reception",
+      "name": "Reception",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 13.44,
+      "add_area_sqm": 13.44,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "reception_rect_1",
+          "name": "Reception rectangle",
+          "operation": "add",
+          "length_m": 4.2,
+          "width_m": 3.2,
+          "area_sqm": 13.44,
+          "signed_area_sqm": 13.44
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "waiting",
+      "name": "Waiting",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 11.52,
+      "add_area_sqm": 11.52,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "waiting_rect_1",
+          "name": "Waiting rectangle",
+          "operation": "add",
+          "length_m": 3.6,
+          "width_m": 3.2,
+          "area_sqm": 11.52,
+          "signed_area_sqm": 11.52
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "wc",
+      "name": "WC",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 3.6,
+      "add_area_sqm": 3.6,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "wc_rect_1",
+          "name": "WC rectangle",
+          "operation": "add",
+          "length_m": 2.0,
+          "width_m": 1.8,
+          "area_sqm": 3.6,
+          "signed_area_sqm": 3.6
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "records",
+      "name": "Records",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 2.8,
+      "add_area_sqm": 2.8,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "records_rect_1",
+          "name": "Records rectangle",
+          "operation": "add",
+          "length_m": 2.0,
+          "width_m": 1.4,
+          "area_sqm": 2.8,
+          "signed_area_sqm": 2.8
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "consult_room_1",
+      "name": "Consult Room 1",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 10.24,
+      "add_area_sqm": 10.24,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "consult_room_1_rect_1",
+          "name": "Consult Room 1 rectangle",
+          "operation": "add",
+          "length_m": 3.2,
+          "width_m": 3.2,
+          "area_sqm": 10.24,
+          "signed_area_sqm": 10.24
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "consult_room_2",
+      "name": "Consult Room 2",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 10.24,
+      "add_area_sqm": 10.24,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "consult_room_2_rect_1",
+          "name": "Consult Room 2 rectangle",
+          "operation": "add",
+          "length_m": 3.2,
+          "width_m": 3.2,
+          "area_sqm": 10.24,
+          "signed_area_sqm": 10.24
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "treatment",
+      "name": "Treatment",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 10.88,
+      "add_area_sqm": 10.88,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "treatment_rect_1",
+          "name": "Treatment rectangle",
+          "operation": "add",
+          "length_m": 3.4,
+          "width_m": 3.2,
+          "area_sqm": 10.88,
+          "signed_area_sqm": 10.88
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    },
+    {
+      "room_id": "corridor",
+      "name": "Corridor",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 11.76,
+      "add_area_sqm": 11.76,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "corridor_rect_1",
+          "name": "Corridor rectangle",
+          "operation": "add",
+          "length_m": 9.8,
+          "width_m": 1.2,
+          "area_sqm": 11.76,
+          "signed_area_sqm": 11.76
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.98
+    }
+  ],
+  "issues": [],
+  "questions": [],
+  "assumptions": [
+    "Subtitle states net room dimensions shown; labeled dimensions are treated as inside-face net internal room dimensions.",
+    "Furniture symbols are ignored and not subtracted from room area."
+  ],
+  "warnings": []
+}

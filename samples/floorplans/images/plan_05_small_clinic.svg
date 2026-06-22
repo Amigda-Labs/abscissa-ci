@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1182" height="1068" viewBox="0 0 1182 1068">
+<defs>
+<pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+<path d="M 46 0 L 0 0 0 46" fill="none" stroke="#edf0f2" stroke-width="1"/>
+</pattern>
+</defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect width="100%" height="100%" fill="url(#grid)"/>
+<text x="140" y="42" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#172026">Small Clinic Suite</text>
+<text x="140" y="68" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4b5563">Synthetic metric plan - net room dimensions shown</text>
+<rect x="140.00" y="140.00" width="386.40" height="294.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="526.40" y="140.00" width="331.20" height="294.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="140.00" y="434.40" width="294.40" height="294.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="434.40" y="434.40" width="294.40" height="294.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="728.80" y="434.40" width="312.80" height="294.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="857.60" y="140.00" width="184.00" height="165.60" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="857.60" y="305.60" width="184.00" height="128.80" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="140.00" y="728.80" width="901.60" height="110.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="186.00" y="190.60" width="128.80" height="64.40" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="250.40" y="222.80" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">DESK</text>
+<rect x="567.80" y="209.00" width="165.60" height="59.80" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="650.60" y="238.90" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">SOFA</text>
+<rect x="181.40" y="485.00" width="101.20" height="59.80" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="232.00" y="514.90" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">DESK</text>
+<rect x="475.80" y="485.00" width="101.20" height="59.80" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="526.40" y="514.90" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">DESK</text>
+<rect x="784.00" y="485.00" width="165.60" height="73.60" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="866.80" y="521.80" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">BED</text>
+<rect x="899.00" y="190.60" width="41.40" height="50.60" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="919.70" y="215.90" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">WC</text>
+<rect x="963.40" y="190.60" width="46.00" height="38.64" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="986.40" y="209.92" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">SINK</text>
+<rect x="885.20" y="342.40" width="119.60" height="41.40" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="945.00" y="363.10" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">WRD</text>
+<rect x="264.30" y="255.20" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="333.20" y="268.20" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Reception</text>
+<text x="333.20" y="286.20" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">4.20 m x 3.20 m</text>
+<rect x="623.10" y="255.20" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="692.00" y="268.20" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Waiting</text>
+<text x="692.00" y="286.20" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">3.60 m x 3.20 m</text>
+<rect x="218.30" y="549.60" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="287.20" y="562.60" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Consult Room 1</text>
+<text x="287.20" y="580.60" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">3.20 m x 3.20 m</text>
+<rect x="512.70" y="549.60" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="581.60" y="562.60" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Consult Room 2</text>
+<text x="581.60" y="580.60" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">3.20 m x 3.20 m</text>
+<rect x="816.30" y="549.60" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="885.20" y="562.60" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Treatment</text>
+<text x="885.20" y="580.60" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">3.40 m x 3.20 m</text>
+<rect x="889.40" y="192.80" width="120.40" height="40.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="949.60" y="204.80" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">WC</text>
+<text x="949.60" y="220.80" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">2.00 m x 1.80 m</text>
+<rect x="889.40" y="340.00" width="120.40" height="40.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="949.60" y="352.00" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Records</text>
+<text x="949.60" y="368.00" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">2.00 m x 1.40 m</text>
+<rect x="521.90" y="752.00" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="590.80" y="765.00" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Corridor</text>
+<text x="590.80" y="783.00" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">9.80 m x 1.20 m</text>
+<line x1="140.00" y1="1020.00" x2="324.00" y2="1020.00" stroke="#111827" stroke-width="5"/>
+<line x1="140.00" y1="1012.00" x2="140.00" y2="1028.00" stroke="#111827" stroke-width="3"/>
+<line x1="324.00" y1="1012.00" x2="324.00" y2="1028.00" stroke="#111827" stroke-width="3"/>
+<text x="232.00" y="1044.00" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="middle">2.00 m scale bar</text>
+</svg>

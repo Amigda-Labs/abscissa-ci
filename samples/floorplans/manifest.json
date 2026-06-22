@@ -1,0 +1,54 @@
+{
+  "description": "Synthetic metric floor plans for Area Agent evaluation.",
+  "measurement_basis": "net_internal_room_area",
+  "scale": {
+    "px_per_m": 92
+  },
+  "plans": [
+    {
+      "plan_id": "plan_01_compact_apartment",
+      "title": "Compact Apartment",
+      "image": "samples/floorplans/images/plan_01_compact_apartment.png",
+      "svg": "samples/floorplans/images/plan_01_compact_apartment.svg",
+      "answer_sheet": "samples/floorplans/answer_sheets/plan_01_compact_apartment.answer.json",
+      "answer_markdown": "samples/floorplans/answer_sheets/plan_01_compact_apartment.answer.md",
+      "gold_extraction": "samples/floorplans/gold_extractions/plan_01_compact_apartment.gold_extraction.json"
+    },
+    {
+      "plan_id": "plan_02_l_shaped_family_flat",
+      "title": "L-Shaped Family Flat",
+      "image": "samples/floorplans/images/plan_02_l_shaped_family_flat.png",
+      "svg": "samples/floorplans/images/plan_02_l_shaped_family_flat.svg",
+      "answer_sheet": "samples/floorplans/answer_sheets/plan_02_l_shaped_family_flat.answer.json",
+      "answer_markdown": "samples/floorplans/answer_sheets/plan_02_l_shaped_family_flat.answer.md",
+      "gold_extraction": "samples/floorplans/gold_extractions/plan_02_l_shaped_family_flat.gold_extraction.json"
+    },
+    {
+      "plan_id": "plan_03_courtyard_unit",
+      "title": "Courtyard Unit",
+      "image": "samples/floorplans/images/plan_03_courtyard_unit.png",
+      "svg": "samples/floorplans/images/plan_03_courtyard_unit.svg",
+      "answer_sheet": "samples/floorplans/answer_sheets/plan_03_courtyard_unit.answer.json",
+      "answer_markdown": "samples/floorplans/answer_sheets/plan_03_courtyard_unit.answer.md",
+      "gold_extraction": "samples/floorplans/gold_extractions/plan_03_courtyard_unit.gold_extraction.json"
+    },
+    {
+      "plan_id": "plan_04_townhouse_ground",
+      "title": "Townhouse Ground Floor",
+      "image": "samples/floorplans/images/plan_04_townhouse_ground.png",
+      "svg": "samples/floorplans/images/plan_04_townhouse_ground.svg",
+      "answer_sheet": "samples/floorplans/answer_sheets/plan_04_townhouse_ground.answer.json",
+      "answer_markdown": "samples/floorplans/answer_sheets/plan_04_townhouse_ground.answer.md",
+      "gold_extraction": "samples/floorplans/gold_extractions/plan_04_townhouse_ground.gold_extraction.json"
+    },
+    {
+      "plan_id": "plan_05_small_clinic",
+      "title": "Small Clinic Suite",
+      "image": "samples/floorplans/images/plan_05_small_clinic.png",
+      "svg": "samples/floorplans/images/plan_05_small_clinic.svg",
+      "answer_sheet": "samples/floorplans/answer_sheets/plan_05_small_clinic.answer.json",
+      "answer_markdown": "samples/floorplans/answer_sheets/plan_05_small_clinic.answer.md",
+      "gold_extraction": "samples/floorplans/gold_extractions/plan_05_small_clinic.gold_extraction.json"
+    }
+  ]
+}

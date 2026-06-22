@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1053" height="1058" viewBox="0 0 1053 1058">
+<defs>
+<pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+<path d="M 46 0 L 0 0 0 46" fill="none" stroke="#edf0f2" stroke-width="1"/>
+</pattern>
+</defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect width="100%" height="100%" fill="url(#grid)"/>
+<text x="140" y="42" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#172026">Courtyard Unit</text>
+<text x="140" y="68" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4b5563">Synthetic metric plan - net room dimensions shown</text>
+<rect x="140.00" y="140.00" width="515.20" height="386.40" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="655.20" y="140.00" width="257.60" height="257.60" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="140.00" y="526.40" width="331.20" height="303.60" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="471.20" y="526.40" width="220.80" height="239.20" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="692.00" y="526.40" width="220.80" height="184.00" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="692.00" y="397.60" width="220.80" height="128.80" fill="#fbfbf8" stroke="#111827" stroke-width="8" />
+<rect x="342.40" y="268.80" width="110.40" height="92.00" fill="#ffffff" stroke="#6b7280" stroke-width="4" stroke-dasharray="8 6" />
+<rect x="181.40" y="190.60" width="170.20" height="64.40" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="266.50" y="222.80" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">SOFA</text>
+<rect x="494.20" y="227.40" width="101.20" height="78.20" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="544.80" y="266.50" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">TBL</text>
+<rect x="682.80" y="172.20" width="193.20" height="50.60" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="779.40" y="197.50" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">CTR</text>
+<rect x="181.40" y="577.00" width="165.60" height="174.80" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="264.20" y="664.40" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">BED</text>
+<rect x="512.60" y="567.80" width="105.80" height="59.80" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="565.50" y="597.70" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">DESK</text>
+<rect x="719.60" y="554.00" width="119.60" height="59.80" rx="4" fill="#eef2f7" stroke="#94a3b8" stroke-width="2" />
+<text x="779.40" y="583.90" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle" dominant-baseline="middle">TUB</text>
+<rect x="466.45" y="403.40" width="129.10" height="42.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="531.00" y="415.90" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Living Room</text>
+<text x="531.00" y="432.90" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">5.60 m x 4.20 m</text>
+<rect x="715.10" y="236.80" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="784.00" y="249.80" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Kitchen</text>
+<text x="784.00" y="267.80" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">2.80 m x 2.80 m</text>
+<rect x="236.70" y="646.20" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="305.60" y="659.20" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Bedroom</text>
+<text x="305.60" y="677.20" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">3.60 m x 3.30 m</text>
+<rect x="512.70" y="614.00" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="581.60" y="627.00" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Study</text>
+<text x="581.60" y="645.00" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">2.40 m x 2.60 m</text>
+<rect x="733.50" y="586.40" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="802.40" y="599.40" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Bathroom</text>
+<text x="802.40" y="617.40" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">2.40 m x 2.00 m</text>
+<rect x="733.50" y="430.00" width="137.80" height="44.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="802.40" y="443.00" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#111827" text-anchor="middle" dominant-baseline="middle">Entry Hall</text>
+<text x="802.40" y="461.00" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#111827" text-anchor="middle" dominant-baseline="middle">2.40 m x 1.40 m</text>
+<rect x="337.40" y="286.80" width="120.40" height="40.00" rx="4" fill="#fbfbf8" stroke="none" />
+<text x="397.60" y="298.80" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" fill="#374151" text-anchor="middle" dominant-baseline="middle">VOID</text>
+<text x="397.60" y="314.80" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="500" fill="#374151" text-anchor="middle" dominant-baseline="middle">1.20 m x 1.00 m</text>
+<line x1="140.00" y1="1010.00" x2="324.00" y2="1010.00" stroke="#111827" stroke-width="5"/>
+<line x1="140.00" y1="1002.00" x2="140.00" y2="1018.00" stroke="#111827" stroke-width="3"/>
+<line x1="324.00" y1="1002.00" x2="324.00" y2="1018.00" stroke="#111827" stroke-width="3"/>
+<text x="232.00" y="1034.00" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#111827" text-anchor="middle">2.00 m scale bar</text>
+</svg>

@@ -1,0 +1,152 @@
+{
+  "plan_id": "plan_02_l_shaped_family_flat",
+  "title": "L-Shaped Family Flat",
+  "image": "samples/floorplans/images/plan_02_l_shaped_family_flat.png",
+  "measurement_basis": "net_internal_room_area",
+  "units": "metric",
+  "scale": {
+    "px_per_m": 92
+  },
+  "notes": [
+    "Living / Dining is an L-shaped area decomposed into two additive rectangles."
+  ],
+  "rooms": [
+    {
+      "name": "Living / Dining",
+      "room_type": "living",
+      "displayed_dimension": "5.00 m x 5.80 m",
+      "components": [
+        {
+          "name": "Lounge rectangle",
+          "operation": "add",
+          "length_m": 5.0,
+          "width_m": 3.2,
+          "calculation": "5.00 m x 3.20 m",
+          "signed_area_sqm": 16.0
+        },
+        {
+          "name": "Living / Dining bay",
+          "operation": "add",
+          "length_m": 2.6,
+          "width_m": 2.6,
+          "calculation": "2.60 m x 2.60 m",
+          "signed_area_sqm": 6.76
+        }
+      ],
+      "area_sqm": 22.76
+    },
+    {
+      "name": "Kitchen",
+      "room_type": "kitchen",
+      "displayed_dimension": "3.00 m x 3.20 m",
+      "components": [
+        {
+          "name": "Kitchen",
+          "operation": "add",
+          "length_m": 3.0,
+          "width_m": 3.2,
+          "calculation": "3.00 m x 3.20 m",
+          "signed_area_sqm": 9.6
+        }
+      ],
+      "area_sqm": 9.6
+    },
+    {
+      "name": "Hall",
+      "room_type": "hall",
+      "displayed_dimension": "5.40 m x 1.20 m",
+      "components": [
+        {
+          "name": "Hall",
+          "operation": "add",
+          "length_m": 5.4,
+          "width_m": 1.2,
+          "calculation": "5.40 m x 1.20 m",
+          "signed_area_sqm": 6.48
+        }
+      ],
+      "area_sqm": 6.48
+    },
+    {
+      "name": "Primary Bedroom",
+      "room_type": "bedroom",
+      "displayed_dimension": "4.00 m x 3.40 m",
+      "components": [
+        {
+          "name": "Primary Bedroom",
+          "operation": "add",
+          "length_m": 4.0,
+          "width_m": 3.4,
+          "calculation": "4.00 m x 3.40 m",
+          "signed_area_sqm": 13.6
+        }
+      ],
+      "area_sqm": 13.6
+    },
+    {
+      "name": "Bedroom 2",
+      "room_type": "bedroom",
+      "displayed_dimension": "3.20 m x 3.20 m",
+      "components": [
+        {
+          "name": "Bedroom 2",
+          "operation": "add",
+          "length_m": 3.2,
+          "width_m": 3.2,
+          "calculation": "3.20 m x 3.20 m",
+          "signed_area_sqm": 10.24
+        }
+      ],
+      "area_sqm": 10.24
+    },
+    {
+      "name": "Bath",
+      "room_type": "bathroom",
+      "displayed_dimension": "2.00 m x 2.20 m",
+      "components": [
+        {
+          "name": "Bath",
+          "operation": "add",
+          "length_m": 2.0,
+          "width_m": 2.2,
+          "calculation": "2.00 m x 2.20 m",
+          "signed_area_sqm": 4.4
+        }
+      ],
+      "area_sqm": 4.4
+    },
+    {
+      "name": "Laundry",
+      "room_type": "laundry",
+      "displayed_dimension": "2.00 m x 1.60 m",
+      "components": [
+        {
+          "name": "Laundry",
+          "operation": "add",
+          "length_m": 2.0,
+          "width_m": 1.6,
+          "calculation": "2.00 m x 1.60 m",
+          "signed_area_sqm": 3.2
+        }
+      ],
+      "area_sqm": 3.2
+    },
+    {
+      "name": "Closet",
+      "room_type": "storage",
+      "displayed_dimension": "2.00 m x 1.20 m",
+      "components": [
+        {
+          "name": "Closet",
+          "operation": "add",
+          "length_m": 2.0,
+          "width_m": 1.2,
+          "calculation": "2.00 m x 1.20 m",
+          "signed_area_sqm": 2.4
+        }
+      ],
+      "area_sqm": 2.4
+    }
+  ],
+  "total_area_sqm": 72.68
+}

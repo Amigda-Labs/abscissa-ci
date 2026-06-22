@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "plans_evaluated": 5,
+  "plans_passed": 5,
+  "results": [
+    {
+      "plan_id": "plan_01_compact_apartment",
+      "passed": true,
+      "total_expected_sqm": 56.64,
+      "total_actual_sqm": 56.64,
+      "failures": [],
+      "output_path": "samples/floorplans/agent_outputs/plan_01_compact_apartment.area_report.json"
+    },
+    {
+      "plan_id": "plan_02_l_shaped_family_flat",
+      "passed": true,
+      "total_expected_sqm": 72.68,
+      "total_actual_sqm": 72.68,
+      "failures": [],
+      "output_path": "samples/floorplans/agent_outputs/plan_02_l_shaped_family_flat.area_report.json"
+    },
+    {
+      "plan_id": "plan_03_courtyard_unit",
+      "passed": true,
+      "total_expected_sqm": 56.44,
+      "total_actual_sqm": 56.44,
+      "failures": [],
+      "output_path": "samples/floorplans/agent_outputs/plan_03_courtyard_unit.area_report.json"
+    },
+    {
+      "plan_id": "plan_04_townhouse_ground",
+      "passed": true,
+      "total_expected_sqm": 87.6,
+      "total_actual_sqm": 87.6,
+      "failures": [],
+      "output_path": "samples/floorplans/agent_outputs/plan_04_townhouse_ground.area_report.json"
+    },
+    {
+      "plan_id": "plan_05_small_clinic",
+      "passed": true,
+      "total_expected_sqm": 74.48,
+      "total_actual_sqm": 74.48,
+      "failures": [],
+      "output_path": "samples/floorplans/agent_outputs/plan_05_small_clinic.area_report.json"
+    }
+  ]
+}

@@ -1,0 +1,296 @@
+{
+  "project_name": "Small Clinic Suite",
+  "requested_measurement_basis": "net_internal_room_area",
+  "scale_basis": "dimension_labels",
+  "units_detected": [
+    "m"
+  ],
+  "rooms": [
+    {
+      "room_id": "reception",
+      "name": "Reception",
+      "room_type": "reception",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "reception",
+          "name": "Reception",
+          "operation": "add",
+          "length": {
+            "value": 4.2,
+            "unit": "m",
+            "source_text": "4.20 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_05_small_clinic"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "waiting",
+      "name": "Waiting",
+      "room_type": "waiting",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "waiting",
+          "name": "Waiting",
+          "operation": "add",
+          "length": {
+            "value": 3.6,
+            "unit": "m",
+            "source_text": "3.60 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_05_small_clinic"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "consult_room_1",
+      "name": "Consult Room 1",
+      "room_type": "consult",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "consult_room_1",
+          "name": "Consult Room 1",
+          "operation": "add",
+          "length": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_05_small_clinic"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "consult_room_2",
+      "name": "Consult Room 2",
+      "room_type": "consult",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "consult_room_2",
+          "name": "Consult Room 2",
+          "operation": "add",
+          "length": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_05_small_clinic"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "treatment",
+      "name": "Treatment",
+      "room_type": "treatment",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "treatment",
+          "name": "Treatment",
+          "operation": "add",
+          "length": {
+            "value": 3.4,
+            "unit": "m",
+            "source_text": "3.40 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 3.2,
+            "unit": "m",
+            "source_text": "3.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_05_small_clinic"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "wc",
+      "name": "WC",
+      "room_type": "bathroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "wc",
+          "name": "WC",
+          "operation": "add",
+          "length": {
+            "value": 2.0,
+            "unit": "m",
+            "source_text": "2.00 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.8,
+            "unit": "m",
+            "source_text": "1.80 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_05_small_clinic"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "records",
+      "name": "Records",
+      "room_type": "storage",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "records",
+          "name": "Records",
+          "operation": "add",
+          "length": {
+            "value": 2.0,
+            "unit": "m",
+            "source_text": "2.00 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.4,
+            "unit": "m",
+            "source_text": "1.40 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_05_small_clinic"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    },
+    {
+      "room_id": "corridor",
+      "name": "Corridor",
+      "room_type": "corridor",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "components": [
+        {
+          "component_id": "corridor",
+          "name": "Corridor",
+          "operation": "add",
+          "length": {
+            "value": 9.8,
+            "unit": "m",
+            "source_text": "9.80 m",
+            "confidence": 1.0
+          },
+          "width": {
+            "value": 1.2,
+            "unit": "m",
+            "source_text": "1.20 m",
+            "confidence": 1.0
+          },
+          "reason": "Synthetic fixture ground truth",
+          "source_refs": [
+            "plan_05_small_clinic"
+          ],
+          "confidence": 1.0
+        }
+      ],
+      "labeled_area": null,
+      "notes": [],
+      "warnings": [],
+      "confidence": 1.0
+    }
+  ],
+  "consistency_checks": [],
+  "assumptions": [
+    "Synthetic fixture with net internal metric dimensions."
+  ],
+  "warnings": [],
+  "questions": []
+}

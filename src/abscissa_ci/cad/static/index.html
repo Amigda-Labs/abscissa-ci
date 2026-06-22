@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Abscissa CAD</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>Abscissa CAD</h1>
+        <p>Construction Intelligence Aided Design</p>
+      </div>
+      <div class="actions">
+        <button data-command="SAVE">Save JSON</button>
+        <button data-command="OPEN">Open JSON</button>
+        <button data-command="EXPORT">Export SVG</button>
+        <button data-command="PNG">Export PNG</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="panel">
+        <section>
+          <h2>Tools</h2>
+          <div class="tool-grid">
+            <button class="tool active" data-command="SELECT" data-shortcut="SELECT" title="Shortcut: SELECT">Select</button>
+            <button class="tool" data-command="LOT" data-shortcut="LOT" title="Shortcut: LOT">Lot</button>
+            <button class="tool" data-command="L" data-shortcut="L" title="Shortcut: L">Line</button>
+            <button class="tool" data-command="W" data-shortcut="W" title="Shortcut: W">Wall</button>
+            <button class="tool" data-command="RW" data-shortcut="RW" title="Shortcut: RW">Rect Wall</button>
+            <button class="tool" data-command="CONVERT" data-shortcut="CONVERT" title="Shortcut: CONVERT">To Wall</button>
+            <button class="tool" data-command="D" data-shortcut="D" title="Shortcut: D">Door</button>
+            <button class="tool" data-command="WIN" data-shortcut="WIN" title="Shortcut: WIN">Window</button>
+            <button class="tool" data-command="ROOM" data-shortcut="ROOM" title="Shortcut: ROOM">Room</button>
+            <button class="tool" data-command="DIM" data-shortcut="DIM" title="Shortcut: DIM">Dimension</button>
+            <button class="tool" data-command="M" data-shortcut="M" title="Shortcut: M">Move</button>
+            <button class="tool" data-command="C" data-shortcut="C" title="Shortcut: C">Copy</button>
+            <button class="tool" data-command="TR" data-shortcut="TR" title="Shortcut: TR">Trim</button>
+            <button class="tool" data-command="EX" data-shortcut="EX" title="Shortcut: EX">Extend</button>
+            <button class="tool" data-command="ROTATE" data-shortcut="ROTATE" title="Shortcut: ROTATE">Rotate</button>
+            <button class="tool danger" data-command="E" data-shortcut="E" title="Shortcut: E">Erase</button>
+          </div>
+        </section>
+
+        <section>
+          <h2>Wall</h2>
+          <label>
+            Type
+            <select id="wallType">
+              <option value="exterior">Exterior - 150 mm</option>
+              <option value="interior">Interior - 100 mm</option>
+            </select>
+          </label>
+        </section>
+
+        <section id="doorProperties" hidden>
+          <h2>Door</h2>
+          <label>
+            Leaf width (mm)
+            <input id="doorLeafWidth" type="number" readonly>
+          </label>
+          <label>
+            Frame / jamb each side (mm)
+            <input id="doorJamb" type="number" min="5" max="200" step="5">
+          </label>
+          <label>
+            Leaf thickness (mm)
+            <input id="doorLeafThickness" type="number" min="10" max="120" step="5">
+          </label>
+          <label>
+            Swing direction
+            <select id="doorSwing">
+              <option value="cw">Clockwise</option>
+              <option value="ccw">Counter-clockwise</option>
+            </select>
+          </label>
+          <label>
+            Hinge side
+            <select id="doorHingeSide">
+              <option value="start">Start</option>
+              <option value="end">End</option>
+            </select>
+          </label>
+        </section>
+
+        <section>
+          <h2>Room</h2>
+          <label>
+            Name
+            <input id="roomName" value="Living Room">
+          </label>
+          <label>
+            Type
+            <select id="roomType">
+              <option value="living_room">Living room</option>
+              <option value="bedroom">Bedroom</option>
+              <option value="bathroom">Bathroom</option>
+              <option value="kitchen">Kitchen</option>
+              <option value="dining">Dining</option>
+              <option value="corridor">Corridor</option>
+              <option value="room">Room</option>
+            </select>
+          </label>
+        </section>
+
+        <section>
+          <h2>Project</h2>
+          <dl class="stats">
+            <dt>Lot Areas</dt><dd id="lotCount">0</dd>
+            <dt>Lines</dt><dd id="lineCount">0</dd>
+            <dt>Walls</dt><dd id="wallCount">0</dd>
+            <dt>Openings</dt><dd id="openingCount">0</dd>
+            <dt>Rooms</dt><dd id="roomCount">0</dd>
+            <dt>Dimensions</dt><dd id="dimensionCount">0</dd>
+          </dl>
+          <p id="coordinateReadout">X 0.00, Y 0.00</p>
+          <p id="selectionSummary">Nothing selected.</p>
+        </section>
+      </aside>
+
+      <section class="board-wrap">
+        <canvas id="board" width="1600" height="1000"></canvas>
+        <div class="command-row">
+          <strong id="commandEcho">Command: SELECT</strong>
+          <span id="status">Ready. Type L, W, RW, CONVERT, D, WIN, ROOM, DIM, M, C, TR, EX, E, U, REDO, SAVE, OPEN, EXPORT.</span>
+          <input id="commandLine" autocomplete="off" placeholder="Command">
+        </div>
+      </section>
+    </main>
+
+    <input id="fileInput" type="file" accept="application/json,.json" hidden>
+    <script src="/app.js"></script>
+  </body>
+</html>

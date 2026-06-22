@@ -1,0 +1,173 @@
+{
+  "can_compute": true,
+  "project_name": "Compact Apartment",
+  "source_image_path": "/Users/josejaimegarcia/Documents/Amigda/_Company_Projects/abscissa-ci/samples/floorplans/images/plan_01_compact_apartment.png",
+  "requested_measurement_basis": "net_internal_room_area",
+  "total_area_sqm": 56.64,
+  "rooms": [
+    {
+      "room_id": "living_dining",
+      "name": "Living / Dining",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 19.76,
+      "add_area_sqm": 19.76,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "living_dining_rect_1",
+          "name": "Living / Dining rectangle",
+          "operation": "add",
+          "length_m": 5.2,
+          "width_m": 3.8,
+          "area_sqm": 19.76,
+          "signed_area_sqm": 19.76
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.95
+    },
+    {
+      "room_id": "kitchen",
+      "name": "Kitchen",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 7.28,
+      "add_area_sqm": 7.28,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "kitchen_rect_1",
+          "name": "Kitchen rectangle",
+          "operation": "add",
+          "length_m": 2.8,
+          "width_m": 2.6,
+          "area_sqm": 7.28,
+          "signed_area_sqm": 7.28
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.95
+    },
+    {
+      "room_id": "entry",
+      "name": "Entry",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 3.36,
+      "add_area_sqm": 3.36,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "entry_rect_1",
+          "name": "Entry rectangle",
+          "operation": "add",
+          "length_m": 2.8,
+          "width_m": 1.2,
+          "area_sqm": 3.36,
+          "signed_area_sqm": 3.36
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.95
+    },
+    {
+      "room_id": "bedroom_1",
+      "name": "Bedroom 1",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 10.88,
+      "add_area_sqm": 10.88,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "bedroom_1_rect_1",
+          "name": "Bedroom 1 rectangle",
+          "operation": "add",
+          "length_m": 3.4,
+          "width_m": 3.2,
+          "area_sqm": 10.88,
+          "signed_area_sqm": 10.88
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.95
+    },
+    {
+      "room_id": "bedroom_2",
+      "name": "Bedroom 2",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 9.6,
+      "add_area_sqm": 9.6,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "bedroom_2_rect_1",
+          "name": "Bedroom 2 rectangle",
+          "operation": "add",
+          "length_m": 3.2,
+          "width_m": 3.0,
+          "area_sqm": 9.6,
+          "signed_area_sqm": 9.6
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.95
+    },
+    {
+      "room_id": "bathroom",
+      "name": "Bathroom",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 3.96,
+      "add_area_sqm": 3.96,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "bathroom_rect_1",
+          "name": "Bathroom rectangle",
+          "operation": "add",
+          "length_m": 1.8,
+          "width_m": 2.2,
+          "area_sqm": 3.96,
+          "signed_area_sqm": 3.96
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.95
+    },
+    {
+      "room_id": "storage",
+      "name": "Storage",
+      "boundary_basis": "inside_face_of_walls",
+      "measurement_method": "dimension_labels",
+      "area_sqm": 1.8,
+      "add_area_sqm": 1.8,
+      "subtract_area_sqm": 0.0,
+      "components": [
+        {
+          "component_id": "storage_rect_1",
+          "name": "Storage rectangle",
+          "operation": "add",
+          "length_m": 1.8,
+          "width_m": 1.0,
+          "area_sqm": 1.8,
+          "signed_area_sqm": 1.8
+        }
+      ],
+      "labeled_area_sqm": null,
+      "confidence": 0.95
+    }
+  ],
+  "issues": [],
+  "questions": [],
+  "assumptions": [
+    "Dimensions are interpreted as net internal room dimensions because the plan subtitle states: \"Synthetic metric plan - net room dimensions shown\".",
+    "Furniture and fixtures are not treated as subtractive area components."
+  ],
+  "warnings": [
+    "No separate area labels are shown; areas should be computed from room dimension labels.",
+    "Scale bar is present but not used because explicit room dimension labels are available."
+  ]
+}

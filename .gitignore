@@ -9,3 +9,7 @@ __pycache__/
 # Generated review outputs from local floor-plan runs.
 *.tile_estimate.json
 *.tile_estimate.md
+
+# Area Agent evaluation scratch runs; canonical sample outputs live in
+# samples/floorplans/agent_outputs.
+samples/floorplans/agent_outputs_iter*/
