@@ -13,6 +13,8 @@ OpeningType = Literal["door", "window"]
 DoorSwingDirection = Literal["cw", "ccw"]
 DoorHingeSide = Literal["start", "end"]
 DimensionKind = Literal["linear"]
+DimensionBasis = Literal["centerline", "outside_face", "inside_face"]
+DraftLineType = Literal["draft", "setback", "grid", "wall_centerline"]
 
 EXTERIOR_WALL_THICKNESS_MM = 150.0
 INTERIOR_WALL_THICKNESS_MM = 100.0
@@ -83,6 +85,8 @@ class DraftLine(StrictModel):
     line_id: str
     start: Point
     end: Point
+    line_type: DraftLineType = "draft"
+    layer: str = "DRAFT_LINE"
 
     @model_validator(mode="after")
     def validate_line(self) -> DraftLine:
@@ -173,6 +177,7 @@ class RoomLabel(StrictModel):
 class DimensionAnnotation(StrictModel):
     dimension_id: str
     kind: DimensionKind = "linear"
+    basis: DimensionBasis = "centerline"
     start: Point
     end: Point
     offset_m: float = 0.0

@@ -5,6 +5,7 @@ from math import hypot
 
 from abscissa_ci.cad.door_style import DoorStyle, load_door_style
 from abscissa_ci.cad.models import CadProject, LotArea, Opening, Point, WallSegment
+from abscissa_ci.cad.wall_geometry import point_key, wall_joint_polygons, wall_solid_polygon
 
 
 SCALE_PX_PER_M = 80.0
@@ -63,35 +64,53 @@ def export_project_svg(project: CadProject) -> str:
     )
 
     for draft_line in level.lines:
+        line_style = _draft_line_svg_style(draft_line.line_type)
         lines.append(
             f'<line id="{escape(draft_line.line_id)}" '
             f'x1="{sx(draft_line.start.x):.2f}" y1="{sy(draft_line.start.y):.2f}" '
             f'x2="{sx(draft_line.end.x):.2f}" y2="{sy(draft_line.end.y):.2f}" '
-            'stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 5" '
-            'data-entity-type="draft-line"/>'
+            f'stroke="{line_style["stroke"]}" stroke-width="{line_style["stroke_width"]}" '
+            f'stroke-dasharray="{line_style["stroke_dasharray"]}" '
+            f'data-entity-type="draft-line" data-line-type="{draft_line.line_type}" '
+            f'data-layer="{escape(draft_line.layer)}"/>'
         )
 
     lines.extend(
         [
             "</g>",
-            '<g id="walls" stroke-linecap="butt" fill="none">',
+            '<g id="walls">',
         ]
     )
 
+    wall_by_id = {wall.wall_id: wall for wall in level.walls}
+    suppressed_joint_keys = _door_opening_centerline_keys(wall_by_id, level.openings)
+
     for wall in level.walls:
-        stroke = "#111827" if wall.wall_type == "exterior" else "#374151"
-        stroke_width = max(2.0, (wall.thickness_mm or 100.0) / 1000.0 * SCALE_PX_PER_M)
+        fill = "#111827" if wall.wall_type == "exterior" else "#374151"
+        polygon = wall_solid_polygon(wall)
+        if not polygon.points:
+            continue
         lines.append(
-            f'<line id="{escape(wall.wall_id)}" x1="{sx(wall.start.x):.2f}" '
-            f'y1="{sy(wall.start.y):.2f}" x2="{sx(wall.end.x):.2f}" '
-            f'y2="{sy(wall.end.y):.2f}" stroke="{stroke}" '
-            f'stroke-width="{stroke_width:.2f}" data-wall-type="{wall.wall_type}"/>'
+            f'<polygon id="{escape(wall.wall_id)}" points="{_svg_points(polygon.points, sx, sy)}" '
+            f'fill="{fill}" data-entity-type="wall-solid" '
+            f'data-wall-type="{wall.wall_type}" data-centerline-start="{wall.start.x:.4f},{wall.start.y:.4f}" '
+            f'data-centerline-end="{wall.end.x:.4f},{wall.end.y:.4f}"/>'
         )
 
+    lines.append('<g id="wall-joints">')
+    for joint in wall_joint_polygons(level.walls, suppressed_joint_keys):
+        fill = "#111827" if joint.wall_type == "exterior" else "#374151"
+        wall_ids = " ".join(escape(wall_id) for wall_id in joint.wall_ids)
+        lines.append(
+            f'<polygon id="wall-joint-{_svg_id(joint.key)}" '
+            f'points="{_svg_points(joint.points, sx, sy)}" fill="{fill}" '
+            f'data-entity-type="wall-joint" data-wall-type="{joint.wall_type}" '
+            f'data-wall-ids="{wall_ids}"/>'
+        )
+    lines.append("</g>")
     lines.append("</g>")
     lines.append('<g id="openings" fill="none" stroke-linecap="butt">')
 
-    wall_by_id = {wall.wall_id: wall for wall in level.walls}
     door_style = load_door_style()
     for opening in level.openings:
         opening_geometry = _opening_geometry(wall_by_id, opening)
@@ -135,7 +154,8 @@ def export_project_svg(project: CadProject) -> str:
             f'<line id="{escape(dimension.dimension_id)}" '
             f'x1="{sx(display_start.x):.2f}" y1="{sy(display_start.y):.2f}" '
             f'x2="{sx(display_end.x):.2f}" y2="{sy(display_end.y):.2f}" '
-            'stroke="#64748b" stroke-width="1.5" stroke-dasharray="4 4"/>'
+            f'stroke="#64748b" stroke-width="1.5" stroke-dasharray="4 4" '
+            f'data-dimension-basis="{dimension.basis}"/>'
         )
         lines.append(
             f'<line x1="{sx(dimension.start.x):.2f}" y1="{sy(dimension.start.y):.2f}" '
@@ -164,7 +184,11 @@ def _project_bounds(project: CadProject) -> tuple[float, float, float, float]:
         for draft_line in level.lines:
             points.extend([draft_line.start, draft_line.end])
         for wall in level.walls:
-            points.extend([wall.start, wall.end])
+            points.extend(wall_solid_polygon(wall).points)
+        wall_by_id = {wall.wall_id: wall for wall in level.walls}
+        suppressed_joint_keys = _door_opening_centerline_keys(wall_by_id, level.openings)
+        for joint in wall_joint_polygons(level.walls, suppressed_joint_keys):
+            points.extend(joint.points)
         for room in level.rooms:
             points.append(room.label)
         for dimension in level.dimensions:
@@ -212,6 +236,41 @@ def _opening_geometry(
         return None
     start, end = _opening_points(wall, opening)
     return start, end, wall.thickness_mm
+
+
+def _door_opening_centerline_keys(
+    wall_by_id: dict[str, WallSegment],
+    openings: list[Opening],
+) -> set[str]:
+    keys: set[str] = set()
+    for opening in openings:
+        if opening.opening_type != "door":
+            continue
+        geometry = _opening_geometry(wall_by_id, opening)
+        if geometry is None:
+            continue
+        start, end, _wall_thickness_mm = geometry
+        keys.add(point_key(start))
+        keys.add(point_key(end))
+    return keys
+
+
+def _svg_points(points: list[Point], sx, sy) -> str:
+    return " ".join(f"{sx(point.x):.2f},{sy(point.y):.2f}" for point in points)
+
+
+def _svg_id(value: str) -> str:
+    return escape(value.replace("-", "n").replace(".", "p").replace(":", "-"))
+
+
+def _draft_line_svg_style(line_type: str) -> dict[str, str]:
+    if line_type == "setback":
+        return {"stroke": "#0891b2", "stroke_width": "1.25", "stroke_dasharray": "8 6"}
+    if line_type == "grid":
+        return {"stroke": "#94a3b8", "stroke_width": "1.0", "stroke_dasharray": "2 7"}
+    if line_type == "wall_centerline":
+        return {"stroke": "#dc2626", "stroke_width": "1.25", "stroke_dasharray": "10 4 2 4"}
+    return {"stroke": "#64748b", "stroke_width": "1.5", "stroke_dasharray": "6 5"}
 
 
 def _door_svg(

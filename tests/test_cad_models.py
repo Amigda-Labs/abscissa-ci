@@ -80,6 +80,38 @@ def test_cad_project_accepts_orthogonal_draft_lines() -> None:
     assert project.levels[0].lines[0].length_m == 3
 
 
+def test_cad_project_preserves_semantic_draft_line_metadata() -> None:
+    project = CadProject.model_validate(
+        {
+            "levels": [
+                {
+                    "lines": [
+                        {
+                            "line_id": "setback-1",
+                            "start": {"x": 2, "y": 3},
+                            "end": {"x": 8, "y": 3},
+                            "line_type": "setback",
+                            "layer": "SETBACK",
+                        },
+                        {
+                            "line_id": "grid-1",
+                            "start": {"x": 5, "y": 0},
+                            "end": {"x": 5, "y": 15},
+                            "line_type": "grid",
+                            "layer": "GRID",
+                        },
+                    ]
+                }
+            ]
+        }
+    )
+
+    assert project.levels[0].lines[0].line_type == "setback"
+    assert project.levels[0].lines[0].layer == "SETBACK"
+    assert project.levels[0].lines[1].line_type == "grid"
+    assert project.levels[0].lines[1].layer == "GRID"
+
+
 def test_cad_project_accepts_rectangular_lot_area() -> None:
     project = CadProject.model_validate(
         {
@@ -160,6 +192,35 @@ def test_cad_project_preserves_dimension_offset() -> None:
     )
 
     assert project.levels[0].dimensions[0].offset_m == -0.75
+
+
+def test_cad_project_preserves_dimension_basis() -> None:
+    project = CadProject.model_validate(
+        {
+            "levels": [
+                {
+                    "dimensions": [
+                        {
+                            "dimension_id": "dim-outside",
+                            "basis": "outside_face",
+                            "start": {"x": -0.075, "y": 0},
+                            "end": {"x": 4.075, "y": 0},
+                            "offset_m": -0.75,
+                        },
+                        {
+                            "dimension_id": "dim-inside",
+                            "basis": "inside_face",
+                            "start": {"x": 0.075, "y": 1},
+                            "end": {"x": 3.925, "y": 1},
+                        },
+                    ]
+                }
+            ]
+        }
+    )
+
+    assert project.levels[0].dimensions[0].basis == "outside_face"
+    assert project.levels[0].dimensions[1].basis == "inside_face"
 
 
 def test_cad_project_rejects_opening_that_exceeds_parent_wall() -> None:

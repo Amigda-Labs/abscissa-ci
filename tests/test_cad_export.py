@@ -21,6 +21,8 @@ def test_export_project_svg_contains_semantic_floor_plan_entities() -> None:
                             "line_id": "line-1",
                             "start": {"x": 0, "y": 2},
                             "end": {"x": 4, "y": 2},
+                            "line_type": "setback",
+                            "layer": "SETBACK",
                         }
                     ],
                     "walls": [
@@ -52,6 +54,7 @@ def test_export_project_svg_contains_semantic_floor_plan_entities() -> None:
                     "dimensions": [
                         {
                             "dimension_id": "dim-1",
+                            "basis": "outside_face",
                             "start": {"x": 0, "y": 0},
                             "end": {"x": 4, "y": 0},
                             "offset_m": 0.5,
@@ -69,10 +72,14 @@ def test_export_project_svg_contains_semantic_floor_plan_entities() -> None:
     assert 'id="lot-1"' in svg
     assert 'data-entity-type="lot-area"' in svg
     assert "<circle" in svg
-    assert 'id="walls" stroke-linecap="butt"' in svg
+    assert 'id="walls"' in svg
+    assert 'data-entity-type="wall-solid"' in svg
+    assert 'id="wall-joints"' in svg
     assert 'id="openings" fill="none" stroke-linecap="butt"' in svg
     assert 'id="line-1"' in svg
     assert 'data-entity-type="draft-line"' in svg
+    assert 'data-line-type="setback"' in svg
+    assert 'data-layer="SETBACK"' in svg
     assert 'id="w1"' in svg
     assert 'data-wall-type="exterior"' in svg
     assert 'id="door-1"' in svg
@@ -80,6 +87,40 @@ def test_export_project_svg_contains_semantic_floor_plan_entities() -> None:
     assert "Waiting Area" in svg
     assert "4.00 m" in svg
     assert 'id="dim-1"' in svg
+    assert 'data-dimension-basis="outside_face"' in svg
+
+
+def test_export_project_svg_draws_wall_joint_solids_for_orthogonal_corners() -> None:
+    project = CadProject.model_validate(
+        {
+            "project": {"name": "Joined Walls"},
+            "levels": [
+                {
+                    "walls": [
+                        {
+                            "wall_id": "w-horizontal",
+                            "start": {"x": 0, "y": 0},
+                            "end": {"x": 2, "y": 0},
+                            "wall_type": "exterior",
+                        },
+                        {
+                            "wall_id": "w-vertical",
+                            "start": {"x": 2, "y": 0},
+                            "end": {"x": 2, "y": 2},
+                            "wall_type": "exterior",
+                        },
+                    ],
+                    "openings": [],
+                }
+            ],
+        }
+    )
+
+    svg = export_project_svg(project)
+
+    assert 'id="wall-joints"' in svg
+    assert 'data-entity-type="wall-joint"' in svg
+    assert 'data-wall-ids="w-horizontal w-vertical"' in svg
 
 
 def test_export_project_svg_draws_explicit_door_gap_without_parent_wall() -> None:

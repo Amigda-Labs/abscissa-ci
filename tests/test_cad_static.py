@@ -10,7 +10,11 @@ def test_cad_static_app_exposes_required_command_aliases() -> None:
 
     for command in [
         "LOT",
+        "SETBACK",
+        "GRID",
+        "WCL",
         "LINE",
+        "REC",
         "WALL",
         "RECTWALL",
         "CONVERT",
@@ -18,6 +22,7 @@ def test_cad_static_app_exposes_required_command_aliases() -> None:
         "WINDOW",
         "ROOM",
         "DIM",
+        "PAN",
         "MOVE",
         "COPY",
         "TRIM",
@@ -48,6 +53,12 @@ def test_cad_static_app_exposes_snap_coordinates_and_window_selection() -> None:
     index_html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")
 
     assert "nearestSnapEndpoint" in app_js
+    assert "segmentMidpoint" in app_js
+    assert 'type: "wall-midpoint"' in app_js
+    assert 'type: "line-midpoint"' in app_js
+    assert 'type: "dimension-midpoint"' in app_js
+    assert 'type: "opening-midpoint"' in app_js
+    assert '"midpoint"' in app_js
     assert "finishSelectionDrag" in app_js
     assert "Crossing" in app_js
     assert "Window" in app_js
@@ -67,6 +78,56 @@ def test_cad_static_app_exposes_lot_area_tool_and_command_echo() -> None:
     assert "Command: ${toolCommandName(nextTool)}" in app_js
 
 
+def test_cad_static_app_exposes_residential_setup_helpers() -> None:
+    app_js = (STATIC_DIR / "app.js").read_text(encoding="utf-8")
+    index_html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")
+    style_css = (STATIC_DIR / "style.css").read_text(encoding="utf-8")
+
+    for input_id in [
+        "lotWidth",
+        "lotDepth",
+        "setbackFront",
+        "setbackRear",
+        "setbackLeft",
+        "setbackRight",
+        "gridXSpacings",
+        "gridYSpacings",
+        "createLotButton",
+        "createSetbackButton",
+        "createGridButton",
+        "createWallCenterlineButton",
+    ]:
+        assert f'id="{input_id}"' in index_html
+
+    assert "LOT 10,15" in index_html
+    assert "SETBACK 3,2,2,2" in index_html
+    assert "GRID 5,5|5,5,5" in index_html
+    assert 'SETBACK: "setback"' in app_js
+    assert 'GRID: "grid"' in app_js
+    assert 'WCL: "wall-centerline"' in app_js
+    assert "handleWorkflowCommand" in app_js
+    assert "createSetbackLines" in app_js
+    assert "createGridLines" in app_js
+    assert "createWallCenterlineFromReference" in app_js
+    assert '"setback", "SETBACK"' in app_js
+    assert '"grid", "GRID"' in app_js
+    assert '"wall_centerline", "WALL_CL"' in app_js
+    assert ".compact-grid" in style_css
+    assert ".wide-action" in style_css
+
+
+def test_cad_static_app_uses_fixed_viewport_layout() -> None:
+    app_js = (STATIC_DIR / "app.js").read_text(encoding="utf-8")
+    style_css = (STATIC_DIR / "style.css").read_text(encoding="utf-8")
+
+    assert "height: 100dvh" in style_css
+    assert "overflow: hidden" in style_css
+    assert "overscroll-behavior: contain" in style_css
+    assert "grid-template-rows: minmax(0, 1fr) auto" in style_css
+    assert "resetAppScroll" in app_js
+    assert "panel.scrollTop = 0" in app_js
+
+
 def test_cad_static_app_exposes_rectangle_wall_command() -> None:
     app_js = (STATIC_DIR / "app.js").read_text(encoding="utf-8")
     index_html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")
@@ -80,6 +141,23 @@ def test_cad_static_app_exposes_rectangle_wall_command() -> None:
     assert "rectangleSegments" in app_js
 
 
+def test_cad_static_app_exposes_rectangle_command_with_typed_dimensions() -> None:
+    app_js = (STATIC_DIR / "app.js").read_text(encoding="utf-8")
+    index_html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")
+
+    assert 'data-command="REC"' in index_html
+    assert 'data-shortcut="REC"' in index_html
+    assert 'REC: "rectangle"' in app_js
+    assert 'RECTANGLE: "rectangle"' in app_js
+    assert 'rectangle: "REC"' in app_js
+    assert "addRectangleLines" in app_js
+    assert "drawRectangleLinePreview" in app_js
+    assert "parseRectangleDimensions" in app_js
+    assert "handleActiveGeometryInput" in app_js
+    assert "Width,Height in meters e.g. 5,8" in app_js
+    assert "formatRectangleSize" in app_js
+
+
 def test_cad_static_tool_shortcuts_are_visible_on_hover() -> None:
     index_html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")
     style_css = (STATIC_DIR / "style.css").read_text(encoding="utf-8")
@@ -89,6 +167,22 @@ def test_cad_static_tool_shortcuts_are_visible_on_hover() -> None:
     assert "content: attr(data-shortcut)" in style_css
     assert ".tool:hover::after" in style_css
     assert ".tool:focus-visible::after" in style_css
+
+
+def test_cad_static_app_exposes_pan_tool_and_board_cursor() -> None:
+    app_js = (STATIC_DIR / "app.js").read_text(encoding="utf-8")
+    index_html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")
+    style_css = (STATIC_DIR / "style.css").read_text(encoding="utf-8")
+
+    assert 'data-command="PAN"' in index_html
+    assert 'data-shortcut="PAN"' in index_html
+    assert 'P: "pan"' in app_js
+    assert 'PAN: "pan"' in app_js
+    assert 'pan: "PAN"' in app_js
+    assert 'tool === "pan"' in app_js
+    assert "startPan(event)" in app_js
+    assert "#board.pan-tool" in style_css
+    assert "#board.panning" in style_css
 
 
 def test_cad_static_app_draws_bottom_left_axis_indicator() -> None:
@@ -102,11 +196,20 @@ def test_cad_static_app_draws_bottom_left_axis_indicator() -> None:
 
 def test_cad_static_app_uses_three_click_dimension_placement() -> None:
     app_js = (STATIC_DIR / "app.js").read_text(encoding="utf-8")
+    index_html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")
 
     assert "dimensionMeasureEnd" in app_js
     assert "dimensionOffsetFromPlacement" in app_js
     assert "dimensionDisplayPoints" in app_js
     assert "click to place the dimension line" in app_js
+    assert 'id="dimensionBasis"' in index_html
+    assert 'value="centerline"' in index_html
+    assert 'value="outside_face"' in index_html
+    assert 'value="inside_face"' in index_html
+    assert "resolveDimensionBasis" in app_js
+    assert "dimensionParallelWallInfo" in app_js
+    assert "connectedPerpendicularWallInfo" in app_js
+    assert "basis," in app_js
 
 
 def test_cad_static_app_rotates_doors_and_handles_keyboard_tool_shortcuts() -> None:
@@ -121,7 +224,6 @@ def test_cad_static_app_rotates_doors_and_handles_keyboard_tool_shortcuts() -> N
     assert "jambLength" in app_js
     assert "drawDoorSwingArrow" in app_js
     assert "doorStyle.colors.frame_fill" in app_js
-    assert 'ctx.lineCap = "butt"' in app_js
     assert "doorLeafWidthForWall" in app_js
     assert "doorOpeningWidthForWall" in app_js
     assert "doorLeafWidthForWall(wall) + 2 * doorJambMeters(null)" in app_js
@@ -134,6 +236,18 @@ def test_cad_static_app_rotates_doors_and_handles_keyboard_tool_shortcuts() -> N
     assert 'type: "door-jamb"' in app_js
     assert "!suppressedWallEndpointKeys.has(pointKey(wall.start))" in app_js
     assert "executeCommand(command)" in app_js
+
+
+def test_cad_static_app_renders_walls_as_derived_solids_with_joint_patches() -> None:
+    app_js = (STATIC_DIR / "app.js").read_text(encoding="utf-8")
+
+    assert "drawWallSolid" in app_js
+    assert "drawWallJoints(activeLevel().walls)" in app_js
+    assert "function wallSolidPolygon" in app_js
+    assert "function wallJointPolygons" in app_js
+    assert "wallJointPolygons(walls, suppressedKeys)" in app_js
+    assert "doorOpeningCenterlineEndpointKeys(wallMap())" in app_js
+    assert 'ctx.lineCap = "butt"' not in app_js
 
 
 def test_cad_static_shares_a_single_door_style_source() -> None:

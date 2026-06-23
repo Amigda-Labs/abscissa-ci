@@ -7,6 +7,7 @@
   const commandEcho = document.getElementById("commandEcho");
   const commandLine = document.getElementById("commandLine");
   const wallTypeEl = document.getElementById("wallType");
+  const dimensionBasisEl = document.getElementById("dimensionBasis");
   const roomNameEl = document.getElementById("roomName");
   const roomTypeEl = document.getElementById("roomType");
   const coordinateReadout = document.getElementById("coordinateReadout");
@@ -17,6 +18,18 @@
   const doorLeafThicknessEl = document.getElementById("doorLeafThickness");
   const doorSwingEl = document.getElementById("doorSwing");
   const doorHingeSideEl = document.getElementById("doorHingeSide");
+  const lotWidthEl = document.getElementById("lotWidth");
+  const lotDepthEl = document.getElementById("lotDepth");
+  const setbackFrontEl = document.getElementById("setbackFront");
+  const setbackRearEl = document.getElementById("setbackRear");
+  const setbackLeftEl = document.getElementById("setbackLeft");
+  const setbackRightEl = document.getElementById("setbackRight");
+  const gridXSpacingsEl = document.getElementById("gridXSpacings");
+  const gridYSpacingsEl = document.getElementById("gridYSpacings");
+  const createLotButton = document.getElementById("createLotButton");
+  const createSetbackButton = document.getElementById("createSetbackButton");
+  const createGridButton = document.getElementById("createGridButton");
+  const createWallCenterlineButton = document.getElementById("createWallCenterlineButton");
 
   // Single source of truth for door visuals, mirrored from static/door_style.json.
   // The same JSON is read by the SVG exporter (cad/door_style.py) so the canvas
@@ -49,10 +62,19 @@
     LOT: "lot",
     LOTAREA: "lot",
     LA: "lot",
+    SETBACK: "setback",
+    SB: "setback",
+    GRID: "grid",
+    XLINE: "grid",
+    WCL: "wall-centerline",
+    WALLCL: "wall-centerline",
     L: "line",
     LINE: "line",
     W: "wall",
     WALL: "wall",
+    REC: "rectangle",
+    RECT: "rectangle",
+    RECTANGLE: "rectangle",
     RW: "rectangle-wall",
     RECTWALL: "rectangle-wall",
     RECTANGLEWALL: "rectangle-wall",
@@ -67,6 +89,8 @@
     R: "room",
     DIM: "dimension",
     DIMENSION: "dimension",
+    P: "pan",
+    PAN: "pan",
     M: "move",
     MOVE: "move",
     C: "copy",
@@ -106,6 +130,7 @@
   let lotStart = null;
   let lineStart = null;
   let wallStart = null;
+  let rectangleStart = null;
   let rectangleWallStart = null;
   let dimensionStart = null;
   let dimensionMeasureEnd = null;
@@ -201,22 +226,26 @@
     lotStart = null;
     lineStart = null;
     wallStart = null;
+    rectangleStart = null;
     rectangleWallStart = null;
     dimensionStart = null;
     dimensionMeasureEnd = null;
     moveAnchor = null;
     selectionDrag = null;
+    resetCommandLinePrompt();
     updateToolButtons();
     const labels = {
       select: "Select: click, or drag left-to-right for window select and right-to-left for crossing select.",
       lot: "LOT: click first corner, then click opposite corner for a rectangular lot area.",
       line: "Line: click start, then click end. Lines snap to grid/endpoints and stay orthogonal.",
       wall: "Wall: click start, then click end. Walls snap to grid and stay orthogonal.",
+      rectangle: "Rectangle: click first corner, then click opposite corner or type width,height such as 5,8.",
       "rectangle-wall": "Rectangle wall: click first corner, then click opposite corner to create four walls.",
       door: "Door: click a wall to place a door. Exterior doors are 0.90 m; interior doors are 0.80 m. Select a door and use ROTATE to flip its swing.",
       window: "Window: click a wall to place a 1.20 m window.",
       room: "Room: click to place a room label.",
-      dimension: "Dimension: click first endpoint, click second endpoint, then click to place the dimension line.",
+      dimension: () => `Dimension (${dimensionBasisLabel()}): click first endpoint, click second endpoint, then click to place the dimension line.`,
+      pan: "Pan: drag anywhere on the board to move the view. Middle mouse, Shift-drag, and Space-drag also pan.",
       move: "Move: select an item, then click a new anchor point.",
       copy: "Copy: select an item, then click a new anchor point.",
       trim: "TRIM: click a draft line or wall near the end to remove up to the nearest crossing line or wall.",
@@ -224,7 +253,8 @@
       erase: "Erase: click an item to remove it.",
     };
     commandEcho.textContent = `Command: ${toolCommandName(nextTool)}`;
-    setStatus(labels[nextTool] || "Ready.");
+    const label = labels[nextTool];
+    setStatus(typeof label === "function" ? label() : label || "Ready.");
     draw();
   }
 
@@ -234,11 +264,13 @@
       lot: "LOT",
       line: "LINE",
       wall: "WALL",
+      rectangle: "REC",
       "rectangle-wall": "RECTWALL",
       door: "DOOR",
       window: "WINDOW",
       room: "ROOM",
       dimension: "DIM",
+      pan: "PAN",
       move: "MOVE",
       copy: "COPY",
       trim: "TRIM",
@@ -253,6 +285,12 @@
       const action = commandAliases[button.dataset.command.toUpperCase()];
       button.classList.toggle("active", action === tool);
     });
+    updateBoardCursor();
+  }
+
+  function updateBoardCursor() {
+    canvas.classList.toggle("pan-tool", tool === "pan");
+    canvas.classList.toggle("panning", isPanning);
   }
 
   function clearTransient() {
@@ -261,11 +299,13 @@
     lotStart = null;
     lineStart = null;
     wallStart = null;
+    rectangleStart = null;
     rectangleWallStart = null;
     dimensionStart = null;
     dimensionMeasureEnd = null;
     moveAnchor = null;
     selectionDrag = null;
+    resetCommandLinePrompt();
   }
 
   function deselect() {
@@ -288,7 +328,13 @@
       deselect();
     } else if (action === "erase" && selected) {
       removeSelectedItems();
-    } else if (["select", "lot", "line", "wall", "rectangle-wall", "door", "window", "room", "dimension", "move", "copy", "trim", "extend", "erase"].includes(action)) {
+    } else if (action === "setback") {
+      createSetbackFromInputs();
+    } else if (action === "grid") {
+      createGridFromInputs();
+    } else if (action === "wall-centerline") {
+      createWallCenterlineFromReference();
+    } else if (["select", "lot", "line", "wall", "rectangle", "rectangle-wall", "door", "window", "room", "dimension", "pan", "move", "copy", "trim", "extend", "erase"].includes(action)) {
       setTool(action);
     } else if (action === "convert-line-to-wall") {
       convertSelectedLinesToWalls();
@@ -401,20 +447,42 @@
     draw();
   }
 
+  function addRectangleLines(cornerA, cornerB) {
+    if (samePoint(cornerA, cornerB) || Math.abs(cornerA.x - cornerB.x) < 1e-9 || Math.abs(cornerA.y - cornerB.y) < 1e-9) {
+      setStatus("Rectangle ignored: rectangle needs width and depth.");
+      return;
+    }
+
+    remember();
+    const lines = rectangleSegments(cornerA, cornerB).map((segment) => makeDraftLine(segment.start, segment.end));
+    activeLevel().lines.push(...lines);
+    selectedItems = lines.map((draftLine) => ({ type: "line", item: draftLine }));
+    selected = selectedItems[0] || null;
+    setStatus(`Draft rectangle added: ${formatRectangleSize(cornerA, cornerB)}.`);
+    updateStats();
+    draw();
+  }
+
   function addLine(start, end) {
     if (samePoint(start, end)) {
       setStatus("Line ignored: start and end are the same.");
       return;
     }
     remember();
-    activeLevel().lines.push({
-      line_id: uid("line"),
-      start,
-      end,
-    });
+    activeLevel().lines.push(makeDraftLine(start, end));
     setStatus("Draft line added.");
     updateStats();
     draw();
+  }
+
+  function makeDraftLine(start, end, lineType = "draft", layer = "DRAFT_LINE") {
+    return {
+      line_id: uid("line"),
+      start: clone(start),
+      end: clone(end),
+      line_type: lineType,
+      layer,
+    };
   }
 
   function addLotArea(cornerA, cornerB) {
@@ -423,15 +491,119 @@
       return;
     }
     remember();
-    activeLevel().lots.push({
+    const lot = {
       lot_id: uid("lot"),
       name: "Lot Area",
       corner_a: cornerA,
       corner_b: cornerB,
       boundary_thickness_mm: 35,
       dash_pattern: "lot_boundary_dash_circle",
-    });
+    };
+    activeLevel().lots.push(lot);
+    selected = { type: "lot", item: lot };
+    selectedItems = [selected];
     setStatus(`Lot area added: ${formatArea(cornerA, cornerB)}.`);
+    updateStats();
+    draw();
+  }
+
+  function createLotFromInputs() {
+    const dimensions = readWidthDepthInputs(lotWidthEl, lotDepthEl);
+    if (!dimensions) {
+      setStatus("Lot needs positive width and depth in meters.");
+      return;
+    }
+    createLotFromDimensions(dimensions.width, dimensions.depth);
+  }
+
+  function createLotFromDimensions(width, depth) {
+    if (!Number.isFinite(width) || !Number.isFinite(depth) || width <= 0 || depth <= 0) {
+      setStatus("Type lot dimensions as width,depth in meters, for example LOT 10,15.");
+      return;
+    }
+    addLotArea({ x: 0, y: 0 }, { x: roundM(width), y: roundM(depth) });
+  }
+
+  function createSetbackFromInputs() {
+    const setbacks = readSetbackInputs();
+    if (!setbacks) {
+      setStatus("Setbacks need non-negative front,rear,left,right values in meters.");
+      return;
+    }
+    createSetbackLines(setbacks);
+  }
+
+  function createSetbackLines(setbacks) {
+    const bounds = selectedLotBounds() || latestLotBounds();
+    if (!bounds) {
+      setStatus("Create or select a lot before creating setbacks.");
+      return;
+    }
+    const inner = {
+      minX: roundM(bounds.minX + setbacks.left),
+      minY: roundM(bounds.minY + setbacks.rear),
+      maxX: roundM(bounds.maxX - setbacks.right),
+      maxY: roundM(bounds.maxY - setbacks.front),
+    };
+    if (inner.minX >= inner.maxX || inner.minY >= inner.maxY) {
+      setStatus("Setbacks are larger than the selected lot.");
+      return;
+    }
+    addGuideRectangle(inner, "setback", "SETBACK", `Setback created: ${formatRectangleBounds(inner)} buildable area.`);
+  }
+
+  function createGridFromInputs() {
+    const xSpacings = parseSpacingList(gridXSpacingsEl.value);
+    const ySpacings = parseSpacingList(gridYSpacingsEl.value);
+    if (!xSpacings.length || !ySpacings.length) {
+      setStatus("Grid needs X and Y spacing lists, for example 5,5 and 5,5,5.");
+      return;
+    }
+    createGridLines(xSpacings, ySpacings);
+  }
+
+  function createGridLines(xSpacings, ySpacings) {
+    const bounds = latestGuideRectangleBounds("setback") || selectedLotBounds() || latestLotBounds();
+    if (!bounds) {
+      setStatus("Create a lot or setback before creating a grid.");
+      return;
+    }
+    const xPositions = gridPositions(bounds.minX, bounds.maxX, xSpacings);
+    const yPositions = gridPositions(bounds.minY, bounds.maxY, ySpacings);
+    const segments = [
+      ...xPositions.map((x) => ({ start: { x, y: bounds.minY }, end: { x, y: bounds.maxY } })),
+      ...yPositions.map((y) => ({ start: { x: bounds.minX, y }, end: { x: bounds.maxX, y } })),
+    ];
+    addGuideLines(segments, "grid", "GRID", `Grid added: ${xPositions.length} vertical and ${yPositions.length} horizontal lines.`);
+  }
+
+  function createWallCenterlineFromReference() {
+    const bounds = latestGuideRectangleBounds("setback") || selectedLotBounds() || latestLotBounds();
+    if (!bounds) {
+      setStatus("Create a lot or setback before creating wall centerlines.");
+      return;
+    }
+    addGuideRectangle(bounds, "wall_centerline", "WALL_CL", `Wall centerline rectangle added: ${formatRectangleBounds(bounds)}.`);
+  }
+
+  function addGuideRectangle(bounds, lineType, layer, message) {
+    const cornerA = { x: bounds.minX, y: bounds.minY };
+    const cornerB = { x: bounds.maxX, y: bounds.maxY };
+    addGuideLines(rectangleSegments(cornerA, cornerB), lineType, layer, message);
+  }
+
+  function addGuideLines(segments, lineType, layer, message) {
+    const validSegments = segments.filter((segment) => !samePoint(segment.start, segment.end));
+    if (!validSegments.length) {
+      setStatus("Guide ignored: no valid guide lines were created.");
+      return;
+    }
+    remember();
+    const lines = validSegments.map((segment) => makeDraftLine(segment.start, segment.end, lineType, layer));
+    activeLevel().lines.push(...lines);
+    selectedItems = lines.map((draftLine) => ({ type: "line", item: draftLine }));
+    selected = selectedItems[0] || null;
+    setStatus(message);
     updateStats();
     draw();
   }
@@ -569,18 +741,21 @@
       setStatus("Dimension ignored: start and end are the same.");
       return;
     }
+    const basis = dimensionBasis();
+    const resolved = resolveDimensionBasis(start, end, placement, basis);
     remember();
-    const offsetM = dimensionOffsetFromPlacement(start, end, placement);
+    const offsetM = dimensionOffsetFromPlacement(resolved.start, resolved.end, placement);
     activeLevel().dimensions.push({
       dimension_id: uid("dimension"),
       kind: "linear",
-      start,
-      end,
+      basis,
+      start: resolved.start,
+      end: resolved.end,
       offset_m: offsetM,
-      label: formatDistance(start, end),
-      reference_ids: [],
+      label: formatDistance(resolved.start, resolved.end),
+      reference_ids: resolved.referenceIds,
     });
-    setStatus("Dimension added.");
+    setStatus(`${dimensionBasisLabel(basis)} dimension added.`);
     updateStats();
     draw();
   }
@@ -662,13 +837,23 @@
         addWall(wallStart, orthogonalPoint(wallStart, point));
         wallStart = null;
       }
+    } else if (tool === "rectangle") {
+      if (!rectangleStart) {
+        rectangleStart = point;
+        promptRectangleDimensions("Rectangle first corner set. Click opposite corner or type width,height.");
+      } else {
+        addRectangleLines(rectangleStart, point);
+        rectangleStart = null;
+        resetCommandLinePrompt();
+      }
     } else if (tool === "rectangle-wall") {
       if (!rectangleWallStart) {
         rectangleWallStart = point;
-        setStatus("Rectangle wall first corner set. Click opposite corner.");
+        promptRectangleDimensions("Rectangle wall first corner set. Click opposite corner or type width,height.");
       } else {
         addRectangleWalls(rectangleWallStart, point);
         rectangleWallStart = null;
+        resetCommandLinePrompt();
       }
     } else if (tool === "door") {
       addOpening(point, "door");
@@ -679,7 +864,7 @@
     } else if (tool === "dimension") {
       if (!dimensionStart) {
         dimensionStart = point;
-        setStatus("Dimension first endpoint set. Click second endpoint.");
+        setStatus(`${dimensionBasisLabel()} dimension first endpoint set. Click second endpoint.`);
       } else if (!dimensionMeasureEnd) {
         const end = orthogonalPoint(dimensionStart, point);
         if (samePoint(dimensionStart, end)) {
@@ -687,7 +872,7 @@
           return;
         }
         dimensionMeasureEnd = end;
-        setStatus("Dimension endpoints set. Move away and click to place the dimension line.");
+        setStatus(`${dimensionBasisLabel()} endpoints set. Move away and click to place the dimension line.`);
       } else {
         addDimension(dimensionStart, dimensionMeasureEnd, point);
         dimensionStart = null;
@@ -748,16 +933,41 @@
 
   function drawWalls() {
     activeLevel().walls.forEach((wall) => {
-      const start = worldToScreen(wall.start);
-      const end = worldToScreen(wall.end);
-      const selectedWall = isSelected("wall", wall.wall_id);
+      drawWallSolid(wall, isSelected("wall", wall.wall_id));
+    });
+    drawWallJoints(activeLevel().walls);
+  }
+
+  function drawWallSolid(wall, selectedWall) {
+    const polygon = wallSolidPolygon(wall);
+    if (!polygon.length) return;
+    ctx.save();
+    fillWorldPolygon(
+      polygon,
+      wallFillColor(wall.wall_type),
+      selectedWall ? "#f97316" : null,
+      selectedWall ? 2 : 0,
+    );
+    ctx.restore();
+  }
+
+  function drawWallJoints(walls) {
+    const suppressedKeys = doorOpeningCenterlineEndpointKeys(wallMap());
+    wallJointPolygons(walls, suppressedKeys).forEach((joint) => {
+      const selectedWall = joint.wallIds.some((wallId) => isSelected("wall", wallId));
       ctx.save();
-      ctx.strokeStyle = selectedWall ? "#f97316" : wall.wall_type === "exterior" ? "#111827" : "#374151";
-      ctx.lineWidth = Math.max(2, (wall.thickness_mm / 1000) * view.scale);
-      ctx.lineCap = "butt";
-      line(start.x, start.y, end.x, end.y);
+      fillWorldPolygon(
+        joint.points,
+        wallFillColor(joint.wallType),
+        selectedWall ? "#f97316" : null,
+        selectedWall ? 2 : 0,
+      );
       ctx.restore();
     });
+  }
+
+  function wallFillColor(wallType) {
+    return wallType === "exterior" ? "#111827" : "#374151";
   }
 
   function drawLots() {
@@ -797,13 +1007,21 @@
       const start = worldToScreen(draftLine.start);
       const end = worldToScreen(draftLine.end);
       const selectedLine = isSelected("line", draftLine.line_id);
+      const style = draftLineStyle(draftLine.line_type);
       ctx.save();
-      ctx.strokeStyle = selectedLine ? "#f97316" : "#64748b";
-      ctx.lineWidth = selectedLine ? 2.5 : 1.5;
-      ctx.setLineDash(selectedLine ? [] : [7, 5]);
+      ctx.strokeStyle = selectedLine ? "#f97316" : style.stroke;
+      ctx.lineWidth = selectedLine ? 2.5 : style.lineWidth;
+      ctx.setLineDash(selectedLine ? [] : style.dash);
       line(start.x, start.y, end.x, end.y);
       ctx.restore();
     });
+  }
+
+  function draftLineStyle(lineType) {
+    if (lineType === "setback") return { stroke: "#0891b2", lineWidth: 1.25, dash: [8, 6] };
+    if (lineType === "grid") return { stroke: "#94a3b8", lineWidth: 1, dash: [2, 7] };
+    if (lineType === "wall_centerline") return { stroke: "#dc2626", lineWidth: 1.25, dash: [10, 4, 2, 4] };
+    return { stroke: "#64748b", lineWidth: 1.5, dash: [7, 5] };
   }
 
   function drawOpenings() {
@@ -1027,15 +1245,19 @@
     }
     if (tool === "wall" && wallStart) {
       const end = orthogonalPoint(wallStart, hoverPoint);
-      const startScreen = worldToScreen(wallStart);
-      const endScreen = worldToScreen(end);
       ctx.save();
-      ctx.strokeStyle = "#2563eb";
-      ctx.lineWidth = Math.max(2, (wallThicknessMm(wallTypeEl.value) / 1000) * view.scale);
-      ctx.lineCap = "butt";
-      ctx.setLineDash([8, 6]);
-      line(startScreen.x, startScreen.y, endScreen.x, endScreen.y);
+      drawWallPreviewSolids([
+        {
+          start: wallStart,
+          end,
+          wall_type: wallTypeEl.value,
+          thickness_mm: wallThicknessMm(wallTypeEl.value),
+        },
+      ]);
       ctx.restore();
+    }
+    if (tool === "rectangle" && rectangleStart) {
+      drawRectangleLinePreview(rectangleStart, hoverPoint);
     }
     if (tool === "rectangle-wall" && rectangleWallStart) {
       drawRectangleWallPreview(rectangleWallStart, hoverPoint);
@@ -1051,14 +1273,15 @@
       ctx.restore();
     }
     if (tool === "dimension" && dimensionStart && dimensionMeasureEnd) {
-      const offsetM = dimensionOffsetFromPlacement(dimensionStart, dimensionMeasureEnd, hoverPoint);
+      const resolved = resolveDimensionBasis(dimensionStart, dimensionMeasureEnd, hoverPoint, dimensionBasis());
+      const offsetM = dimensionOffsetFromPlacement(resolved.start, resolved.end, hoverPoint);
       const display = dimensionDisplayPoints({
-        start: dimensionStart,
-        end: dimensionMeasureEnd,
+        start: resolved.start,
+        end: resolved.end,
         offset_m: offsetM,
       });
-      const measureStart = worldToScreen(dimensionStart);
-      const measureEnd = worldToScreen(dimensionMeasureEnd);
+      const measureStart = worldToScreen(resolved.start);
+      const measureEnd = worldToScreen(resolved.end);
       const displayStart = worldToScreen(display.start);
       const displayEnd = worldToScreen(display.end);
       ctx.save();
@@ -1074,7 +1297,7 @@
       ctx.fillStyle = "#2563eb";
       ctx.font = "12px Inter, Arial, sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText(formatDistance(dimensionStart, dimensionMeasureEnd), (displayStart.x + displayEnd.x) / 2, (displayStart.y + displayEnd.y) / 2 - 8);
+      ctx.fillText(formatDistance(resolved.start, resolved.end), (displayStart.x + displayEnd.x) / 2, (displayStart.y + displayEnd.y) / 2 - 8);
       ctx.restore();
     }
   }
@@ -1086,16 +1309,24 @@
     ctx.save();
     ctx.strokeStyle = "#22c55e";
     ctx.lineWidth = 2;
-    ctx.strokeRect(point.x - size / 2, point.y - size / 2, size, size);
+    if (snapCandidate.type.includes("midpoint")) {
+      ctx.beginPath();
+      ctx.moveTo(point.x, point.y - size / 2);
+      ctx.lineTo(point.x + size / 2, point.y + size / 2);
+      ctx.lineTo(point.x - size / 2, point.y + size / 2);
+      ctx.closePath();
+      ctx.stroke();
+    } else {
+      ctx.strokeRect(point.x - size / 2, point.y - size / 2, size, size);
+    }
     ctx.restore();
   }
 
-  function drawRectangleWallPreview(cornerA, cornerB) {
+  function drawRectangleLinePreview(cornerA, cornerB) {
     if (samePoint(cornerA, cornerB) || Math.abs(cornerA.x - cornerB.x) < 1e-9 || Math.abs(cornerA.y - cornerB.y) < 1e-9) return;
     ctx.save();
     ctx.strokeStyle = "#2563eb";
-    ctx.lineWidth = Math.max(2, (wallThicknessMm(wallTypeEl.value) / 1000) * view.scale);
-    ctx.lineCap = "butt";
+    ctx.lineWidth = 2;
     ctx.setLineDash([8, 6]);
     rectangleSegments(cornerA, cornerB).forEach((segment) => {
       const start = worldToScreen(segment.start);
@@ -1103,6 +1334,31 @@
       line(start.x, start.y, end.x, end.y);
     });
     ctx.restore();
+  }
+
+  function drawRectangleWallPreview(cornerA, cornerB) {
+    if (samePoint(cornerA, cornerB) || Math.abs(cornerA.x - cornerB.x) < 1e-9 || Math.abs(cornerA.y - cornerB.y) < 1e-9) return;
+    const walls = rectangleSegments(cornerA, cornerB).map((segment, index) => ({
+      wall_id: `preview-wall-${index}`,
+      start: segment.start,
+      end: segment.end,
+      wall_type: wallTypeEl.value,
+      thickness_mm: wallThicknessMm(wallTypeEl.value),
+    }));
+    ctx.save();
+    drawWallPreviewSolids(walls);
+    ctx.restore();
+  }
+
+  function drawWallPreviewSolids(walls) {
+    ctx.setLineDash([8, 6]);
+    walls.forEach((wall) => {
+      fillWorldPolygon(wallSolidPolygon(wall), "rgba(37, 99, 235, 0.18)", "#2563eb", 1.5);
+    });
+    wallJointPolygons(walls).forEach((joint) => {
+      fillWorldPolygon(joint.points, "rgba(37, 99, 235, 0.18)", "#2563eb", 1.5);
+    });
+    ctx.setLineDash([]);
   }
 
   function drawSelectionWindow() {
@@ -1194,6 +1450,74 @@
     ctx.stroke();
   }
 
+  function fillWorldPolygon(points, fillStyle, strokeStyle = null, lineWidth = 0) {
+    if (!points.length) return;
+    const screenPoints = points.map(worldToScreen);
+    ctx.beginPath();
+    ctx.moveTo(screenPoints[0].x, screenPoints[0].y);
+    screenPoints.slice(1).forEach((point) => ctx.lineTo(point.x, point.y));
+    ctx.closePath();
+    ctx.fillStyle = fillStyle;
+    ctx.fill();
+    if (strokeStyle && lineWidth > 0) {
+      ctx.strokeStyle = strokeStyle;
+      ctx.lineWidth = lineWidth;
+      ctx.stroke();
+    }
+  }
+
+  function wallSolidPolygon(wall) {
+    const dx = wall.end.x - wall.start.x;
+    const dy = wall.end.y - wall.start.y;
+    const length = Math.hypot(dx, dy);
+    if (length <= 0) return [];
+    const half = ((wall.thickness_mm || wallThicknessMm(wall.wall_type || "interior")) / 1000) / 2;
+    const normal = { x: -dy / length, y: dx / length };
+    return [
+      { x: wall.start.x + normal.x * half, y: wall.start.y + normal.y * half },
+      { x: wall.end.x + normal.x * half, y: wall.end.y + normal.y * half },
+      { x: wall.end.x - normal.x * half, y: wall.end.y - normal.y * half },
+      { x: wall.start.x - normal.x * half, y: wall.start.y - normal.y * half },
+    ];
+  }
+
+  function wallJointPolygons(walls, suppressedKeys = new Set()) {
+    const endpointGroups = new Map();
+    walls.forEach((wall) => {
+      [wall.start, wall.end].forEach((point) => {
+        const key = pointKey(point);
+        if (!endpointGroups.has(key)) endpointGroups.set(key, []);
+        endpointGroups.get(key).push({ wall, point });
+      });
+    });
+
+    const joints = [];
+    endpointGroups.forEach((entries, key) => {
+      if (suppressedKeys.has(key) || entries.length < 2) return;
+      const orientations = new Set(entries.map(({ wall }) => wallOrientation(wall)));
+      if (orientations.size < 2) return;
+      const point = entries[0].point;
+      const thicknessMm = Math.max(...entries.map(({ wall }) => wall.thickness_mm || wallThicknessMm(wall.wall_type || "interior")));
+      const half = thicknessMm / 2000;
+      joints.push({
+        key,
+        wallIds: entries.map(({ wall }) => wall.wall_id),
+        wallType: entries.some(({ wall }) => wall.wall_type === "exterior") ? "exterior" : "interior",
+        points: [
+          { x: point.x - half, y: point.y - half },
+          { x: point.x + half, y: point.y - half },
+          { x: point.x + half, y: point.y + half },
+          { x: point.x - half, y: point.y + half },
+        ],
+      });
+    });
+    return joints;
+  }
+
+  function wallOrientation(wall) {
+    return Math.abs(wall.start.y - wall.end.y) < 1e-9 ? "horizontal" : "vertical";
+  }
+
   function isSelected(type, id) {
     return selectedItems.some((hit) => hit.type === type && entityId(hit) === id);
   }
@@ -1227,12 +1551,24 @@
     const candidates = [];
     level.lots.forEach((lot) => {
       lotCorners(lot).forEach((point) => candidates.push({ type: "lot", id: lot.lot_id, point }));
+      lotSegments(lot).forEach((segment, index) => {
+        candidates.push({
+          type: "lot-midpoint",
+          id: `${lot.lot_id}-${index}`,
+          point: segmentMidpoint(segment.start, segment.end),
+        });
+      });
     });
     level.lines.forEach((draftLine) => {
       candidates.push({ type: "line", id: draftLine.line_id, point: draftLine.start });
       candidates.push({ type: "line", id: draftLine.line_id, point: draftLine.end });
+      candidates.push({ type: "line-midpoint", id: draftLine.line_id, point: segmentMidpoint(draftLine.start, draftLine.end) });
     });
     level.openings.forEach((opening) => {
+      const geometry = openingGeometry(opening, walls);
+      if (geometry) {
+        candidates.push({ type: "opening-midpoint", id: opening.opening_id, point: segmentMidpoint(geometry.points.start, geometry.points.end) });
+      }
       if (opening.opening_type !== "door") return;
       doorFrameSnapPoints(opening, walls).forEach((point, index) => {
         candidates.push({ type: "door-jamb", id: `${opening.opening_id}-${index}`, point });
@@ -1245,10 +1581,12 @@
       if (!suppressedWallEndpointKeys.has(pointKey(wall.end))) {
         candidates.push({ type: "wall", id: wall.wall_id, point: wall.end });
       }
+      candidates.push({ type: "wall-midpoint", id: wall.wall_id, point: segmentMidpoint(wall.start, wall.end) });
     });
     level.dimensions.forEach((dimension) => {
       candidates.push({ type: "dimension", id: dimension.dimension_id, point: dimension.start });
       candidates.push({ type: "dimension", id: dimension.dimension_id, point: dimension.end });
+      candidates.push({ type: "dimension-midpoint", id: dimension.dimension_id, point: segmentMidpoint(dimension.start, dimension.end) });
     });
     return candidates;
   }
@@ -1320,6 +1658,317 @@
     return Math.abs(wall.end.x - wall.start.x) + Math.abs(wall.end.y - wall.start.y);
   }
 
+  function segmentMidpoint(start, end) {
+    return {
+      x: roundM((start.x + end.x) / 2),
+      y: roundM((start.y + end.y) / 2),
+    };
+  }
+
+  function parseRectangleDimensions(value) {
+    const cleaned = String(value || "").trim().replace(/^@/, "").replace(/\s+/g, "");
+    const parts = cleaned.split(/[x,]/i);
+    if (parts.length !== 2) return null;
+    const width = Number(parts[0]);
+    const depth = Number(parts[1]);
+    if (!Number.isFinite(width) || !Number.isFinite(depth) || width <= 0 || depth <= 0) return null;
+    return { width, depth };
+  }
+
+  function readWidthDepthInputs(widthEl, depthEl) {
+    const width = Number(widthEl.value);
+    const depth = Number(depthEl.value);
+    if (!Number.isFinite(width) || !Number.isFinite(depth) || width <= 0 || depth <= 0) return null;
+    return { width, depth };
+  }
+
+  function readSetbackInputs() {
+    const setbacks = {
+      front: Number(setbackFrontEl.value),
+      rear: Number(setbackRearEl.value),
+      left: Number(setbackLeftEl.value),
+      right: Number(setbackRightEl.value),
+    };
+    if (Object.values(setbacks).some((value) => !Number.isFinite(value) || value < 0)) return null;
+    return setbacks;
+  }
+
+  function parseSetbackValues(value) {
+    const parts = String(value || "").trim().replace(/\s+/g, "").split(",");
+    if (parts.length !== 4) return null;
+    const [front, rear, left, right] = parts.map(Number);
+    if ([front, rear, left, right].some((number) => !Number.isFinite(number) || number < 0)) return null;
+    return { front, rear, left, right };
+  }
+
+  function parseSpacingList(value) {
+    return String(value || "")
+      .trim()
+      .replace(/\s+/g, "")
+      .split(",")
+      .map(Number)
+      .filter((number) => Number.isFinite(number) && number > 0);
+  }
+
+  function parseGridValues(value) {
+    const parts = String(value || "").split("|");
+    if (parts.length !== 2) return null;
+    const xSpacings = parseSpacingList(parts[0]);
+    const ySpacings = parseSpacingList(parts[1]);
+    if (!xSpacings.length || !ySpacings.length) return null;
+    return { xSpacings, ySpacings };
+  }
+
+  function selectedLotBounds() {
+    if (selected && selected.type === "lot") return lotBounds(selected.item);
+    return null;
+  }
+
+  function latestLotBounds() {
+    const lots = activeLevel().lots;
+    if (!lots.length) return null;
+    return lotBounds(lots[lots.length - 1]);
+  }
+
+  function latestGuideRectangleBounds(lineType) {
+    const lines = activeLevel().lines.filter((draftLine) => draftLine.line_type === lineType);
+    if (lines.length < 4) return null;
+    return lineRectangleBounds(lines.slice(-4));
+  }
+
+  function lineRectangleBounds(lines) {
+    const points = lines.flatMap((draftLine) => [draftLine.start, draftLine.end]);
+    return {
+      minX: roundM(Math.min(...points.map((point) => point.x))),
+      minY: roundM(Math.min(...points.map((point) => point.y))),
+      maxX: roundM(Math.max(...points.map((point) => point.x))),
+      maxY: roundM(Math.max(...points.map((point) => point.y))),
+    };
+  }
+
+  function gridPositions(minValue, maxValue, spacings) {
+    const positions = [roundM(minValue)];
+    let cursor = minValue;
+    for (const spacing of spacings) {
+      cursor = roundM(cursor + spacing);
+      if (cursor > maxValue - 1e-9) break;
+      positions.push(cursor);
+    }
+    const maxRounded = roundM(maxValue);
+    if (Math.abs(positions[positions.length - 1] - maxRounded) > 1e-9) {
+      positions.push(maxRounded);
+    }
+    return positions;
+  }
+
+  function cornerFromRectangleDimensions(corner, dimensions) {
+    return {
+      x: roundM(corner.x + dimensions.width),
+      y: roundM(corner.y + dimensions.depth),
+    };
+  }
+
+  function handleActiveGeometryInput(value) {
+    if (tool !== "rectangle" && tool !== "rectangle-wall") return false;
+    const start = tool === "rectangle" ? rectangleStart : rectangleWallStart;
+    if (!start) return false;
+    const dimensions = parseRectangleDimensions(value);
+    if (!dimensions) {
+      setStatus("Type rectangle dimensions as width,height in meters, for example 5,8.");
+      return true;
+    }
+    const oppositeCorner = cornerFromRectangleDimensions(start, dimensions);
+    if (tool === "rectangle") {
+      addRectangleLines(start, oppositeCorner);
+      rectangleStart = null;
+    } else {
+      addRectangleWalls(start, oppositeCorner);
+      rectangleWallStart = null;
+    }
+    resetCommandLinePrompt();
+    return true;
+  }
+
+  function handleCommandLineInput(value) {
+    if (handleActiveGeometryInput(value)) return;
+    if (handleWorkflowCommand(value)) return;
+    executeCommand(value);
+  }
+
+  function handleWorkflowCommand(value) {
+    const trimmed = String(value || "").trim();
+    const match = trimmed.match(/^(\S+)\s+(.+)$/);
+    if (!match) return false;
+    const command = match[1].toUpperCase();
+    const args = match[2];
+
+    if (command === "LOT" || command === "LOTAREA" || command === "LA") {
+      const dimensions = parseRectangleDimensions(args);
+      if (!dimensions) {
+        setStatus("Type lot dimensions as width,depth in meters, for example LOT 10,15.");
+        return true;
+      }
+      lotWidthEl.value = dimensions.width;
+      lotDepthEl.value = dimensions.depth;
+      createLotFromDimensions(dimensions.width, dimensions.depth);
+      return true;
+    }
+
+    if (command === "SETBACK" || command === "SB") {
+      const setbacks = parseSetbackValues(args);
+      if (!setbacks) {
+        setStatus("Type setbacks as front,rear,left,right in meters, for example SETBACK 3,2,2,2.");
+        return true;
+      }
+      setbackFrontEl.value = setbacks.front;
+      setbackRearEl.value = setbacks.rear;
+      setbackLeftEl.value = setbacks.left;
+      setbackRightEl.value = setbacks.right;
+      createSetbackLines(setbacks);
+      return true;
+    }
+
+    if (command === "GRID" || command === "XLINE") {
+      const values = parseGridValues(args);
+      if (!values) {
+        setStatus("Type grid spacing as X-list|Y-list, for example GRID 5,5|5,5,5.");
+        return true;
+      }
+      gridXSpacingsEl.value = values.xSpacings.join(",");
+      gridYSpacingsEl.value = values.ySpacings.join(",");
+      createGridLines(values.xSpacings, values.ySpacings);
+      return true;
+    }
+
+    return false;
+  }
+
+  function promptRectangleDimensions(status) {
+    commandLine.placeholder = "Width,Height in meters e.g. 5,8";
+    commandLine.focus();
+    setStatus(status);
+  }
+
+  function resetCommandLinePrompt() {
+    commandLine.placeholder = "Command";
+  }
+
+  function dimensionBasis() {
+    return dimensionBasisEl ? dimensionBasisEl.value : "centerline";
+  }
+
+  function dimensionBasisLabel(basis = dimensionBasis()) {
+    const labels = {
+      centerline: "Centerline",
+      outside_face: "Outside Face",
+      inside_face: "Inside Face",
+    };
+    return labels[basis] || "Centerline";
+  }
+
+  function resolveDimensionBasis(rawStart, rawEnd, placement, basis) {
+    const centerStart = clone(rawStart);
+    const centerEnd = orthogonalPoint(centerStart, rawEnd);
+    if (basis === "centerline") {
+      return { start: centerStart, end: centerEnd, referenceIds: [] };
+    }
+
+    const horizontal = Math.abs(centerStart.y - centerEnd.y) < 1e-9;
+    const axisSign = horizontal
+      ? Math.sign(centerEnd.x - centerStart.x) || 1
+      : Math.sign(centerEnd.y - centerStart.y) || 1;
+    const faceSide = dimensionPlacementSide(centerStart, centerEnd, placement, horizontal);
+    const parallelInfo = dimensionParallelWallInfo(centerStart, centerEnd, horizontal);
+    const startInfo = connectedPerpendicularWallInfo(centerStart, horizontal);
+    const endInfo = connectedPerpendicularWallInfo(centerEnd, horizontal);
+    const expand = basis === "outside_face" ? 1 : -1;
+    const start = clone(centerStart);
+    const end = clone(centerEnd);
+
+    if (horizontal) {
+      const y = roundM(centerStart.y + faceSide * parallelInfo.halfThicknessM);
+      start.x = roundM(centerStart.x - axisSign * startInfo.halfThicknessM * expand);
+      start.y = y;
+      end.x = roundM(centerEnd.x + axisSign * endInfo.halfThicknessM * expand);
+      end.y = y;
+    } else {
+      const x = roundM(centerStart.x + faceSide * parallelInfo.halfThicknessM);
+      start.x = x;
+      start.y = roundM(centerStart.y - axisSign * startInfo.halfThicknessM * expand);
+      end.x = x;
+      end.y = roundM(centerEnd.y + axisSign * endInfo.halfThicknessM * expand);
+    }
+
+    return {
+      start,
+      end,
+      referenceIds: uniqueIds([
+        ...parallelInfo.wallIds,
+        ...startInfo.wallIds,
+        ...endInfo.wallIds,
+      ]),
+    };
+  }
+
+  function dimensionPlacementSide(start, end, placement, horizontal) {
+    const delta = horizontal ? placement.y - start.y : placement.x - start.x;
+    if (Math.abs(delta) < 1e-9) return 1;
+    return delta < 0 ? -1 : 1;
+  }
+
+  function dimensionParallelWallInfo(start, end, horizontal) {
+    const candidates = activeLevel().walls.filter((wall) => {
+      if (wallOrientation(wall) !== (horizontal ? "horizontal" : "vertical")) return false;
+      if (horizontal) {
+        if (Math.abs(wall.start.y - start.y) > 1e-9) return false;
+        return rangesOverlap(
+          Math.min(start.x, end.x),
+          Math.max(start.x, end.x),
+          Math.min(wall.start.x, wall.end.x),
+          Math.max(wall.start.x, wall.end.x),
+        );
+      }
+      if (Math.abs(wall.start.x - start.x) > 1e-9) return false;
+      return rangesOverlap(
+        Math.min(start.y, end.y),
+        Math.max(start.y, end.y),
+        Math.min(wall.start.y, wall.end.y),
+        Math.max(wall.start.y, wall.end.y),
+      );
+    });
+    return wallThicknessInfo(candidates);
+  }
+
+  function connectedPerpendicularWallInfo(point, dimensionHorizontal) {
+    const orientation = dimensionHorizontal ? "vertical" : "horizontal";
+    const candidates = activeLevel().walls.filter((wall) => (
+      wallOrientation(wall) === orientation
+      && (
+        samePoint(wall.start, point)
+        || samePoint(wall.end, point)
+        || pointOnSegment(point, wall.start, wall.end)
+      )
+    ));
+    return wallThicknessInfo(candidates);
+  }
+
+  function wallThicknessInfo(walls) {
+    if (!walls.length) return { halfThicknessM: 0, wallIds: [] };
+    const thicknessMm = Math.max(...walls.map((wall) => wall.thickness_mm || wallThicknessMm(wall.wall_type || "interior")));
+    return {
+      halfThicknessM: thicknessMm / 2000,
+      wallIds: walls.map((wall) => wall.wall_id),
+    };
+  }
+
+  function rangesOverlap(aMin, aMax, bMin, bMax) {
+    return Math.max(aMin, bMin) <= Math.min(aMax, bMax) + 1e-9;
+  }
+
+  function uniqueIds(ids) {
+    return Array.from(new Set(ids.filter(Boolean)));
+  }
+
   function lotBounds(lot) {
     return {
       minX: Math.min(lot.corner_a.x, lot.corner_b.x),
@@ -1373,6 +2022,18 @@
   function formatArea(cornerA, cornerB) {
     const area = Math.abs((cornerB.x - cornerA.x) * (cornerB.y - cornerA.y));
     return `${area.toFixed(2)} sqm`;
+  }
+
+  function formatRectangleSize(cornerA, cornerB) {
+    const width = Math.abs(cornerB.x - cornerA.x);
+    const depth = Math.abs(cornerB.y - cornerA.y);
+    return `${width.toFixed(2)} m x ${depth.toFixed(2)} m`;
+  }
+
+  function formatRectangleBounds(bounds) {
+    const width = Math.abs(bounds.maxX - bounds.minX);
+    const depth = Math.abs(bounds.maxY - bounds.minY);
+    return `${width.toFixed(2)} m x ${depth.toFixed(2)} m`;
   }
 
   function nearestWall(point, toleranceM) {
@@ -2186,7 +2847,7 @@
       el.textContent = `${lot.name || "Lot Area"}, ${lotAreaSqm(lot).toFixed(2)} sqm, thin dashed boundary.`;
     } else if (selected.type === "line") {
       const draftLine = selected.item;
-      el.textContent = `draft line, ${formatDistance(draftLine.start, draftLine.end)}.`;
+      el.textContent = `${draftLineLabel(draftLine)}, ${formatDistance(draftLine.start, draftLine.end)}.`;
     } else if (selected.type === "wall") {
       const wall = selected.item;
       el.textContent = `${wall.wall_type} wall, ${wallLengthM(wall).toFixed(2)} m, ${wall.thickness_mm} mm thick.`;
@@ -2202,17 +2863,34 @@
     } else if (selected.type === "room") {
       el.textContent = `${selected.item.name} (${selected.item.room_type}).`;
     } else if (selected.type === "dimension") {
-      el.textContent = selected.item.label || "Dimension.";
+      const dimension = selected.item;
+      el.textContent = `${dimensionBasisLabel(dimension.basis)} dimension, ${dimension.label || formatDistance(dimension.start, dimension.end)}.`;
     }
+  }
+
+  function draftLineLabel(draftLine) {
+    const labels = {
+      draft: "draft line",
+      setback: "setback line",
+      grid: "grid line",
+      wall_centerline: "wall centerline",
+    };
+    const label = labels[draftLine.line_type] || "draft line";
+    return draftLine.layer ? `${label} (${draftLine.layer})` : label;
   }
 
   document.querySelectorAll("[data-command]").forEach((button) => {
     button.addEventListener("click", () => executeCommand(button.dataset.command));
   });
 
+  createLotButton.addEventListener("click", createLotFromInputs);
+  createSetbackButton.addEventListener("click", createSetbackFromInputs);
+  createGridButton.addEventListener("click", createGridFromInputs);
+  createWallCenterlineButton.addEventListener("click", createWallCenterlineFromReference);
+
   commandLine.addEventListener("keydown", (event) => {
     if (event.key !== "Enter") return;
-    executeCommand(commandLine.value);
+    handleCommandLineInput(commandLine.value);
     commandLine.value = "";
   });
 
@@ -2223,11 +2901,20 @@
     fileInput.value = "";
   });
 
+  dimensionBasisEl.addEventListener("change", () => {
+    if (tool === "dimension") {
+      setStatus(`Dimension (${dimensionBasisLabel()}): click first endpoint, click second endpoint, then click to place the dimension line.`);
+    }
+    draw();
+  });
+
   canvas.addEventListener("pointerdown", (event) => {
+    if (tool === "pan" && event.button === 0) {
+      startPan(event);
+      return;
+    }
     if (event.button === 1 || event.shiftKey || event.code === "Space") {
-      isPanning = true;
-      panAnchor = { x: event.clientX, y: event.clientY, viewX: view.x, viewY: view.y };
-      canvas.setPointerCapture(event.pointerId);
+      startPan(event);
       return;
     }
     if (tool === "select" && event.button === 0) {
@@ -2243,6 +2930,13 @@
     }
     handlePrimaryClick(event);
   });
+
+  function startPan(event) {
+    isPanning = true;
+    panAnchor = { x: event.clientX, y: event.clientY, viewX: view.x, viewY: view.y };
+    canvas.setPointerCapture(event.pointerId);
+    updateBoardCursor();
+  }
 
   canvas.addEventListener("pointermove", (event) => {
     if (isPanning && panAnchor) {
@@ -2268,6 +2962,7 @@
       isPanning = false;
       panAnchor = null;
       canvas.releasePointerCapture(event.pointerId);
+      updateBoardCursor();
     }
     if (selectionDrag) {
       finishSelectionDrag(event);
@@ -2371,6 +3066,14 @@
       });
   }
 
+  function resetAppScroll() {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    const panel = document.querySelector(".panel");
+    if (panel) panel.scrollTop = 0;
+  }
+
   window.AbscissaCad = {
     commandAliases,
     getProject: () => clone(project),
@@ -2379,6 +3082,7 @@
   };
 
   loadDoorStyle();
+  resetAppScroll();
   resizeCanvas();
   setTool("select");
 })();

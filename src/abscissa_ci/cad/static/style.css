@@ -21,8 +21,9 @@ body {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   margin: 0;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
   overflow: hidden;
   background: var(--bg);
   color: var(--text);
@@ -36,19 +37,19 @@ body {
   display: flex;
   gap: 24px;
   justify-content: space-between;
-  min-height: 70px;
-  padding: 12px 18px;
+  min-height: 54px;
+  padding: 8px 14px;
 }
 
 .topbar h1 {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.1;
   margin: 0;
 }
 
 .topbar p {
   color: #cbd5e1;
-  font-size: 13px;
+  font-size: 12px;
   margin: 3px 0 0;
 }
 
@@ -92,14 +93,19 @@ button.danger {
 .workspace {
   display: grid;
   grid-template-columns: 300px minmax(0, 1fr);
+  height: 100%;
   min-height: 0;
+  overflow: hidden;
 }
 
 .panel {
   background: var(--panel);
   border-right: 1px solid var(--line);
+  height: 100%;
+  min-height: 0;
+  overscroll-behavior: contain;
   overflow: auto;
-  padding: 14px;
+  padding: 12px;
 }
 
 .panel section + section {
@@ -119,6 +125,42 @@ button.danger {
   display: grid;
   gap: 8px;
   grid-template-columns: 1fr 1fr;
+}
+
+.compact-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.compact-grid.four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.compact-grid label {
+  min-width: 0;
+}
+
+.compact-grid input {
+  width: 100%;
+}
+
+.wide-action {
+  margin: 0 0 10px;
+  width: 100%;
+}
+
+.button-row {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.35;
+  margin: 10px 0 0;
 }
 
 .tool {
@@ -211,6 +253,7 @@ select {
   grid-template-rows: minmax(0, 1fr) auto;
   min-height: 0;
   min-width: 0;
+  overflow: hidden;
 }
 
 #board {
@@ -221,6 +264,14 @@ select {
   width: 100%;
 }
 
+#board.pan-tool {
+  cursor: grab;
+}
+
+#board.panning {
+  cursor: grabbing;
+}
+
 .command-row {
   align-items: center;
   background: white;
@@ -228,7 +279,7 @@ select {
   display: grid;
   gap: 12px;
   grid-template-columns: auto minmax(12rem, 1fr) minmax(150px, 220px);
-  min-height: 52px;
+  min-height: 48px;
   padding: 8px 12px;
 }
 
@@ -264,6 +315,7 @@ select {
   .topbar {
     align-items: flex-start;
     flex-direction: column;
+    gap: 8px;
   }
 
   .command-row {
@@ -280,6 +332,10 @@ select {
   .topbar {
     gap: 12px;
     padding: 10px 12px;
+  }
+
+  .compact-grid.four {
+    grid-template-columns: 1fr 1fr;
   }
 
   .actions,
