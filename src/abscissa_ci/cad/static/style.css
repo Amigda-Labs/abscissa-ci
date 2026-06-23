@@ -1,5 +1,6 @@
 :root {
   color-scheme: light;
+  --agent-panel-width: 310px;
   --bg: #eef2f7;
   --panel: #ffffff;
   --line: #d6dde8;
@@ -92,10 +93,118 @@ button.danger {
 
 .workspace {
   display: grid;
-  grid-template-columns: 300px minmax(0, 1fr);
+  grid-template-columns: 300px minmax(0, 1fr) 8px var(--agent-panel-width);
   height: 100%;
   min-height: 0;
   overflow: hidden;
+}
+
+.workspace.resizing-agent {
+  cursor: col-resize;
+  user-select: none;
+}
+
+.agent-resizer {
+  background: #e2e8f0;
+  cursor: col-resize;
+  min-height: 0;
+  position: relative;
+}
+
+.agent-resizer::after {
+  background: #94a3b8;
+  border-radius: 999px;
+  content: "";
+  height: 44px;
+  left: 50%;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 120ms ease;
+  width: 2px;
+}
+
+.agent-resizer:hover::after,
+.agent-resizer:focus-visible::after,
+.workspace.resizing-agent .agent-resizer::after {
+  opacity: 1;
+}
+
+.agent-panel {
+  background: #f8fafc;
+  display: grid;
+  min-height: 0;
+  overflow: hidden;
+  padding: 12px;
+}
+
+.agent-card {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 0;
+}
+
+.agent-header h2 {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.agent-header p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+  margin: 4px 0 0;
+}
+
+.agent-messages {
+  align-content: start;
+  display: grid;
+  gap: 8px;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding-right: 2px;
+}
+
+.agent-message {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 8px 9px;
+  white-space: pre-wrap;
+}
+
+.agent-message.assistant {
+  background: #ffffff;
+  color: #1f2937;
+}
+
+.agent-message.user {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e3a8a;
+}
+
+.agent-message.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.agent-form {
+  display: grid;
+  gap: 8px;
+}
+
+#agentInput {
+  min-height: 74px;
+  resize: vertical;
+  text-transform: none;
 }
 
 .panel {
@@ -303,7 +412,17 @@ select {
 @media (max-width: 900px) {
   .workspace {
     grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+  }
+
+  .agent-resizer {
+    display: none;
+  }
+
+  .agent-panel {
+    border-bottom: 1px solid var(--line);
+    border-left: 0;
+    max-height: min(260px, 30dvh);
   }
 
   .panel {

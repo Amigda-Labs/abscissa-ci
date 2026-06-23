@@ -38,6 +38,33 @@ def test_cad_static_app_exposes_required_command_aliases() -> None:
         assert f"{command}:" in app_js
 
 
+def test_cad_static_app_exposes_agent_chat_panel() -> None:
+    app_js = (STATIC_DIR / "app.js").read_text(encoding="utf-8")
+    index_html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")
+    style_css = (STATIC_DIR / "style.css").read_text(encoding="utf-8")
+
+    for element_id in ["agentStatus", "agentMessages", "agentForm", "agentInput", "agentSend", "agentResizer"]:
+        assert f'id="{element_id}"' in index_html
+
+    assert "Abscissa Agent" in index_html
+    assert 'role="separator"' in index_html
+    assert "/api/agent/status" in app_js
+    assert "/api/agent/chat" in app_js
+    assert "sendAgentMessage" in app_js
+    assert "startAgentResize" in app_js
+    assert "moveAgentResize" in app_js
+    assert "finishAgentResize" in app_js
+    assert 'agentResizer.addEventListener("mousedown", startAgentResize)' in app_js
+    assert "abscissaCadAgentPanelWidthPx" in app_js
+    assert 'event.target.tagName === "TEXTAREA"' in app_js
+    assert ".agent-panel" in style_css
+    assert ".agent-resizer" in style_css
+    assert ".agent-message.assistant" in style_css
+    assert "--agent-panel-width: 310px" in style_css
+    assert "grid-template-columns: 300px minmax(0, 1fr) 8px var(--agent-panel-width)" in style_css
+    assert "cursor: col-resize" in style_css
+
+
 def test_cad_static_app_keeps_metric_defaults_visible() -> None:
     app_js = (STATIC_DIR / "app.js").read_text(encoding="utf-8")
     index_html = (STATIC_DIR / "index.html").read_text(encoding="utf-8")

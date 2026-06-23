@@ -10,6 +10,12 @@ from urllib.parse import unquote
 
 from pydantic import ValidationError
 
+from abscissa_ci.agents.cad_agent import (
+    CadAgentConfigurationError,
+    configured_model as configured_cad_agent_model,
+    is_configured as is_cad_agent_configured,
+    respond_to_cad_chat,
+)
 from abscissa_ci.cad.export import export_project_svg
 from abscissa_ci.cad.models import CadProject, create_default_project
 
@@ -33,6 +39,15 @@ class CadRequestHandler(SimpleHTTPRequestHandler):
             project = create_default_project()
             self._send_json(project.model_dump(mode="json"))
             return
+        if self.path == "/api/agent/status":
+            self._send_json(
+                {
+                    "ok": True,
+                    "configured": is_cad_agent_configured(),
+                    "model": configured_cad_agent_model(),
+                }
+            )
+            return
         if self.path == "/favicon.ico":
             self.send_response(HTTPStatus.NO_CONTENT)
             self.end_headers()
@@ -45,6 +60,9 @@ class CadRequestHandler(SimpleHTTPRequestHandler):
             return
         if self.path == "/api/export/svg":
             self._handle_export_svg()
+            return
+        if self.path == "/api/agent/chat":
+            self._handle_agent_chat()
             return
         self.send_error(HTTPStatus.NOT_FOUND, "Unknown API endpoint")
 
@@ -78,6 +96,24 @@ class CadRequestHandler(SimpleHTTPRequestHandler):
         self.send_header("Content-Length", str(len(encoded)))
         self.end_headers()
         self.wfile.write(encoded)
+
+    def _handle_agent_chat(self) -> None:
+        try:
+            payload = self._read_json_body()
+            message = str(payload.get("message", "")).strip()
+            if not message:
+                raise ValueError("message is required")
+            reply = respond_to_cad_chat(message)
+        except CadAgentConfigurationError as exc:
+            self._send_json({"ok": False, "error": str(exc)}, status=HTTPStatus.SERVICE_UNAVAILABLE)
+            return
+        except (json.JSONDecodeError, ValueError) as exc:
+            self._send_json({"ok": False, "error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
+            return
+        except Exception as exc:  # pragma: no cover - depends on external provider
+            self._send_json({"ok": False, "error": str(exc)}, status=HTTPStatus.BAD_GATEWAY)
+            return
+        self._send_json({"ok": True, "reply": reply, "model": configured_cad_agent_model()})
 
     def _read_json_body(self) -> Any:
         length = int(self.headers.get("Content-Length", "0"))

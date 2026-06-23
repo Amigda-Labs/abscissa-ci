@@ -189,6 +189,26 @@
           <input id="commandLine" autocomplete="off" placeholder="Command">
         </div>
       </section>
+
+      <div id="agentResizer" class="agent-resizer" role="separator" aria-label="Resize agent chat" aria-orientation="vertical" tabindex="0"></div>
+
+      <aside class="agent-panel" aria-label="Abscissa assistant">
+        <section class="agent-card">
+          <div class="agent-header">
+            <h2>Abscissa Agent</h2>
+            <p id="agentStatus">Checking setup...</p>
+          </div>
+          <div id="agentMessages" class="agent-messages" aria-live="polite">
+            <div class="agent-message assistant">
+              Ask drafting questions here. V1 answers only; it does not edit the floor plan yet.
+            </div>
+          </div>
+          <form id="agentForm" class="agent-form">
+            <textarea id="agentInput" rows="3" placeholder="Ask the CAD agent"></textarea>
+            <button id="agentSend" type="submit">Send</button>
+          </form>
+        </section>
+      </aside>
     </main>
 
     <input id="fileInput" type="file" accept="application/json,.json" hidden>

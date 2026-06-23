@@ -30,6 +30,13 @@
   const createSetbackButton = document.getElementById("createSetbackButton");
   const createGridButton = document.getElementById("createGridButton");
   const createWallCenterlineButton = document.getElementById("createWallCenterlineButton");
+  const agentStatus = document.getElementById("agentStatus");
+  const agentMessages = document.getElementById("agentMessages");
+  const agentForm = document.getElementById("agentForm");
+  const agentInput = document.getElementById("agentInput");
+  const agentSend = document.getElementById("agentSend");
+  const agentResizer = document.getElementById("agentResizer");
+  const workspace = document.querySelector(".workspace");
 
   // Single source of truth for door visuals, mirrored from static/door_style.json.
   // The same JSON is read by the SVG exporter (cad/door_style.py) so the canvas
@@ -149,6 +156,13 @@
   let redoStack = [];
   let keyboardCommandBuffer = "";
   let keyboardCommandTimer = null;
+  let agentResizeDrag = null;
+  const agentPanelWidth = {
+    defaultPx: 310,
+    minPx: 240,
+    maxPx: 560,
+    storageKey: "abscissaCadAgentPanelWidthPx",
+  };
 
   function createDefaultProject() {
     return {
@@ -185,6 +199,115 @@
 
   function setStatus(message) {
     statusEl.textContent = message;
+  }
+
+  function clampAgentPanelWidth(widthPx) {
+    const maxByViewport = Math.max(agentPanelWidth.minPx, window.innerWidth - 520);
+    return Math.round(Math.max(agentPanelWidth.minPx, Math.min(agentPanelWidth.maxPx, maxByViewport, widthPx)));
+  }
+
+  function setAgentPanelWidth(widthPx, persist = false) {
+    const clamped = clampAgentPanelWidth(widthPx);
+    document.documentElement.style.setProperty("--agent-panel-width", `${clamped}px`);
+    if (persist) {
+      window.localStorage.setItem(agentPanelWidth.storageKey, String(clamped));
+    }
+    resizeCanvas();
+  }
+
+  function loadAgentPanelWidth() {
+    const stored = Number.parseFloat(window.localStorage.getItem(agentPanelWidth.storageKey));
+    setAgentPanelWidth(Number.isFinite(stored) ? stored : agentPanelWidth.defaultPx);
+  }
+
+  function startAgentResize(event) {
+    if (!agentResizer) return;
+    if (agentResizeDrag) return;
+    event.preventDefault();
+    const current = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--agent-panel-width")) || agentPanelWidth.defaultPx;
+    agentResizeDrag = { startX: event.clientX, startWidth: current };
+    workspace.classList.add("resizing-agent");
+    if (event.pointerId !== undefined && agentResizer.setPointerCapture) {
+      agentResizer.setPointerCapture(event.pointerId);
+    }
+    window.addEventListener("mousemove", moveAgentResize);
+    window.addEventListener("mouseup", finishAgentResize);
+  }
+
+  function moveAgentResize(event) {
+    if (!agentResizeDrag) return;
+    const delta = agentResizeDrag.startX - event.clientX;
+    setAgentPanelWidth(agentResizeDrag.startWidth + delta);
+  }
+
+  function finishAgentResize(event) {
+    if (!agentResizeDrag) return;
+    const delta = agentResizeDrag.startX - event.clientX;
+    setAgentPanelWidth(agentResizeDrag.startWidth + delta, true);
+    agentResizeDrag = null;
+    workspace.classList.remove("resizing-agent");
+    window.removeEventListener("mousemove", moveAgentResize);
+    window.removeEventListener("mouseup", finishAgentResize);
+    if (event.pointerId !== undefined && agentResizer.hasPointerCapture(event.pointerId)) {
+      agentResizer.releasePointerCapture(event.pointerId);
+    }
+  }
+
+  function setAgentStatus(message) {
+    if (agentStatus) agentStatus.textContent = message;
+  }
+
+  function addAgentMessage(role, text) {
+    if (!agentMessages) return;
+    const message = document.createElement("div");
+    message.className = `agent-message ${role}`;
+    message.textContent = text;
+    agentMessages.appendChild(message);
+    agentMessages.scrollTop = agentMessages.scrollHeight;
+  }
+
+  async function loadAgentStatus() {
+    if (!agentStatus) return;
+    try {
+      const response = await fetch("/api/agent/status");
+      const payload = await response.json();
+      if (payload.configured) {
+        setAgentStatus(`Ready: ${payload.model}`);
+      } else {
+        setAgentStatus("Add ABSCISSA_CAD_AGENT_API_KEY to .env, then restart.");
+      }
+    } catch (error) {
+      setAgentStatus("Agent status unavailable.");
+    }
+  }
+
+  async function sendAgentMessage(event) {
+    event.preventDefault();
+    const message = agentInput.value.trim();
+    if (!message) return;
+    agentInput.value = "";
+    addAgentMessage("user", message);
+    setAgentStatus("Thinking...");
+    agentSend.disabled = true;
+    try {
+      const response = await fetch("/api/agent/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload.ok) {
+        addAgentMessage("error", payload.error || "Agent request failed.");
+      } else {
+        addAgentMessage("assistant", payload.reply || "(No reply)");
+      }
+    } catch (error) {
+      addAgentMessage("error", "Agent request failed. Check the CAD server.");
+    } finally {
+      agentSend.disabled = false;
+      loadAgentStatus();
+      agentInput.focus();
+    }
   }
 
   function uid(prefix) {
@@ -3192,6 +3315,16 @@
   createSetbackButton.addEventListener("click", createSetbackFromInputs);
   createGridButton.addEventListener("click", createGridFromInputs);
   createWallCenterlineButton.addEventListener("click", createWallCenterlineFromReference);
+  if (agentForm) {
+    agentForm.addEventListener("submit", sendAgentMessage);
+  }
+  if (agentResizer) {
+    agentResizer.addEventListener("pointerdown", startAgentResize);
+    agentResizer.addEventListener("pointermove", moveAgentResize);
+    agentResizer.addEventListener("pointerup", finishAgentResize);
+    agentResizer.addEventListener("pointercancel", finishAgentResize);
+    agentResizer.addEventListener("mousedown", startAgentResize);
+  }
 
   commandLine.addEventListener("keydown", (event) => {
     if (event.key !== "Enter") return;
@@ -3287,7 +3420,7 @@
   }, { passive: false });
 
   window.addEventListener("keydown", (event) => {
-    if (event.target === commandLine || event.target.tagName === "INPUT" || event.target.tagName === "SELECT") {
+    if (event.target === commandLine || event.target.tagName === "INPUT" || event.target.tagName === "SELECT" || event.target.tagName === "TEXTAREA") {
       return;
     }
     if (event.key === "Escape") {
@@ -3387,6 +3520,8 @@
   };
 
   loadDoorStyle();
+  loadAgentStatus();
+  loadAgentPanelWidth();
   resetAppScroll();
   resizeCanvas();
   setTool("select");
