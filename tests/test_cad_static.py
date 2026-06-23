@@ -101,17 +101,31 @@ def test_cad_static_app_exposes_residential_setup_helpers() -> None:
 
     assert "LOT 10,15" in index_html
     assert "SETBACK 3,2,2,2" in index_html
-    assert "GRID 5,5|5,5,5" in index_html
+    assert "GRID 4|4" in index_html
     assert 'SETBACK: "setback"' in app_js
     assert 'GRID: "grid"' in app_js
     assert 'WCL: "wall-centerline"' in app_js
     assert "handleWorkflowCommand" in app_js
     assert "createSetbackLines" in app_js
     assert "createGridLines" in app_js
+    assert "structuralGridPositions" in app_js
+    assert "structuralBayCount" in app_js
+    assert "gridLabelSets" in app_js
+    assert "spreadsheetColumnLabel" in app_js
+    assert "drawGridLineLabels" in app_js
+    assert "drawGridColumnMarkers" in app_js
+    assert "drawGridExtension" in app_js
+    assert "drawGridDimensions" in app_js
+    assert "drawHorizontalGridDimensionChain" in app_js
+    assert "drawVerticalGridDimensionChain" in app_js
+    assert "labelOffsetM: 1.1" in app_js
     assert "createWallCenterlineFromReference" in app_js
     assert '"setback", "SETBACK"' in app_js
-    assert '"grid", "GRID"' in app_js
+    assert '"grid"' in app_js
+    assert '"GRID"' in app_js
     assert '"wall_centerline", "WALL_CL"' in app_js
+    assert "gridLabel:" in app_js
+    assert "gridAxis:" in app_js
     assert ".compact-grid" in style_css
     assert ".wide-action" in style_css
 
@@ -236,6 +250,16 @@ def test_cad_static_app_rotates_doors_and_handles_keyboard_tool_shortcuts() -> N
     assert 'type: "door-jamb"' in app_js
     assert "!suppressedWallEndpointKeys.has(pointKey(wall.start))" in app_js
     assert "executeCommand(command)" in app_js
+
+
+def test_cad_static_app_draws_windows_as_two_wall_depth_panels() -> None:
+    app_js = (STATIC_DIR / "app.js").read_text(encoding="utf-8")
+
+    assert "drawWindowFrame" in app_js
+    assert "drawWindowPanel" in app_js
+    assert "((thicknessMm || defaults.interiorWallThicknessMm) / 1000) * view.scale / 2" in app_js
+    assert "drawWindowPanel(start, end, perpendicular, -halfDepth, 0" in app_js
+    assert "drawWindowPanel(start, end, perpendicular, 0, halfDepth" in app_js
 
 
 def test_cad_static_app_renders_walls_as_derived_solids_with_joint_patches() -> None:

@@ -122,6 +122,10 @@
     windowWidthM: 1.2,
     gridSizeM: 0.25,
   };
+  const gridAnnotation = {
+    labelOffsetM: 1.1,
+    dimensionOffsetM: 0.55,
+  };
 
   let project = createDefaultProject();
   let tool = "select";
@@ -475,13 +479,15 @@
     draw();
   }
 
-  function makeDraftLine(start, end, lineType = "draft", layer = "DRAFT_LINE") {
+  function makeDraftLine(start, end, lineType = "draft", layer = "DRAFT_LINE", options = {}) {
     return {
       line_id: uid("line"),
       start: clone(start),
       end: clone(end),
       line_type: lineType,
       layer,
+      grid_label: options.gridLabel || null,
+      grid_axis: options.gridAxis || null,
     };
   }
 
@@ -556,7 +562,7 @@
     const xSpacings = parseSpacingList(gridXSpacingsEl.value);
     const ySpacings = parseSpacingList(gridYSpacingsEl.value);
     if (!xSpacings.length || !ySpacings.length) {
-      setStatus("Grid needs X and Y spacing lists, for example 5,5 and 5,5,5.");
+      setStatus("Grid needs X and Y target bay values or spacing lists, for example 4 and 4.");
       return;
     }
     createGridLines(xSpacings, ySpacings);
@@ -568,13 +574,31 @@
       setStatus("Create a lot or setback before creating a grid.");
       return;
     }
-    const xPositions = gridPositions(bounds.minX, bounds.maxX, xSpacings);
-    const yPositions = gridPositions(bounds.minY, bounds.maxY, ySpacings);
+    const width = bounds.maxX - bounds.minX;
+    const depth = bounds.maxY - bounds.minY;
+    const xPositions = structuralGridPositions(bounds.minX, bounds.maxX, xSpacings);
+    const yPositions = structuralGridPositions(bounds.minY, bounds.maxY, ySpacings);
+    const labels = gridLabelSets(xPositions.length, yPositions.length, width >= depth);
     const segments = [
-      ...xPositions.map((x) => ({ start: { x, y: bounds.minY }, end: { x, y: bounds.maxY } })),
-      ...yPositions.map((y) => ({ start: { x: bounds.minX, y }, end: { x: bounds.maxX, y } })),
+      ...xPositions.map((x, index) => ({
+        start: { x, y: bounds.minY },
+        end: { x, y: bounds.maxY },
+        gridLabel: labels.vertical[index],
+        gridAxis: "vertical",
+      })),
+      ...yPositions.map((y, index) => ({
+        start: { x: bounds.minX, y },
+        end: { x: bounds.maxX, y },
+        gridLabel: labels.horizontal[index],
+        gridAxis: "horizontal",
+      })),
     ];
-    addGuideLines(segments, "grid", "GRID", `Grid added: ${xPositions.length} vertical and ${yPositions.length} horizontal lines.`);
+    addGuideLines(
+      segments,
+      "grid",
+      "GRID",
+      `Structural grid added: ${labels.vertical.join(", ")} vertical and ${labels.horizontal.join(", ")} horizontal.`,
+    );
   }
 
   function createWallCenterlineFromReference() {
@@ -599,7 +623,7 @@
       return;
     }
     remember();
-    const lines = validSegments.map((segment) => makeDraftLine(segment.start, segment.end, lineType, layer));
+    const lines = validSegments.map((segment) => makeDraftLine(segment.start, segment.end, lineType, layer, segment));
     activeLevel().lines.push(...lines);
     selectedItems = lines.map((draftLine) => ({ type: "line", item: draftLine }));
     selected = selectedItems[0] || null;
@@ -901,6 +925,8 @@
     drawGrid(rect.width, rect.height);
     drawLots();
     drawLines();
+    drawGridColumnMarkers();
+    drawGridDimensions();
     drawDimensions();
     drawWalls();
     drawOpenings();
@@ -1014,6 +1040,7 @@
       ctx.setLineDash(selectedLine ? [] : style.dash);
       line(start.x, start.y, end.x, end.y);
       ctx.restore();
+      drawGridLineLabels(draftLine);
     });
   }
 
@@ -1022,6 +1049,196 @@
     if (lineType === "grid") return { stroke: "#94a3b8", lineWidth: 1, dash: [2, 7] };
     if (lineType === "wall_centerline") return { stroke: "#dc2626", lineWidth: 1.25, dash: [10, 4, 2, 4] };
     return { stroke: "#64748b", lineWidth: 1.5, dash: [7, 5] };
+  }
+
+  function drawGridLineLabels(draftLine) {
+    if (draftLine.line_type !== "grid" || !draftLine.grid_label) return;
+    const vertical = draftLine.grid_axis === "vertical" || Math.abs(draftLine.start.x - draftLine.end.x) < 1e-9;
+    const minY = Math.min(draftLine.start.y, draftLine.end.y);
+    const maxY = Math.max(draftLine.start.y, draftLine.end.y);
+    const minX = Math.min(draftLine.start.x, draftLine.end.x);
+    const maxX = Math.max(draftLine.start.x, draftLine.end.x);
+    const labelPairs = vertical
+      ? [
+          {
+            anchor: { x: draftLine.start.x, y: minY },
+            label: { x: draftLine.start.x, y: minY - gridAnnotation.labelOffsetM },
+          },
+          {
+            anchor: { x: draftLine.start.x, y: maxY },
+            label: { x: draftLine.start.x, y: maxY + gridAnnotation.labelOffsetM },
+          },
+        ]
+      : [
+          {
+            anchor: { x: minX, y: draftLine.start.y },
+            label: { x: minX - gridAnnotation.labelOffsetM, y: draftLine.start.y },
+          },
+          {
+            anchor: { x: maxX, y: draftLine.start.y },
+            label: { x: maxX + gridAnnotation.labelOffsetM, y: draftLine.start.y },
+          },
+        ];
+    labelPairs.forEach(({ anchor, label }) => {
+      drawGridExtension(anchor, label);
+      drawGridBubble(label, draftLine.grid_label);
+    });
+  }
+
+  function drawGridExtension(anchor, labelPoint) {
+    const start = worldToScreen(anchor);
+    const end = worldToScreen(labelPoint);
+    ctx.save();
+    ctx.strokeStyle = "#475569";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([]);
+    line(start.x, start.y, end.x, end.y);
+    ctx.restore();
+  }
+
+  function drawGridBubble(point, label) {
+    const screen = worldToScreen(point);
+    ctx.save();
+    ctx.fillStyle = "#ffffff";
+    ctx.strokeStyle = "#475569";
+    ctx.lineWidth = 1.25;
+    ctx.beginPath();
+    ctx.arc(screen.x, screen.y, 11, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#0f172a";
+    ctx.font = "11px Inter, Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(label, screen.x, screen.y);
+    ctx.restore();
+  }
+
+  function drawGridColumnMarkers() {
+    const gridLines = activeLevel().lines.filter((draftLine) => draftLine.line_type === "grid");
+    const { vertical, horizontal } = gridLineGroups(gridLines);
+    if (!vertical.length || !horizontal.length) return;
+    ctx.save();
+    ctx.fillStyle = "rgba(15, 23, 42, 0.14)";
+    ctx.strokeStyle = "rgba(15, 23, 42, 0.35)";
+    ctx.lineWidth = 1;
+    vertical.forEach((vLine) => {
+      horizontal.forEach((hLine) => {
+        const point = { x: vLine.start.x, y: hLine.start.y };
+        if (!pointOnSegment(point, vLine.start, vLine.end) || !pointOnSegment(point, hLine.start, hLine.end)) return;
+        const screen = worldToScreen(point);
+        const size = Math.max(5, Math.min(12, 0.18 * view.scale));
+        ctx.fillRect(screen.x - size / 2, screen.y - size / 2, size, size);
+        ctx.strokeRect(screen.x - size / 2, screen.y - size / 2, size, size);
+      });
+    });
+    ctx.restore();
+  }
+
+  function drawGridDimensions() {
+    const { vertical, horizontal } = gridLineGroups(activeLevel().lines.filter((draftLine) => draftLine.line_type === "grid"));
+    if (!vertical.length && !horizontal.length) return;
+    const bounds = gridAnnotationBounds(vertical, horizontal);
+    if (!bounds) return;
+    if (vertical.length > 1) {
+      drawHorizontalGridDimensionChain(vertical, bounds.minY - gridAnnotation.dimensionOffsetM);
+    }
+    if (horizontal.length > 1) {
+      drawVerticalGridDimensionChain(horizontal, bounds.minX - gridAnnotation.dimensionOffsetM);
+    }
+  }
+
+  function drawHorizontalGridDimensionChain(verticalLines, y) {
+    const points = verticalLines.map((draftLine) => ({ x: draftLine.start.x, y }));
+    ctx.save();
+    ctx.strokeStyle = "#475569";
+    ctx.fillStyle = "#334155";
+    ctx.lineWidth = 1;
+    ctx.font = "11px Inter, Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "bottom";
+    for (let index = 0; index < points.length - 1; index += 1) {
+      const start = worldToScreen(points[index]);
+      const end = worldToScreen(points[index + 1]);
+      line(start.x, start.y, end.x, end.y);
+      drawGridDimensionTick(start, true);
+      drawGridDimensionTick(end, true);
+      const distanceM = Math.abs(points[index + 1].x - points[index].x);
+      ctx.fillText(`${distanceM.toFixed(2)} m`, (start.x + end.x) / 2, start.y - 5);
+    }
+    ctx.restore();
+  }
+
+  function drawVerticalGridDimensionChain(horizontalLines, x) {
+    const points = horizontalLines.map((draftLine) => ({ x, y: draftLine.start.y }));
+    ctx.save();
+    ctx.strokeStyle = "#475569";
+    ctx.fillStyle = "#334155";
+    ctx.lineWidth = 1;
+    ctx.font = "11px Inter, Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "bottom";
+    for (let index = 0; index < points.length - 1; index += 1) {
+      const start = worldToScreen(points[index]);
+      const end = worldToScreen(points[index + 1]);
+      line(start.x, start.y, end.x, end.y);
+      drawGridDimensionTick(start, false);
+      drawGridDimensionTick(end, false);
+      const distanceM = Math.abs(points[index + 1].y - points[index].y);
+      ctx.save();
+      ctx.translate(start.x - 5, (start.y + end.y) / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText(`${distanceM.toFixed(2)} m`, 0, 0);
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  function drawGridDimensionTick(point, horizontal) {
+    const half = 4;
+    if (horizontal) {
+      line(point.x, point.y - half, point.x, point.y + half);
+    } else {
+      line(point.x - half, point.y, point.x + half, point.y);
+    }
+  }
+
+  function gridLineGroups(gridLines) {
+    return {
+      vertical: uniqueGridLines(
+        gridLines.filter((draftLine) => draftLine.grid_axis === "vertical" || Math.abs(draftLine.start.x - draftLine.end.x) < 1e-9),
+        "x",
+      ),
+      horizontal: uniqueGridLines(
+        gridLines.filter((draftLine) => draftLine.grid_axis === "horizontal" || Math.abs(draftLine.start.y - draftLine.end.y) < 1e-9),
+        "y",
+      ),
+    };
+  }
+
+  function uniqueGridLines(gridLines, axis) {
+    const byCoordinate = new Map();
+    gridLines.forEach((draftLine) => {
+      const coordinate = axis === "x" ? draftLine.start.x : draftLine.start.y;
+      byCoordinate.set(roundM(coordinate), draftLine);
+    });
+    return Array.from(byCoordinate.values()).sort((a, b) => (
+      axis === "x" ? a.start.x - b.start.x : a.start.y - b.start.y
+    ));
+  }
+
+  function gridAnnotationBounds(verticalLines, horizontalLines) {
+    const points = [
+      ...verticalLines.flatMap((draftLine) => [draftLine.start, draftLine.end]),
+      ...horizontalLines.flatMap((draftLine) => [draftLine.start, draftLine.end]),
+    ];
+    if (!points.length) return null;
+    return {
+      minX: Math.min(...points.map((point) => point.x)),
+      minY: Math.min(...points.map((point) => point.y)),
+      maxX: Math.max(...points.map((point) => point.x)),
+      maxY: Math.max(...points.map((point) => point.y)),
+    };
   }
 
   function drawOpenings() {
@@ -1038,16 +1255,43 @@
         drawDoorFrame(opening, start, end, geometry.thicknessMm, selectedOpening);
         drawDoorSwing(opening, walls, selectedOpening);
       } else {
-        ctx.lineCap = "square";
-        ctx.strokeStyle = "#2563eb";
-        ctx.lineWidth = Math.max(4, (geometry.thicknessMm / 1000) * view.scale + 3);
-        line(start.x, start.y, end.x, end.y);
-        ctx.strokeStyle = selectedOpening ? "#f97316" : "#2563eb";
-        ctx.lineWidth = 2;
-        line(start.x, start.y, end.x, end.y);
+        drawWindowFrame(start, end, geometry.thicknessMm, selectedOpening);
       }
       ctx.restore();
     });
+  }
+
+  function drawWindowFrame(start, end, thicknessMm, selectedOpening) {
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const length = Math.hypot(dx, dy);
+    if (length <= 0) return;
+
+    const tangent = { x: dx / length, y: dy / length };
+    const perpendicular = { x: -tangent.y, y: tangent.x };
+    const halfDepth = Math.max(2, ((thicknessMm || defaults.interiorWallThicknessMm) / 1000) * view.scale / 2);
+    const stroke = selectedOpening ? "#f97316" : "#111827";
+
+    drawWindowPanel(start, end, perpendicular, -halfDepth, 0, stroke, selectedOpening);
+    drawWindowPanel(start, end, perpendicular, 0, halfDepth, stroke, selectedOpening);
+  }
+
+  function drawWindowPanel(start, end, perpendicular, offsetA, offsetB, stroke, selectedOpening) {
+    const corners = [
+      { x: start.x + perpendicular.x * offsetA, y: start.y + perpendicular.y * offsetA },
+      { x: end.x + perpendicular.x * offsetA, y: end.y + perpendicular.y * offsetA },
+      { x: end.x + perpendicular.x * offsetB, y: end.y + perpendicular.y * offsetB },
+      { x: start.x + perpendicular.x * offsetB, y: start.y + perpendicular.y * offsetB },
+    ];
+    ctx.fillStyle = "#ffffff";
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = selectedOpening ? 2 : 1.25;
+    ctx.beginPath();
+    ctx.moveTo(corners[0].x, corners[0].y);
+    corners.slice(1).forEach((corner) => ctx.lineTo(corner.x, corner.y));
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
   }
 
   function drawDoorFrame(opening, start, end, thicknessMm, selectedOpening) {
@@ -1746,19 +1990,80 @@
     };
   }
 
-  function gridPositions(minValue, maxValue, spacings) {
+  function structuralGridPositions(minValue, maxValue, requestedSpacings) {
+    const length = maxValue - minValue;
+    if (length <= 0) return [roundM(minValue)];
+    const requested = requestedSpacings.filter((spacing) => Number.isFinite(spacing) && spacing > 0);
+    const exact = exactRegularRequestedGrid(minValue, maxValue, requested);
+    if (exact) return exact;
+
+    const target = requested.length ? average(requested) : 4;
+    const bayCount = structuralBayCount(length, target);
+    const baySize = length / bayCount;
+    return Array.from({ length: bayCount + 1 }, (_value, index) => roundM(minValue + baySize * index));
+  }
+
+  function exactRegularRequestedGrid(minValue, maxValue, spacings) {
+    if (spacings.length < 2) return null;
+    const length = maxValue - minValue;
+    const total = spacings.reduce((sum, spacing) => sum + spacing, 0);
+    const regular = spacings.every((spacing) => spacing >= 3 && spacing <= 5);
+    if (!regular || Math.abs(total - length) > 1e-6) return null;
     const positions = [roundM(minValue)];
     let cursor = minValue;
-    for (const spacing of spacings) {
+    spacings.forEach((spacing) => {
       cursor = roundM(cursor + spacing);
-      if (cursor > maxValue - 1e-9) break;
       positions.push(cursor);
-    }
-    const maxRounded = roundM(maxValue);
-    if (Math.abs(positions[positions.length - 1] - maxRounded) > 1e-9) {
-      positions.push(maxRounded);
-    }
+    });
     return positions;
+  }
+
+  function structuralBayCount(length, target) {
+    const minBay = 3;
+    const maxBay = 5;
+    if (length <= maxBay) return 1;
+    const minCount = Math.ceil(length / maxBay);
+    const maxCount = Math.floor(length / minBay);
+    if (minCount <= maxCount) {
+      let best = minCount;
+      for (let count = minCount; count <= maxCount; count += 1) {
+        if (Math.abs(length / count - target) < Math.abs(length / best - target)) {
+          best = count;
+        }
+      }
+      return best;
+    }
+    return Math.max(1, Math.round(length / Math.max(minBay, Math.min(maxBay, target || 4))));
+  }
+
+  function average(values) {
+    return values.reduce((sum, value) => sum + value, 0) / values.length;
+  }
+
+  function gridLabelSets(verticalCount, horizontalCount, numbersFollowX) {
+    return {
+      vertical: numbersFollowX ? numberLabels(verticalCount) : letterLabels(verticalCount),
+      horizontal: numbersFollowX ? letterLabels(horizontalCount) : numberLabels(horizontalCount),
+    };
+  }
+
+  function letterLabels(count) {
+    return Array.from({ length: count }, (_value, index) => spreadsheetColumnLabel(index));
+  }
+
+  function numberLabels(count) {
+    return Array.from({ length: count }, (_value, index) => String(index + 1));
+  }
+
+  function spreadsheetColumnLabel(index) {
+    let label = "";
+    let value = index + 1;
+    while (value > 0) {
+      const remainder = (value - 1) % 26;
+      label = String.fromCharCode(65 + remainder) + label;
+      value = Math.floor((value - 1) / 26);
+    }
+    return label;
   }
 
   function cornerFromRectangleDimensions(corner, dimensions) {
@@ -1831,7 +2136,7 @@
     if (command === "GRID" || command === "XLINE") {
       const values = parseGridValues(args);
       if (!values) {
-        setStatus("Type grid spacing as X-list|Y-list, for example GRID 5,5|5,5,5.");
+        setStatus("Type grid target bays as X|Y, for example GRID 4|4, or exact regular lists such as GRID 3,3|5,5.");
         return true;
       }
       gridXSpacingsEl.value = values.xSpacings.join(",");

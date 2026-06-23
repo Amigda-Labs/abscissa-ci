@@ -15,6 +15,7 @@ DoorHingeSide = Literal["start", "end"]
 DimensionKind = Literal["linear"]
 DimensionBasis = Literal["centerline", "outside_face", "inside_face"]
 DraftLineType = Literal["draft", "setback", "grid", "wall_centerline"]
+GridAxis = Literal["vertical", "horizontal"]
 
 EXTERIOR_WALL_THICKNESS_MM = 150.0
 INTERIOR_WALL_THICKNESS_MM = 100.0
@@ -87,6 +88,8 @@ class DraftLine(StrictModel):
     end: Point
     line_type: DraftLineType = "draft"
     layer: str = "DRAFT_LINE"
+    grid_label: str | None = None
+    grid_axis: GridAxis | None = None
 
     @model_validator(mode="after")
     def validate_line(self) -> DraftLine:

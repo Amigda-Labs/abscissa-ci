@@ -79,18 +79,18 @@
           </div>
           <button class="wide-action" id="createSetbackButton" type="button">Create Setback</button>
           <label>
-            Grid X spacings (m)
-            <input id="gridXSpacings" value="5,5">
+            Grid X target/spacings (m)
+            <input id="gridXSpacings" value="4">
           </label>
           <label>
-            Grid Y spacings (m)
-            <input id="gridYSpacings" value="5,5,5">
+            Grid Y target/spacings (m)
+            <input id="gridYSpacings" value="4">
           </label>
           <div class="button-row">
             <button id="createGridButton" type="button">Grid</button>
             <button id="createWallCenterlineButton" type="button">Wall CL</button>
           </div>
-          <p class="hint">Commands: LOT 10,15 · SETBACK 3,2,2,2 · GRID 5,5|5,5,5 · WCL</p>
+          <p class="hint">Commands: LOT 10,15 · SETBACK 3,2,2,2 · GRID 4|4 · WCL</p>
         </section>
 
         <section>
@@ -185,7 +185,7 @@
         <canvas id="board" width="1600" height="1000"></canvas>
         <div class="command-row">
           <strong id="commandEcho">Command: SELECT</strong>
-          <span id="status">Ready. Type LOT 10,15, SETBACK 3,2,2,2, GRID 5,5|5,5,5, WCL, L, REC, W, RW, DIM, PAN, SAVE.</span>
+          <span id="status">Ready. Type LOT 10,15, SETBACK 3,2,2,2, GRID 4|4, WCL, L, REC, W, RW, DIM, PAN, SAVE.</span>
           <input id="commandLine" autocomplete="off" placeholder="Command">
         </div>
       </section>

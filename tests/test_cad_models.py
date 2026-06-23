@@ -99,6 +99,8 @@ def test_cad_project_preserves_semantic_draft_line_metadata() -> None:
                             "end": {"x": 5, "y": 15},
                             "line_type": "grid",
                             "layer": "GRID",
+                            "grid_label": "A",
+                            "grid_axis": "vertical",
                         },
                     ]
                 }
@@ -110,6 +112,8 @@ def test_cad_project_preserves_semantic_draft_line_metadata() -> None:
     assert project.levels[0].lines[0].layer == "SETBACK"
     assert project.levels[0].lines[1].line_type == "grid"
     assert project.levels[0].lines[1].layer == "GRID"
+    assert project.levels[0].lines[1].grid_label == "A"
+    assert project.levels[0].lines[1].grid_axis == "vertical"
 
 
 def test_cad_project_accepts_rectangular_lot_area() -> None:

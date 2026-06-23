@@ -10,6 +10,8 @@ from abscissa_ci.cad.wall_geometry import point_key, wall_joint_polygons, wall_s
 
 SCALE_PX_PER_M = 80.0
 MARGIN_PX = 64.0
+GRID_LABEL_OFFSET_M = 1.1
+GRID_DIMENSION_OFFSET_M = 0.55
 
 
 def export_project_svg(project: CadProject) -> str:
@@ -65,6 +67,7 @@ def export_project_svg(project: CadProject) -> str:
 
     for draft_line in level.lines:
         line_style = _draft_line_svg_style(draft_line.line_type)
+        grid_attrs = _grid_line_svg_attrs(draft_line)
         lines.append(
             f'<line id="{escape(draft_line.line_id)}" '
             f'x1="{sx(draft_line.start.x):.2f}" y1="{sy(draft_line.start.y):.2f}" '
@@ -72,8 +75,11 @@ def export_project_svg(project: CadProject) -> str:
             f'stroke="{line_style["stroke"]}" stroke-width="{line_style["stroke_width"]}" '
             f'stroke-dasharray="{line_style["stroke_dasharray"]}" '
             f'data-entity-type="draft-line" data-line-type="{draft_line.line_type}" '
-            f'data-layer="{escape(draft_line.layer)}"/>'
+            f'data-layer="{escape(draft_line.layer)}"{grid_attrs}/>'
         )
+        if draft_line.line_type == "grid" and draft_line.grid_label:
+            lines.extend(_grid_label_svg(draft_line, sx, sy))
+    lines.extend(_grid_dimensions_svg(level.lines, sx, sy))
 
     lines.extend(
         [
@@ -117,18 +123,19 @@ def export_project_svg(project: CadProject) -> str:
         if opening_geometry is None:
             continue
         start, end, wall_thickness_mm = opening_geometry
-        stroke_width = max(4.0, (wall_thickness_mm or 100.0) / 1000.0 * SCALE_PX_PER_M + 3.0)
-        color = "#2563eb" if opening.opening_type == "window" else "#f8fafc"
-        lines.append(
-            f'<line id="{escape(opening.opening_id)}" x1="{sx(start.x):.2f}" '
-            f'y1="{sy(start.y):.2f}" x2="{sx(end.x):.2f}" y2="{sy(end.y):.2f}" '
-            f'stroke="{color}" stroke-width="{stroke_width:.2f}" '
-            f'data-opening-type="{opening.opening_type}"/>'
-        )
         if opening.opening_type == "door":
+            stroke_width = max(4.0, (wall_thickness_mm or 100.0) / 1000.0 * SCALE_PX_PER_M + 3.0)
+            lines.append(
+                f'<line id="{escape(opening.opening_id)}" x1="{sx(start.x):.2f}" '
+                f'y1="{sy(start.y):.2f}" x2="{sx(end.x):.2f}" y2="{sy(end.y):.2f}" '
+                f'stroke="#f8fafc" stroke-width="{stroke_width:.2f}" '
+                f'data-opening-type="{opening.opening_type}"/>'
+            )
             lines.extend(
                 _door_svg(opening, start, end, wall_thickness_mm, sx, sy, door_style)
             )
+        else:
+            lines.extend(_window_svg(opening, start, end, wall_thickness_mm, sx, sy))
 
     lines.append("</g>")
     lines.append('<g id="rooms" font-family="Inter, Arial, sans-serif" text-anchor="middle">')
@@ -183,6 +190,7 @@ def _project_bounds(project: CadProject) -> tuple[float, float, float, float]:
             points.extend(_lot_corners(lot))
         for draft_line in level.lines:
             points.extend([draft_line.start, draft_line.end])
+        points.extend(_grid_annotation_extent_points(level.lines))
         for wall in level.walls:
             points.extend(wall_solid_polygon(wall).points)
         wall_by_id = {wall.wall_id: wall for wall in level.walls}
@@ -271,6 +279,224 @@ def _draft_line_svg_style(line_type: str) -> dict[str, str]:
     if line_type == "wall_centerline":
         return {"stroke": "#dc2626", "stroke_width": "1.25", "stroke_dasharray": "10 4 2 4"}
     return {"stroke": "#64748b", "stroke_width": "1.5", "stroke_dasharray": "6 5"}
+
+
+def _grid_line_svg_attrs(draft_line) -> str:
+    attrs = []
+    if draft_line.grid_label:
+        attrs.append(f'data-grid-label="{escape(draft_line.grid_label)}"')
+    if draft_line.grid_axis:
+        attrs.append(f'data-grid-axis="{draft_line.grid_axis}"')
+    return (" " + " ".join(attrs)) if attrs else ""
+
+
+def _grid_label_svg(draft_line, sx, sy) -> list[str]:
+    assert draft_line.grid_label is not None
+    vertical = draft_line.grid_axis == "vertical" or abs(draft_line.start.x - draft_line.end.x) < 1e-9
+    if vertical:
+        min_y = min(draft_line.start.y, draft_line.end.y)
+        max_y = max(draft_line.start.y, draft_line.end.y)
+        points = [
+            (Point(x=draft_line.start.x, y=min_y), Point(x=draft_line.start.x, y=min_y - GRID_LABEL_OFFSET_M)),
+            (Point(x=draft_line.start.x, y=max_y), Point(x=draft_line.start.x, y=max_y + GRID_LABEL_OFFSET_M)),
+        ]
+    else:
+        min_x = min(draft_line.start.x, draft_line.end.x)
+        max_x = max(draft_line.start.x, draft_line.end.x)
+        points = [
+            (Point(x=min_x, y=draft_line.start.y), Point(x=min_x - GRID_LABEL_OFFSET_M, y=draft_line.start.y)),
+            (Point(x=max_x, y=draft_line.start.y), Point(x=max_x + GRID_LABEL_OFFSET_M, y=draft_line.start.y)),
+        ]
+    label = escape(draft_line.grid_label)
+    return [
+        (
+            f'<g data-entity-type="grid-label" data-grid-line-id="{escape(draft_line.line_id)}">'
+            f'<line x1="{sx(anchor.x):.2f}" y1="{sy(anchor.y):.2f}" '
+            f'x2="{sx(point.x):.2f}" y2="{sy(point.y):.2f}" stroke="#475569" stroke-width="1"/>'
+            f'<circle cx="{sx(point.x):.2f}" cy="{sy(point.y):.2f}" r="11" fill="#ffffff" '
+            f'stroke="#475569" stroke-width="1.25"/>'
+            f'<text x="{sx(point.x):.2f}" y="{sy(point.y) + 4:.2f}" font-size="11" '
+            f'text-anchor="middle" fill="#0f172a">{label}</text></g>'
+        )
+        for anchor, point in points
+    ]
+
+
+def _grid_dimensions_svg(draft_lines, sx, sy) -> list[str]:
+    grid_lines = [draft_line for draft_line in draft_lines if draft_line.line_type == "grid"]
+    vertical = _unique_grid_lines(
+        [
+            draft_line
+            for draft_line in grid_lines
+            if draft_line.grid_axis == "vertical" or abs(draft_line.start.x - draft_line.end.x) < 1e-9
+        ],
+        "x",
+    )
+    horizontal = _unique_grid_lines(
+        [
+            draft_line
+            for draft_line in grid_lines
+            if draft_line.grid_axis == "horizontal" or abs(draft_line.start.y - draft_line.end.y) < 1e-9
+        ],
+        "y",
+    )
+    bounds = _grid_annotation_bounds(vertical, horizontal)
+    if bounds is None:
+        return []
+    min_x, min_y, _max_x, _max_y = bounds
+    output: list[str] = []
+    if len(vertical) > 1:
+        y = min_y - GRID_DIMENSION_OFFSET_M
+        for first, second in zip(vertical, vertical[1:]):
+            start = Point(x=first.start.x, y=y)
+            end = Point(x=second.start.x, y=y)
+            label = f"{abs(second.start.x - first.start.x):.2f} m"
+            output.append(_horizontal_grid_dimension_svg(start, end, label, sx, sy))
+    if len(horizontal) > 1:
+        x = min_x - GRID_DIMENSION_OFFSET_M
+        for first, second in zip(horizontal, horizontal[1:]):
+            start = Point(x=x, y=first.start.y)
+            end = Point(x=x, y=second.start.y)
+            label = f"{abs(second.start.y - first.start.y):.2f} m"
+            output.append(_vertical_grid_dimension_svg(start, end, label, sx, sy))
+    return output
+
+
+def _horizontal_grid_dimension_svg(start: Point, end: Point, label: str, sx, sy) -> str:
+    mid_x = (start.x + end.x) / 2
+    y = start.y
+    return (
+        '<g data-entity-type="grid-dimension" data-grid-dimension-axis="horizontal">'
+        f'<line x1="{sx(start.x):.2f}" y1="{sy(y):.2f}" x2="{sx(end.x):.2f}" y2="{sy(y):.2f}" '
+        'stroke="#475569" stroke-width="1"/>'
+        f'<text x="{sx(mid_x):.2f}" y="{sy(y) - 5:.2f}" font-size="11" text-anchor="middle" '
+        f'fill="#334155">{escape(label)}</text></g>'
+    )
+
+
+def _vertical_grid_dimension_svg(start: Point, end: Point, label: str, sx, sy) -> str:
+    mid_y = (start.y + end.y) / 2
+    x = start.x
+    text_x = sx(x) - 5
+    text_y = sy(mid_y)
+    return (
+        '<g data-entity-type="grid-dimension" data-grid-dimension-axis="vertical">'
+        f'<line x1="{sx(x):.2f}" y1="{sy(start.y):.2f}" x2="{sx(x):.2f}" y2="{sy(end.y):.2f}" '
+        'stroke="#475569" stroke-width="1"/>'
+        f'<text x="{text_x:.2f}" y="{text_y:.2f}" font-size="11" text-anchor="middle" fill="#334155" '
+        f'transform="rotate(-90 {text_x:.2f} {text_y:.2f})">{escape(label)}</text></g>'
+    )
+
+
+def _unique_grid_lines(grid_lines, axis: str):
+    by_coordinate = {}
+    for draft_line in grid_lines:
+        coordinate = draft_line.start.x if axis == "x" else draft_line.start.y
+        by_coordinate[round(coordinate, 6)] = draft_line
+    return sorted(
+        by_coordinate.values(),
+        key=lambda draft_line: draft_line.start.x if axis == "x" else draft_line.start.y,
+    )
+
+
+def _grid_annotation_bounds(vertical, horizontal) -> tuple[float, float, float, float] | None:
+    points: list[Point] = []
+    for draft_line in [*vertical, *horizontal]:
+        points.extend([draft_line.start, draft_line.end])
+    if not points:
+        return None
+    return (
+        min(point.x for point in points),
+        min(point.y for point in points),
+        max(point.x for point in points),
+        max(point.y for point in points),
+    )
+
+
+def _grid_annotation_extent_points(draft_lines) -> list[Point]:
+    grid_lines = [draft_line for draft_line in draft_lines if draft_line.line_type == "grid"]
+    vertical = _unique_grid_lines(
+        [
+            draft_line
+            for draft_line in grid_lines
+            if draft_line.grid_axis == "vertical" or abs(draft_line.start.x - draft_line.end.x) < 1e-9
+        ],
+        "x",
+    )
+    horizontal = _unique_grid_lines(
+        [
+            draft_line
+            for draft_line in grid_lines
+            if draft_line.grid_axis == "horizontal" or abs(draft_line.start.y - draft_line.end.y) < 1e-9
+        ],
+        "y",
+    )
+    bounds = _grid_annotation_bounds(vertical, horizontal)
+    if bounds is None:
+        return []
+    min_x, min_y, max_x, max_y = bounds
+    offset = max(GRID_LABEL_OFFSET_M, GRID_DIMENSION_OFFSET_M)
+    return [
+        Point(x=min_x - offset, y=min_y - offset),
+        Point(x=max_x + offset, y=max_y + offset),
+    ]
+
+
+def _window_svg(
+    opening: Opening,
+    start: Point,
+    end: Point,
+    wall_thickness_mm: float | None,
+    sx,
+    sy,
+) -> list[str]:
+    start_x = sx(start.x)
+    start_y = sy(start.y)
+    end_x = sx(end.x)
+    end_y = sy(end.y)
+    span_px = hypot(end_x - start_x, end_y - start_y)
+    if span_px <= 0:
+        return []
+
+    tangent_x = (end_x - start_x) / span_px
+    tangent_y = (end_y - start_y) / span_px
+    perpendicular_x = -tangent_y
+    perpendicular_y = tangent_x
+    half_depth = max(2.0, (wall_thickness_mm or 100.0) / 1000.0 * SCALE_PX_PER_M / 2.0)
+
+    return [
+        (
+            f'<polygon id="{escape(opening.opening_id)}-panel-1" '
+            f'points="{_panel_svg_points(start_x, start_y, end_x, end_y, perpendicular_x, perpendicular_y, -half_depth, 0)}" '
+            'fill="#ffffff" stroke="#111827" stroke-width="1.25" '
+            f'data-opening-type="window" data-window-panel="1" data-wall-thickness-mm="{wall_thickness_mm or 100.0:.0f}"/>'
+        ),
+        (
+            f'<polygon id="{escape(opening.opening_id)}-panel-2" '
+            f'points="{_panel_svg_points(start_x, start_y, end_x, end_y, perpendicular_x, perpendicular_y, 0, half_depth)}" '
+            'fill="#ffffff" stroke="#111827" stroke-width="1.25" '
+            f'data-opening-type="window" data-window-panel="2" data-wall-thickness-mm="{wall_thickness_mm or 100.0:.0f}"/>'
+        ),
+    ]
+
+
+def _panel_svg_points(
+    start_x: float,
+    start_y: float,
+    end_x: float,
+    end_y: float,
+    perpendicular_x: float,
+    perpendicular_y: float,
+    offset_a: float,
+    offset_b: float,
+) -> str:
+    points = [
+        (start_x + perpendicular_x * offset_a, start_y + perpendicular_y * offset_a),
+        (end_x + perpendicular_x * offset_a, end_y + perpendicular_y * offset_a),
+        (end_x + perpendicular_x * offset_b, end_y + perpendicular_y * offset_b),
+        (start_x + perpendicular_x * offset_b, start_y + perpendicular_y * offset_b),
+    ]
+    return " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
 
 
 def _door_svg(

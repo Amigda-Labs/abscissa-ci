@@ -23,6 +23,24 @@ def test_export_project_svg_contains_semantic_floor_plan_entities() -> None:
                             "end": {"x": 4, "y": 2},
                             "line_type": "setback",
                             "layer": "SETBACK",
+                        },
+                        {
+                            "line_id": "grid-a",
+                            "start": {"x": 1, "y": 0},
+                            "end": {"x": 1, "y": 4},
+                            "line_type": "grid",
+                            "layer": "GRID",
+                            "grid_label": "A",
+                            "grid_axis": "vertical",
+                        },
+                        {
+                            "line_id": "grid-b",
+                            "start": {"x": 4, "y": 0},
+                            "end": {"x": 4, "y": 4},
+                            "line_type": "grid",
+                            "layer": "GRID",
+                            "grid_label": "B",
+                            "grid_axis": "vertical",
                         }
                     ],
                     "walls": [
@@ -41,6 +59,13 @@ def test_export_project_svg_contains_semantic_floor_plan_entities() -> None:
                             "offset_m": 1,
                             "width_m": 0.9,
                             "swing_direction": "ccw",
+                        },
+                        {
+                            "opening_id": "window-1",
+                            "opening_type": "window",
+                            "parent_wall_id": "w1",
+                            "offset_m": 2.6,
+                            "width_m": 1.0,
                         }
                     ],
                     "rooms": [
@@ -80,10 +105,21 @@ def test_export_project_svg_contains_semantic_floor_plan_entities() -> None:
     assert 'data-entity-type="draft-line"' in svg
     assert 'data-line-type="setback"' in svg
     assert 'data-layer="SETBACK"' in svg
+    assert 'id="grid-a"' in svg
+    assert 'data-grid-label="A"' in svg
+    assert 'data-grid-axis="vertical"' in svg
+    assert 'data-entity-type="grid-label"' in svg
+    assert 'data-entity-type="grid-dimension"' in svg
     assert 'id="w1"' in svg
     assert 'data-wall-type="exterior"' in svg
     assert 'id="door-1"' in svg
     assert 'data-door-swing="ccw"' in svg
+    assert 'id="window-1-panel-1"' in svg
+    assert 'id="window-1-panel-2"' in svg
+    assert 'data-opening-type="window"' in svg
+    assert 'data-window-panel="1"' in svg
+    assert 'data-window-panel="2"' in svg
+    assert 'data-wall-thickness-mm="150"' in svg
     assert "Waiting Area" in svg
     assert "4.00 m" in svg
     assert 'id="dim-1"' in svg
